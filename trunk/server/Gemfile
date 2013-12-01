@@ -3,17 +3,18 @@ source 'http://rubygems.org'
 ruby '1.9.3'
 
 group :test do
-    gem "sqlite3"
+    gem "sqlite3", '1.3.8'
 end
 
 group :heroku do
-    gem "pg"
+    gem "pg", '0.17.0'
 end
 
-gem "thin"
-gem "sequel"
-gem "sinatra", 					:require => "sinatra/base"
-gem 'sinatra-contrib', 			
+gem "thin", '1.6.1'
+gem "sequel", '4.4.0'
+gem "sinatra", '1.4.4',
+    :require => "sinatra/base"
+gem 'sinatra-contrib', '1.4.2',
     :require => ["sinatra/config_file", 
         "sinatra/namespace", 
         "sinatra/reloader", 
