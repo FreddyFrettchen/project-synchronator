@@ -17,6 +17,15 @@ OptionParser.new do |opts|
         DB.transaction do
             user = User.for_update.first(:id=>m)
             user.approve!
+            puts "User #{user.email} successfully approved"
+        end 
+    end
+    
+    opts.on("-r", "--reject ID_USER", "reject a user by id.") do |m|
+        DB.transaction do
+            user = User.for_update.first(:id=>m)
+            user.reject!
+            puts "User #{user.email} successfully rejected"
         end 
     end
 
