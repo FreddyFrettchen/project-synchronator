@@ -1,0 +1,82 @@
+#!/usr/bin/ruby
+
+require 'pp'
+require 'json'
+require 'socket'
+require 'openssl'
+require 'optparse'
+
+options = {
+    :ssl => {
+    :private_key_file => '../../data/ssl/pubkey.key', 
+    :cert_chain_file => '../../data/ssl/cacert.crt', 
+},
+:host => "localhost",
+:port => 45678,
+:pipe_stdin => false
+}
+
+OptionParser.new do |opts|
+    opts.banner = "Usage: client [options]"
+
+    opts.on("-m", "--mail MAIL", "user login email") do |m|
+        options[:mail] = m
+    end
+
+    opts.on("-p", "--password PASSWORD", "user login password hash") do |p|
+        options[:password] = p
+    end
+
+    opts.on("-H", "--host HOST", "server to connect to. ( default : #{options[:host]} )") do |h|
+        options[:host] = h
+    end
+
+    opts.on("-s", "--socket SOCKET", "socket to connect to. ( default : #{options[:port]} )") do |p|
+        options[:port] = p
+    end
+
+    opts.on("-d", "--data DATA", "data to be send to the server if action is update_contacts, update_notes, update_calendar") do |d|
+        options[:data] = d
+    end
+
+    opts.on("-a", "--action ACTION", "action to be executed ( login, update_contacts, update_calendar, update_notes, get_notes, get_contacts, get_calendar, register_user, delete_user )") do |a|
+        options[:action] = a
+    end
+
+    opts.on("-k","--ssl-private-key-file KEYFILE", 
+            "set the private file to read the private key from") do |k|
+        options[:ssl][:private_key_file] = k
+            end
+
+    opts.on("-r","--pipe-stdin", 
+            "read data from stdin and raw write to server") do |k|
+        options[:pipe_stdin] = k
+            end
+
+    opts.on("-c", "--cert-chain-file CHAIN", "set file to read certificate chain from") do |c|
+        options[:ssl][:cert_chain_file] = c
+    end
+end.parse!
+
+socket = TCPSocket.open(options[:host],options[:port])
+ssl_context = OpenSSL::SSL::SSLContext.new
+ssl_context.cert = OpenSSL::X509::Certificate.new(File.open(options[:ssl][:cert_chain_file]))
+ssl_context.key = OpenSSL::PKey::RSA.new(File.open(options[:ssl][:private_key_file]))
+ssl_context.ssl_version = :SSLv23
+ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
+ssl_socket.sync_close = true
+ssl_socket.connect
+
+if options[:pipe_stdin]
+    ssl_socket.puts($<.read)
+else
+    message = {"action" => options[:action],
+        "data" => {"mail" => options[:mail],
+            "password" => options[:password],
+            "encrypted_data" => options[:data]}}.to_json
+    ssl_socket.puts(message)
+end
+while line = ssl_socket.gets
+    p line
+end
+ssl_socket.close
