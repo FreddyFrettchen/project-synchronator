@@ -1,0 +1,29 @@
+#!/usr/bin/ruby
+
+require 'pp'
+require 'json'
+require 'optparse'
+require 'bundler'
+Bundler.require
+
+require_relative 'db'
+require_relative 'models/init'
+
+options = {}
+OptionParser.new do |opts|
+    opts.banner = "Usage: serveradmin [options]"
+
+    opts.on("-a", "--approve ID_USER", "approve a user by id.") do |m|
+        DB.transaction do
+            user = User.for_update.first(:id=>m)
+            user.approve!
+        end 
+    end
+
+    opts.on("-l", "--list-unapproved", 
+            "list all users that are registred but not approved yet.") do |m|
+        DB[:user].where(:approved => false).all.each do |user|
+            puts "id: #{user[:id]} | email: #{user[:email]}"        
+        end
+    end
+end.parse!

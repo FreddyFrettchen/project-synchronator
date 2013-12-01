@@ -1,0 +1,20 @@
+source 'http://rubygems.org'
+
+ruby '1.9.3'
+
+group :test do
+    gem "sqlite3"
+end
+
+group :heroku do
+    gem "pg"
+end
+
+gem "thin"
+gem "sequel"
+gem "sinatra", 					:require => "sinatra/base"
+gem 'sinatra-contrib', 			
+    :require => ["sinatra/config_file", 
+        "sinatra/namespace", 
+        "sinatra/reloader", 
+        "sinatra/json" ]
