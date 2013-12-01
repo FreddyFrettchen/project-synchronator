@@ -1,3 +1,4 @@
+require 'pp'
 require 'test/unit'
 
 DB = Sequel.sqlite(':memory:')
@@ -42,6 +43,14 @@ class TestUser < Test::Unit::TestCase
         user.approve!
         user.reload
         assert_equal true, user.approved
+    end
+
+    def test_reject!
+        email, pw = "reject@addr.de", "123"
+        user = User.register(email, pw)
+        user.reject!
+        find = User.find(:id => user.id)
+        assert_equal nil, find
     end
 
     def test_get_nonexistent_data

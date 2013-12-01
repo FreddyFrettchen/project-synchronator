@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# without ssl
 bundle exec thin start -R config.ru -p 45678 -D "$@"
 
+# with ssl and self signed cert
 #bundle exec thin start -R config.ru -p 45678 --ssl --ssl-key-file "data/ssl/pubkey.key" --ssl-cert-file "data/ssl/cacert.crt" -D "$@"

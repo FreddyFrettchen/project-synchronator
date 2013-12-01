@@ -31,7 +31,13 @@ class User < Sequel::Model(:user)
 
     def approve!
         self.approved = true
-        save
+        self.save
+    end
+
+    def reject!
+        pp self.approved
+        return false if self.approved == true
+        self.destroy
     end
 
     def contacts_data
