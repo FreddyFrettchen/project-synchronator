@@ -1,7 +1,7 @@
 class ServerHandler < Sinatra::Base
     namespace '/data' do
         before do
-            content_type 'text/plain'
+            content_type 'json'
             email, password = @params["email"], @params["password"]
             @user = User.authenticate(email, password)
             halt(403) unless @user
@@ -32,6 +32,20 @@ class ServerHandler < Sinatra::Base
 
             post '/notes' do
                 @user.notes_data
+            end
+        end
+
+        namespace '/update' do
+            post '/calendar' do
+                @user.set_calendar_data! request['data']
+            end
+
+            post '/contacts' do
+                @user.set_contacts_data! request['data']
+            end
+
+            post '/notes' do
+                @user.set_notes_data! request['data']
             end
         end
     end

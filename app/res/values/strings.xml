@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">prototype</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- action bar stuff -->
+    <string name="action_home">Home</string>
+    <string name="action_contacts">Contacts</string>
+    <string name="action_notes">Notes</string>
+    <string name="action_calendar">Calendar</string>
+    <string name="action_accounts">Accounts</string>
+
+    <string-array name="contacts_array">
+        <item>Kontakt 1</item>
+        <item>Kontakt 2</item>
+        <item>Kontakt 3</item>
+        <item>Kontakt 4</item>
+        <item>Kontakt 5</item>
+        <item>Kontakt 6</item>
+        <item>Kontakt 7</item>
+    </string-array>
+    
+    <string-array name="notes_array">
+        <item>Notiz 1</item>
+        <item>Notiz 2</item>
+        <item>Notiz 3</item>
+        <item>Notiz 4</item>
+        <item>Notiz 5</item>
+        <item>Notiz 6</item>
+        <item>Notiz 7</item>
+    </string-array>
+        <string name="passwort">Passwort</string>
+        <string name="registrieren">Registrieren</string>
+        <string name="synchronator">Synchronator</string>
+        <string name="login">Login</string>
+        <string name="email">Email</string>
+        
+
+</resources>

@@ -1,9 +1,9 @@
 class User < Sequel::Model(:user)
     plugin :validation_helpers
 
-    one_to_one :notes, :key => :id_user, :class => :Notes
-    one_to_one :contacts, :key => :id_user, :class => :Contacts
-    one_to_one :calendar, :key => :id_user, :class => :Calendar
+    one_to_many :notes,    :key => :id_user, :class => :Notes
+    one_to_many :contacts, :key => :id_user, :class => :Contacts
+    one_to_many :calendar, :key => :id_user, :class => :Calendar
 
     def validate
         super
@@ -35,7 +35,6 @@ class User < Sequel::Model(:user)
     end
 
     def reject!
-        pp self.approved
         return false if self.approved == true
         self.destroy
     end
