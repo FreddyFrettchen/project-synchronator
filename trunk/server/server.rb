@@ -14,21 +14,14 @@ class ServerHandler < Sinatra::Base
 	
 	config_file './config.yml'
 	
-	configure do
+	use Rack::Session::Pool, :expire_after => 2592000
+	
+    configure do
 		set :base, File.dirname(__FILE__)
 	end
 	
-	use Rack::Session::Pool, :expire_after => 2592000
-	use Rack::Logger
-
-    # datatype of coice
-
 	helpers do
 		include Rack::Utils
-		
-		def logger
-			request.logger
-		end
 	end
 	
     # reload files between requests

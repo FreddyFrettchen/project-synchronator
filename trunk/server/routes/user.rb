@@ -7,14 +7,12 @@ class ServerHandler < Sinatra::Base
 
         post '/authenticate' do
             success = User.authenticate( @email, @password )
-            code = if success then "OK" else "ERROR" end
-            { "code" => code }.to_json
+            halt( success ? 200 : 403 )
         end
         
         post '/register' do
             success = User.register( @email, @password )
-            code = if success then "OK" else "ERROR" end
-            { "code" => code }.to_json
+            halt( success ? 202 : 403 )
         end
     end
 end

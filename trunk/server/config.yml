@@ -1,4 +1,2 @@
-port: 45678
-server: thin
-static: true
+environment: development
 logging: true
