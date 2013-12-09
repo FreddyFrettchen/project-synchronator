@@ -15,10 +15,9 @@
 #
 class ServerHandler < Sinatra::Base
     namespace '/data' do
-        #
+        
         # None of this routes is reachable without
         # user verification!
-        #
         before do
             content_type 'json'
             email, password = @params["email"], @params["password"]
@@ -27,46 +26,23 @@ class ServerHandler < Sinatra::Base
         end
 
         namespace '/add' do
-            before do
-                @data = {
-                    :id_user => @user.id,
-                    :data => @params["data"]
-                }
-            end
-
-            post '/calendar' do
-                entry = Calendar.new(@data) 
-                halt(403) unless entry.valid?
-                entry.save
-                halt(200)
-            end
-
-            post '/contacts' do
-                entry = Contacts.new(@data) 
-                halt(403) unless entry.valid?
-                entry.save
-                halt(200)
-            end
-
-            post '/notes' do
-                entry = Notes.new(@data) 
-                halt(403) unless entry.valid?
-                entry.save
-                halt(200)
+            ['calendar', 'contact', 'note'].each do |route|
+                post "/#{route}" do
+                    begin
+                        @user.send("add_#{route}", :data => @params['data']) 
+                    rescue Sequel::ValidationFailed => error
+                        halt 304
+                    end
+                    halt 200
+                end
             end
         end
 
         namespace '/get' do
-            post '/calendar' do
-                @user.calendar.map{|e| e.values}.to_json
-            end
-
-            post '/contacts' do
-                @user.contacts.map{|e| e.values}.to_json
-            end
-
-            post '/notes' do
-                @user.notes.map{|e| e.values}.to_json
+            ['calendar', 'contacts', 'notes'].each do |route|
+                post "/#{route}" do
+                    @user.send(route).map{|e| e.values}.to_json
+                end
             end
         end
 
@@ -74,21 +50,18 @@ class ServerHandler < Sinatra::Base
             before do
                 @data = {
                     :id_user => @user.id,
-                    :data => @params["data"],
+                    :data => @params['data'],
                     :last_sync => Time.now
                 }
             end
 
-            post '/calendar/:id' do
-                DB[:calendars].update(@data)
-            end
-
-            post '/contacts/:id' do
-                DB[:contacts].update(@data)
-            end
-
-            post '/notes/:id' do
-                DB[:notes].update(@data)
+            ['calendar', 'contacts', 'notes'].each do |route|
+                post "/#{route}/:id" do
+                    entry = Calendar[@params[:id].to_i]
+                    halt(404) if entry.nil?
+                    entry.update(@data)
+                    halt(200)
+                end
             end
         end
     end
