@@ -8,6 +8,7 @@ class User < Sequel::Model(:user)
 
     def validate
         super
+        validates_presence [:email, :password]
         validates_unique :email
     end
 
