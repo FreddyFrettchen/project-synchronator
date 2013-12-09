@@ -1,7 +1,0 @@
-#!/usr/bin/ruby
-
-require 'bundler'
-ENV['BUNDLE_GEMFILE'] = '../Gemfile'
-Bundler.require
-
-require_relative 'test_user'

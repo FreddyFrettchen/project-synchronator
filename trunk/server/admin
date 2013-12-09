@@ -6,8 +6,8 @@ require 'optparse'
 require 'bundler'
 Bundler.require
 
-require_relative 'db'
-require_relative 'models/init'
+require_relative 'application/db'
+require_relative 'application/models/init'
 
 options = {}
 OptionParser.new do |opts|
