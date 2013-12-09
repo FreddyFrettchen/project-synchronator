@@ -52,28 +52,4 @@ class TestUser < Test::Unit::TestCase
         find = User.find(:id => user.id)
         assert_equal nil, find
     end
-
-    def test_get_nonexistent_data
-        email, pw = "get@addr.de", "123"
-        user = User.register(email, pw)
-        user.approve!
-        assert_equal "", user.contacts_data
-        assert_equal "", user.calendar_data
-        assert_equal "", user.notes_data
-    end
-
-    def test_set_get_data
-        email, pw = "set@addr.de", "123"
-        user = User.register(email, pw)
-        user.approve!
-
-        cal, con, note = "CAL", "CON", "NOTE"
-        assert_equal true, user.set_calendar_data!(cal)
-        assert_equal true, user.set_contacts_data!(con)
-        assert_equal true, user.set_notes_data!(note)
-
-        assert_equal cal, user.calendar_data
-        assert_equal con, user.contacts_data
-        assert_equal note, user.notes_data
-    end
 end
