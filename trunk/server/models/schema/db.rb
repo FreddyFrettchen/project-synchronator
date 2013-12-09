@@ -1,6 +1,4 @@
-# require all table defs here
+# require all table definitions here
 
 require_relative "user"
-require_relative "contacts"
-require_relative "notes"
-require_relative "calendars"
+require_relative "data"
