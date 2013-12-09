@@ -1,3 +1,11 @@
+#
+# Handles user registration and authentication.
+# Each request requires the post parameters 
+# email and password.
+#
+# If not all fields are passed, the statuscode 
+# 400 for Bad Request is send.
+#
 class ServerHandler < Sinatra::Base
     namespace '/user' do
         before do
