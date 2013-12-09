@@ -3,5 +3,5 @@
 # Rack based handlers and heroku.
 #
 
-require './application/server'
+require './server'
 run ServerHandler

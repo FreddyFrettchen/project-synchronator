@@ -1,0 +1,14 @@
+#!/usr/bin/ruby
+
+require 'bundler'
+
+ENV['TEST'] = 'true'
+ENV['BUNDLE_GEMFILE'] = '../../Gemfile'
+
+Bundler.require
+
+DB = Sequel.sqlite(':memory:')
+
+require_relative 'test_user'
+require_relative 'test_user_route'
+require_relative 'test_data_route'

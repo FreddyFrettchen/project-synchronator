@@ -1,13 +1,10 @@
 require 'pp'
 require 'test/unit'
 
-DB = Sequel.sqlite(':memory:')
 
 require_relative '../models/schema/db.rb'
 require_relative '../models/user.rb'
-require_relative '../models/calendar.rb'
-require_relative '../models/contacts.rb'
-require_relative '../models/notes.rb'
+require_relative '../models/data.rb'
 
 class TestUser < Test::Unit::TestCase
     def test_register_success

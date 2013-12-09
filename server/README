@@ -3,4 +3,15 @@ Project-Synchronator Server
 2. Installation
 2.1 Eigener Server
 
+  - Ruby:
+    sudo apt-get install ruby
+
+  - Bundler:
+    sudo gem install bundler
+
+  - im /server verzeichnis:
+    bundle install
+
+  - server mit ./server starten
+
 2.2 Heroku
