@@ -6,12 +6,14 @@ class User < Sequel::Model(:user)
     one_to_many :contacts, :key => :id_user, :class => :Contacts
     one_to_many :calendar, :key => :id_user, :class => :Calendar
 
+    #@override
     def validate
         super
         validates_presence [:email, :password]
         validates_unique :email
     end
 
+    #@override
     def before_save
         super
         self.register ||= Time.new 
@@ -50,7 +52,8 @@ class User < Sequel::Model(:user)
         return false if self.approved == true
         self.destroy
     end
-    
+     
+    #@override
     def to_s
         "<USER ID:#{self.id} MAIL:#{self.email} APPROVED:#{self.approved} REG:#{self.register}>" 
     end
