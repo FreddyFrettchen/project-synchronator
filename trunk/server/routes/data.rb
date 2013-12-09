@@ -35,15 +35,24 @@ class ServerHandler < Sinatra::Base
             end
 
             post '/calendar' do
-                Calendar.create(@data) 
+                entry = Calendar.new(@data) 
+                halt(403) unless entry.valid?
+                entry.save
+                halt(200)
             end
 
             post '/contacts' do
-                Contacts.create(@data) 
+                entry = Contacts.new(@data) 
+                halt(403) unless entry.valid?
+                entry.save
+                halt(200)
             end
 
             post '/notes' do
-                Notes.create(@data) 
+                entry = Notes.new(@data) 
+                halt(403) unless entry.valid?
+                entry.save
+                halt(200)
             end
         end
 
