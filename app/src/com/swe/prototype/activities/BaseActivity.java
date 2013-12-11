@@ -1,5 +1,11 @@
 package com.swe.prototype.activities;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+
 import com.swe.prototype.R;
 import com.swe.prototype.R.id;
 import com.swe.prototype.R.menu;
@@ -73,5 +79,31 @@ public class BaseActivity extends Activity {
 	public void showListNotes() {
 		Intent myIntent = new Intent(this, ListNotesActivity.class);
 		startActivity(myIntent);
+	}
+	
+	/**
+	 * urlencodes list of NameValuePairs
+	 * 
+	 * @param params
+	 * @return urlencoded querystring
+	 * @throws UnsupportedEncodingException
+	 */
+	String getQuery(List<NameValuePair> params)
+			throws UnsupportedEncodingException {
+		StringBuilder result = new StringBuilder();
+		boolean first = true;
+
+		for (NameValuePair pair : params) {
+			if (first)
+				first = false;
+			else
+				result.append("&");
+
+			result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
+			result.append("=");
+			result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
+		}
+
+		return result.toString();
 	}
 }
