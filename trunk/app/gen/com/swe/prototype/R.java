@@ -45,12 +45,12 @@ public final class R {
         public static final int action_home=0x7f09000e;
         public static final int action_notes=0x7f090011;
         public static final int action_settings=0x7f09000c;
-        public static final int button1=0x7f090000;
-        public static final int button2=0x7f09000a;
-        public static final int editText1=0x7f090007;
-        public static final int editText2=0x7f090009;
+        public static final int button_login=0x7f090000;
+        public static final int button_register=0x7f09000a;
         public static final int editText3=0x7f090001;
         public static final int imageView1=0x7f09000b;
+        public static final int input_email=0x7f090007;
+        public static final int input_password=0x7f090009;
         public static final int textView1=0x7f090006;
         public static final int textView2=0x7f090004;
         public static final int view1=0x7f090008;
