@@ -1,10 +1,8 @@
 require 'pp'
 require 'test/unit'
 
-
-require_relative '../models/schema/db.rb'
-require_relative '../models/user.rb'
-require_relative '../models/data.rb'
+require_relative '../models/schema/db'
+require_relative '../models/init'
 
 class TestUser < Test::Unit::TestCase
     def test_register_success
