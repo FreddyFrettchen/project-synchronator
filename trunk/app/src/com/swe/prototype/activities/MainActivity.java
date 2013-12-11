@@ -90,13 +90,7 @@ public class MainActivity extends BaseActivity {
 			Log.v(TAG, "no internet");
 			Log.v(TAG, "email: " + email);
 			Log.v(TAG, "password: " + password);
-			// textView.setText("No network connection available.");
 		}
-		/*
-		 * Log.v(TAG, "email: " + email); Log.v(TAG, "password: " + password);
-		 */
-
-		// login hier
 	}
 
 	private void loginFailed() {
@@ -114,25 +108,24 @@ public class MainActivity extends BaseActivity {
 		startActivity(myIntent);
 	}
 
-	private class AuthenticateUserTask extends AsyncTask<String, Void, String> {
-		@Override
-		protected String doInBackground(String... params) {
+	private class AuthenticateUserTask extends AsyncTask<String, Void, Boolean> {
+		protected Boolean doInBackground(String... params) {
 			String serverurl = params[0];
 			String username = params[1];
 			String password = params[2];
 			//
 			try {
-				return authenticate(serverurl, username, password) ? "1" : "0";
+				return authenticate(serverurl, username, password);
 			} catch (IOException e) {
-				return "IO EXCEPTION: " + e.getMessage();
+				//turn "IO EXCEPTION: " + e.getMessage();
 			}
+			return false;
 		}
 
 		// onPostExecute displays the results of the AsyncTask.
-		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Boolean result) {
 			Log.v(TAG, "Result authentication = " + result);
-			if( result == "1" )
+			if( result )
 				postLogin();
 			else
 				loginFailed();
@@ -169,32 +162,6 @@ public class MainActivity extends BaseActivity {
 			Log.d(TAG, "The response is: " + response);
 
 			return response == 200 ? true : false;
-		}
-
-		/**
-		 * urlencodes list of NameValuePairs
-		 * 
-		 * @param params
-		 * @return urlencoded querystring
-		 * @throws UnsupportedEncodingException
-		 */
-		private String getQuery(List<NameValuePair> params)
-				throws UnsupportedEncodingException {
-			StringBuilder result = new StringBuilder();
-			boolean first = true;
-
-			for (NameValuePair pair : params) {
-				if (first)
-					first = false;
-				else
-					result.append("&");
-
-				result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
-				result.append("=");
-				result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
-			}
-
-			return result.toString();
 		}
 	}
 }

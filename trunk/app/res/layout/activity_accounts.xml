@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/register_button_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -15,7 +15,7 @@
     <Space
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText3"
+        android:layout_below="@+id/register_input_password"
         android:layout_marginTop="47dp"
         android:layout_toRightOf="@+id/TextView01" />
 
@@ -48,7 +48,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/input_email"
+        android:id="@+id/register_input_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView1"
@@ -66,7 +66,7 @@
         android:layout_alignParentTop="true" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/register_input_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/input_email"
@@ -79,14 +79,14 @@
         android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/editText3"
-        android:layout_alignLeft="@+id/editText3"
+        android:layout_above="@+id/register_input_password"
+        android:layout_alignLeft="@+id/register_input_password"
         android:layout_marginBottom="18dp"
         android:text="Passwort:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/input_password"
+        android:id="@+id/register_input_password_rep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/TextView01"
@@ -103,8 +103,8 @@
         android:id="@+id/TextView02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/input_password"
-        android:layout_below="@+id/editText3"
+        android:layout_alignLeft="@+id/register_input_password_rep"
+        android:layout_below="@+id/register_input_password"
         android:layout_marginTop="49dp"
         android:text="Passwort wiederholen:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
