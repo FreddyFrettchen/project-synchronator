@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
+	
+	// test
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
