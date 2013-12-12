@@ -4,10 +4,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +13,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,11 +29,11 @@ import android.widget.EditText;
 
 import com.swe.prototype.R;
 
-// muss in register umbenannt werden
 public class AccountsActivity extends BaseActivity {
-	
+
 	private static final String TAG = "AccountsActivity";
-	
+	ProgressDialog dialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,6 +49,11 @@ public class AccountsActivity extends BaseActivity {
 		});
 	}
 	
+	private void initializeDialog() {
+		dialog = ProgressDialog.show(AccountsActivity.this, "", "Bitte einen moment geduld...", true);
+		dialog.show();
+	}
+
 	private void alertPasswordsNotMatching() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
@@ -59,31 +63,35 @@ public class AccountsActivity extends BaseActivity {
 		dlgAlert.setCancelable(true);
 		dlgAlert.create().show();
 	}
+	
+	/**
+	 * returns the content of a
+	 * editText by id.
+	 * @param id
+	 * @return
+	 */
+	private String getField(int id){
+		return ((EditText) findViewById(id)).getText().toString();
+	}
 
 	private void doRegistration() {
-		String url = "http://10.0.2.2:45678";
+		initializeDialog();
+		String email = getField(R.id.register_input_email);
+		String password = getField(R.id.register_input_password);
+		String password2 = getField(R.id.register_input_password_rep);
 		
-		String email = ((EditText) findViewById(R.id.register_input_email)).getText()
-				.toString();
-		String password = ((EditText) findViewById(R.id.register_input_password))
-				.getText().toString();
-		String password2 = ((EditText) findViewById(R.id.register_input_password_rep))
-				.getText().toString();
-		
-		if( !password.equals(password2) ){
+		if (!password.equals(password2)) {
 			alertPasswordsNotMatching();
 			return;
 		}
-		
-		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-		if (networkInfo != null && networkInfo.isConnected()) {
-			new RegisterUserTask().execute(url, email, password);
+
+		if (hasInternetConnection()) {
+			new RegisterUserTask().execute(SERVER, email, password);
 		} else {
 			Log.i(TAG, "No internet");
 		}
 	}
-	
+
 	private void registerFailed() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
@@ -93,28 +101,26 @@ public class AccountsActivity extends BaseActivity {
 		dlgAlert.setCancelable(true);
 		dlgAlert.create().show();
 	}
-	
-	private void openLogin(){
-		Intent myIntent = new Intent(this, MainActivity.class);
-		startActivity(myIntent);		
+
+	private void openLogin() {
+		startActivity(new Intent(this, MainActivity.class));
+		finish();
 	}
-	
-	private void postRegister(){
+
+	private void postRegister() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
 		dlgAlert.setMessage("Nachdem Ihr Account vom Admin freigeschaltet wurde, können Sie sich einloggen.");
 		dlgAlert.setTitle("Registrierung erfolgreich");
-		dlgAlert.setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            	openLogin();
-            }
-        });
+		dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				openLogin();
+			}
+		});
 		dlgAlert.setCancelable(true);
 		dlgAlert.create().show();
-		
 	}
-	
+
 	private class RegisterUserTask extends AsyncTask<String, Void, Boolean> {
 		protected Boolean doInBackground(String... params) {
 			String serverurl = params[0];
@@ -124,28 +130,29 @@ public class AccountsActivity extends BaseActivity {
 			try {
 				return register(serverurl, username, password);
 			} catch (IOException e) {
-				//turn "IO EXCEPTION: " + e.getMessage();
+				// turn "IO EXCEPTION: " + e.getMessage();
 			}
 			return false;
 		}
 
 		// onPostExecute displays the results of the AsyncTask.
 		protected void onPostExecute(Boolean result) {
+			dialog.dismiss();
 			Log.v(TAG, "Result authentication = " + result);
-			if( result )
+			if (result)
 				postRegister();
 			else
 				registerFailed();
 		}
 
-		private boolean register(String server, String email,
-				String password) throws IOException {
+		private boolean register(String server, String email, String password)
+				throws IOException {
 			String authentification_url = server + "/user/register";
 
 			URL url = new URL(authentification_url);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setReadTimeout(10000 /* milliseconds */);
-			conn.setConnectTimeout(15000 /* milliseconds */);
+			conn.setReadTimeout(10000);
+			conn.setConnectTimeout(15000);
 			conn.setRequestMethod("POST");
 			conn.setDoInput(true);
 			conn.setDoOutput(true);

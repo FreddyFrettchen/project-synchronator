@@ -7,6 +7,9 @@ import android.provider.ContactsContract.CommonDataKinds.Note;
 import com.swe.prototype.R;
 
 public class ListContactsActivity extends BaseActivity {
+	
+	private static final String TAG = "ListContactsActivity";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

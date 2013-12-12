@@ -11,12 +11,19 @@ import com.swe.prototype.R.id;
 import com.swe.prototype.R.menu;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
 public class BaseActivity extends Activity {
+
+	protected static final String SERVER = "http://10.0.2.2:45678";
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -24,63 +31,46 @@ public class BaseActivity extends Activity {
 		return true;
 	}
 
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_accounts:
-			showAccounts();
+			show(AccountsActivity.class);
 			return true;
 		case R.id.action_settings:
-			showSettings();
+			show(SettingsActivity.class);
 			return true;
 		case R.id.action_home:
-			showHome();
+			show(MainActivity.class);
 			return true;
 		case R.id.action_contacts:
-			showListContacts();
+			show(ListContactsActivity.class);
 			return true;
 		case R.id.action_calendar:
-			showCalendar();
+			show(CalendarActivity.class);
 			return true;
 		case R.id.action_notes:
-			showListNotes();
+			show(ListNotesActivity.class);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
-	public void showAccounts() {
-		Intent myIntent = new Intent(this, AccountsActivity.class);
-		startActivity(myIntent);
+
+	public void show(Class<?> cls) {
+		startActivity(new Intent(this, cls));
 	}
 	
-	public void showHome() {
-		Intent myIntent = new Intent(this, MainActivity.class);
-		startActivity(myIntent);
-	}
-	
-	public void showSettings() {
-		Intent myIntent = new Intent(this, SettingsActivity.class);
-		startActivity(myIntent);
+	/**
+	 * checks if the device is connected to the Internet
+	 * @return
+	 */
+	protected boolean hasInternetConnection(){
+		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+		return (networkInfo != null && networkInfo.isConnected());
 	}
 
-	public void showListContacts() {
-		Intent myIntent = new Intent(this, ListContactsActivity.class);
-		startActivity(myIntent);
-	}
-
-	public void showCalendar() {
-		Intent myIntent = new Intent(this, CalendarActivity.class);
-		startActivity(myIntent);
-	}
-
-	public void showListNotes() {
-		Intent myIntent = new Intent(this, ListNotesActivity.class);
-		startActivity(myIntent);
-	}
-	
 	/**
 	 * urlencodes list of NameValuePairs
 	 * 
