@@ -66,25 +66,32 @@ class TestDataRoute < Test::Unit::TestCase
   end
 
   def test_update_data
-#    credentials = {"email" => "update@mail.com", "password" => "dpd"}
-#    post '/user/register', credentials
-#    User.find(:email => credentials["email"]).approve!
-#
-#    # set some data to be set
-#    credentials["data"] = "TESTDATA"
-#    %w{calendar contact note}.each do |route|
-#        post "/data/add/#{route}", credentials
-#    end
-#
-#    credentials["data"] = "UPDATEDDATA"
-#    # now we update this data
-#    %w{calendar contacts notes}.each do |route|
-#        post "/data/update/#{route}", credentials
-#        post "/data/get/#{route}", credentials
-#        assert_equal 200 , last_response.status
-#        assert_equal credentials["data"], JSON.parse(last_response.body).first["data"]
-#    end
-#
+    credentials = {"email" => "update@mail.com", "password" => "dpd"}
+    post '/user/register', credentials
+    User.find(:email => credentials["email"]).approve!
+
+    # set some data to be set
+    credentials["data"] = "TESTDATA"
+    %w{calendar contact note}.each do |route|
+        post "/data/add/#{route}", credentials
+    end
+
+    # get the set data
+    data = {}
+    %w{calendar contacts notes}.each do |route|
+        post "/data/get/#{route}", credentials
+        data[route] = JSON.parse(last_response.body).first
+    end
+
+    credentials["data"] = "UPDATEDDATA"
+    # now we update this data
+    data.each_pair do |route,entry|
+        post "/data/update/#{route}/#{entry["id"].to_s}", credentials
+        assert_equal 200 , last_response.status
+        post "/data/get/#{route}", credentials
+        assert_equal credentials["data"], JSON.parse(last_response.body).first["data"]
+    end
+
   end
 
   def test_sync_data
