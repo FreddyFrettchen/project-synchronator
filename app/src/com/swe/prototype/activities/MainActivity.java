@@ -32,9 +32,11 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,8 +46,8 @@ import android.widget.EditText;
 public class MainActivity extends BaseActivity {
 
 	private static final String TAG = "MainActivity";
+	ProgressDialog dialog;
 
-	// test
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,18 +76,20 @@ public class MainActivity extends BaseActivity {
 		startActivity(myIntent);
 	}
 
+	private void initializeDialog() {
+		dialog = ProgressDialog.show(MainActivity.this, "", "Bitte einen moment geduld...", true);
+		dialog.show();
+	}
+
 	private void doAuthentication() {
+		initializeDialog();
 		String email = ((EditText) findViewById(R.id.input_email)).getText()
 				.toString();
 		String password = ((EditText) findViewById(R.id.input_password))
 				.getText().toString();
 
-		String url = "http://10.0.2.2:45678";
-
-		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-		if (networkInfo != null && networkInfo.isConnected()) {
-			new AuthenticateUserTask().execute(url, email, password);
+		if (hasInternetConnection()) {
+			new AuthenticateUserTask().execute(SERVER, email, password);
 		} else {
 			Log.v(TAG, "no internet");
 			Log.v(TAG, "email: " + email);
@@ -102,10 +106,10 @@ public class MainActivity extends BaseActivity {
 		dlgAlert.setCancelable(true);
 		dlgAlert.create().show();
 	}
-	
-	private void postLogin(){
-		Intent myIntent = new Intent(this, CalendarActivity.class);
-		startActivity(myIntent);
+
+	private void postLogin() {
+		startActivity(new Intent(this, CalendarActivity.class));
+		finish();
 	}
 
 	private class AuthenticateUserTask extends AsyncTask<String, Void, Boolean> {
@@ -117,18 +121,20 @@ public class MainActivity extends BaseActivity {
 			try {
 				return authenticate(serverurl, username, password);
 			} catch (IOException e) {
-				//turn "IO EXCEPTION: " + e.getMessage();
+				// turn "IO EXCEPTION: " + e.getMessage();
 			}
 			return false;
 		}
 
 		// onPostExecute displays the results of the AsyncTask.
 		protected void onPostExecute(Boolean result) {
+			dialog.dismiss();
 			Log.v(TAG, "Result authentication = " + result);
-			if( result )
+			if (result) {
 				postLogin();
-			else
+			} else {
 				loginFailed();
+			}
 		}
 
 		private boolean authenticate(String server, String email,
