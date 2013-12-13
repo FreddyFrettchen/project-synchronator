@@ -17,6 +17,8 @@ import com.swe.prototype.net.AsyncTaskBase;
 
 public abstract class AsyncUserTask extends AsyncTaskBase<String, Void, Boolean> {
 	
+	protected static final String TAG = "AsyncUserTask";
+	
 	protected boolean authenticate(String server, String email, String password)
 			throws IOException {
 		String authentification_url = server + "/user/authenticate";

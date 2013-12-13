@@ -15,11 +15,14 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
+import com.swe.prototype.activities.MainActivity;
+
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		AsyncTask<Params, Progress, Result> {
-
+	
 	/**
 	 * urlencodes list of NameValuePairs
 	 * 

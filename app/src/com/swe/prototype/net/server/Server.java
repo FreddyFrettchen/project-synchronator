@@ -97,4 +97,33 @@ public class Server {
 			return false;
 		}
 	}
+	
+	/**
+	 * get data from useraccount on the server
+	 * to the app.
+	 * Task returns a list of entries of specified Type
+	 * given in param[2]
+	 * 
+	 * @author batman
+	 */
+	public class GetDataTask<Type> extends AsyncDataTask<List<Type>> {
+		/**
+		 * @params[2] -> possible values: calendar, contacts, notes
+		 */
+		protected List<Type> doInBackground(String... params) {
+			String serverurl = params[0];
+			String username = params[1];
+			String password = sha1(params[2]);
+			String type = params[3];
+
+			String response = null;
+			try {
+				response = get(serverurl, username, password, type);
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
 }

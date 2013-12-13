@@ -39,6 +39,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,6 +54,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 
 		// buttons and listeners for login register
@@ -92,7 +94,7 @@ public class MainActivity extends BaseActivity {
 
 		if (hasInternetConnection()) {
 			Server server = new Server();
-			server.new AuthenticateUserTask(){
+			server.new AuthenticateUserTask() {
 				@Override
 				protected void onPostExecute(Boolean result) {
 					super.onPostExecute(result);
@@ -111,7 +113,7 @@ public class MainActivity extends BaseActivity {
 	private void loginFailed() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
-		dlgAlert.setMessage("Username/Passwort falsch.");
+		dlgAlert.setMessage("Username/Passwort falsch oder nicht freigeschaltet.");
 		dlgAlert.setTitle("Login fehlgeschlagen");
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.setCancelable(true);
@@ -119,6 +121,17 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void postLogin() {
+		String email = ((EditText) findViewById(R.id.input_email)).getText()
+				.toString();
+		String password = ((EditText) findViewById(R.id.input_password))
+				.getText().toString();
+
+		SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0)
+				.edit();
+		editor.putString("email", email);
+		editor.putString("password", password);
+		editor.commit();
+
 		startActivity(new Intent(this, CalendarActivity.class));
 		finish();
 	}
