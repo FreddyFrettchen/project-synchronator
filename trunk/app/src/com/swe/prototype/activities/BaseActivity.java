@@ -2,6 +2,7 @@ package com.swe.prototype.activities;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -14,15 +15,45 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
-public class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity {
 
+	protected static final String TAG = "BaseActivity";
+	protected static final String PREFS_NAME = "SynchronatorPrefs";
 	protected static final String SERVER = "http://10.0.2.2:45678";
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+	
+	/*public void checkLogin(){
+		if( getClassTag().equals("MainActivity") ) return;
+		if (!(isLoggedIn() && isPublic())) {
+			startActivity(new Intent(this, MainActivity.class));
+			finish();
+		}
+	}*/
+
+	/**
+	 * Checks if we have logincreds saved for a user
+	 * @return logged in true/false
+	 */
+	private boolean isLoggedIn() {
+		// Restore preferences
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		String email = settings.getString("email", null);
+		String password = settings.getString("password", null);
+
+		return email != null && password != null;
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,39 +92,19 @@ public class BaseActivity extends Activity {
 		startActivity(new Intent(this, cls));
 	}
 	
-	/**
-	 * checks if the device is connected to the Internet
-	 * @return
-	 */
-	protected boolean hasInternetConnection(){
-		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-		return (networkInfo != null && networkInfo.isConnected());
+	public void showAndFinish(Class<?> cls) {
+		show(cls);
+		finish();
 	}
 
 	/**
-	 * urlencodes list of NameValuePairs
+	 * checks if the device is connected to the Internet
 	 * 
-	 * @param params
-	 * @return urlencoded querystring
-	 * @throws UnsupportedEncodingException
+	 * @return
 	 */
-	String getQuery(List<NameValuePair> params)
-			throws UnsupportedEncodingException {
-		StringBuilder result = new StringBuilder();
-		boolean first = true;
-
-		for (NameValuePair pair : params) {
-			if (first)
-				first = false;
-			else
-				result.append("&");
-
-			result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
-			result.append("=");
-			result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
-		}
-
-		return result.toString();
+	protected boolean hasInternetConnection() {
+		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+		return (networkInfo != null && networkInfo.isConnected());
 	}
 }
