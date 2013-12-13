@@ -58,6 +58,10 @@
             android:name="com.swe.prototype.activities.AccountsActivity"
             android:label="Accounts" >
         </activity>
+        <activity
+            android:name="com.swe.prototype.activities.RegisterActivity"
+            android:label="Register" >
+        </activity>
     </application>
 
 </manifest>

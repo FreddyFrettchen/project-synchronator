@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity {
 		btn_register.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				switchToAccounts();
+				switchToRegister();
 			}
 		});
 
@@ -75,8 +75,8 @@ public class MainActivity extends BaseActivity {
 		});
 	}
 
-	private void switchToAccounts() {
-		startActivity(new Intent(this, AccountsActivity.class));
+	private void switchToRegister() {
+		startActivity(new Intent(this, RegisterActivity.class));
 	}
 
 	private void initializeDialog() {
