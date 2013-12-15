@@ -27,6 +27,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import com.swe.prototype.R;
 import com.swe.prototype.net.server.AsyncUserTask;
 import com.swe.prototype.net.server.Server;
+import com.swe.prototype.net.server.Server.Security;
 
 import android.R.string;
 import android.net.ConnectivityManager;
@@ -54,6 +55,18 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		/*String encryption_key = "meinpw";
+		String key_to_enc = "asd";
+		Server server = new Server();
+		 Server.Security s = server.new Security(encryption_key);
+         String encrypted = s.encrypt(key_to_enc);
+         String decrypted = s.decrypt(encrypted);
+         Log.i(TAG,"pin: " + encryption_key + "\n" +
+                 "password: " + key_to_enc + "\n" +
+                 "encrypted: " + encrypted + "\n" +
+                 "decrypted: " + decrypted + "\n" +
+                 "salt: " + s.getSalt());*/
 
 		setContentView(R.layout.activity_main);
 
@@ -96,10 +109,10 @@ public class MainActivity extends BaseActivity {
 			Server server = new Server();
 			server.new AuthenticateUserTask() {
 				@Override
-				protected void onPostExecute(Boolean result) {
-					super.onPostExecute(result);
+				protected void onPostExecute(Boolean success) {
+					super.onPostExecute(success);
 					dialog.dismiss();
-					if (result)
+					if (success)
 						postLogin();
 					else
 						loginFailed();
@@ -120,6 +133,7 @@ public class MainActivity extends BaseActivity {
 		dlgAlert.create().show();
 	}
 
+	/* Speichert logindaten */
 	private void postLogin() {
 		String email = ((EditText) findViewById(R.id.input_email)).getText()
 				.toString();
