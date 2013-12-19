@@ -46,6 +46,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
 
@@ -87,25 +88,29 @@ public class MainActivity extends BaseActivity {
 			}
 		});
 	}
-
+	
+	// wird aufgerufen, wenn der user auf Registrieren-Button klickt
 	private void switchToRegister() {
 		startActivity(new Intent(this, RegisterActivity.class));
 	}
 
-	private void initializeDialog() {
+	// wird bei login-versuch aufgerufen
+	private void initializeDialog(String message) {
 		dialog = ProgressDialog.show(MainActivity.this, "",
-				"Bitte einen moment geduld...", true);
+				message, true);
 		dialog.show();
 	}
-
+	
+	// wird aufgerufen, wenn der user auf Login-Button klickt
 	private void doAuthentication() {
-		initializeDialog();
+		
 		String email = ((EditText) findViewById(R.id.input_email)).getText()
 				.toString();
 		String password = ((EditText) findViewById(R.id.input_password))
 				.getText().toString();
 
 		if (hasInternetConnection()) {
+			initializeDialog(getString(R.string.wait));
 			Server server = new Server();
 			server.new AuthenticateUserTask() {
 				@Override
@@ -120,14 +125,17 @@ public class MainActivity extends BaseActivity {
 			}.execute(SERVER, email, password);
 		} else {
 			Log.v(TAG, "no internet");
+			Toast.makeText(getApplicationContext(), 
+                    R.string.no_internet, Toast.LENGTH_LONG).show();
+			//initializeDialog("no internet connection"+R.string.no_internet,true);
 		}
 	}
 
 	private void loginFailed() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
-		dlgAlert.setMessage("Username/Passwort falsch oder nicht freigeschaltet.");
-		dlgAlert.setTitle("Login fehlgeschlagen");
+		dlgAlert.setMessage("Username/Password wrong or not activated yet.");
+		dlgAlert.setTitle(getString(R.string.login_failed));
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.setCancelable(true);
 		dlgAlert.create().show();
