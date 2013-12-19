@@ -50,6 +50,15 @@ class ServerHandler < Sinatra::Base
                     halt( changed.eql(1) ? 200 : 404 )
                 end
             end
+            
+            namespace '/delete' do
+                post "/#{route}/:id" do
+                    changed = @user.send("#{route}_dataset")
+                    .where(:id => @params[:id])
+                    .delete
+                    halt( (changed == 1) ? 200 : 404 )
+                end
+            end
 
             # "/get" requests return the complete set of records
             # as json list to the client. No params needed.
@@ -70,6 +79,13 @@ class ServerHandler < Sinatra::Base
                     @user.send(route)
                     .select{|e| e.last_update.to_i > last_sync}
                     .map(&:public_values).to_json
+                end
+            end
+
+            namespace '/ids' do
+                post "/#{route}" do
+                    @user.send(route)
+                    .map{|e|e.id}.to_json
                 end
             end
         end
