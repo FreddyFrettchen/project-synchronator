@@ -6,12 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.swe.prototype.R;
+import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.net.server.Server;
 import com.swe.prototype.net.server.Server.RegisterUserTask;
 
@@ -33,6 +35,15 @@ public class RegisterActivity extends BaseActivity {
 				doRegistration();
 			}
 		});
+	}
+	
+
+	/*
+	müssen wir überschreiben, damit das optionsmenü nicht sichtbar ist und der user nicht am registrieren vorbei kommt.
+	*/
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
 	}
 
 	private void initializeDialog() {
@@ -83,7 +94,7 @@ public class RegisterActivity extends BaseActivity {
 					else
 						registerFailed();
 				}
-			}.execute(SERVER, email, password);
+			}.execute(Settings.getServer(), email, password);
 		} else {
 			Log.i(TAG, "No internet");
 		}

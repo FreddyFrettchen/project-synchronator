@@ -25,6 +25,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 
 import com.swe.prototype.R;
+import com.swe.prototype.globalsettings.Settings;
+import com.swe.prototype.globalsettings.Tools;
 import com.swe.prototype.net.server.AsyncUserTask;
 import com.swe.prototype.net.server.Server;
 import com.swe.prototype.net.server.Server.Security;
@@ -35,6 +37,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -42,6 +45,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -52,7 +57,57 @@ public class MainActivity extends BaseActivity {
 
 	private static final String TAG = "MainActivity";
 	ProgressDialog dialog;
+	
+	/*
+	 * wird aufgerufen sobald user auf das imageview Serversettings clickt*/
+	public void onClickServerSettings(View v){
+		AlertDialog.Builder ssAlert = new AlertDialog.Builder(this);
+		LayoutInflater inflator = getLayoutInflater();
+		View optionDialogView = inflator.inflate(R.layout.dialog_serversettings,
+				null);
+		final EditText ip = (EditText)optionDialogView.findViewById(R.id.editText_ip);
+		final EditText port = (EditText) optionDialogView.findViewById(R.id.editText_port);
+		ip.setText(Settings.getIp());
+		port.setText(Settings.getPort());
+		ssAlert.setView(optionDialogView);
+		//final EditText ip = (EditText) optionDialogView.findViewById(R.id.editText_ip);
+		
+		ssAlert.setCancelable(true);
+		ssAlert.setTitle("Server Settings");
+		ssAlert.setIcon(getResources().getDrawable(R.drawable.server_settings));
+		ssAlert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+				String newIP = ip.getText().toString();
+				String newPort = port.getText().toString();
+				if(Tools.isValidPort(newPort)&&Tools.isValidIP(newIP)){
+					Settings.setServer(newIP, newPort);
+				}
+				else{
+					System.out.println("Server Settings IP oder Port nicht valide!");
+				}
+				
+
+			}
+		});
+		ssAlert.setNegativeButton("Cancel", null);
+		ssAlert.setCancelable(true);
+		ssAlert.create().show();
+
+	}
+	
+
+	
+
+	/*
+	Die müssen wir überschreiben, damit das optionsmenü nicht sichtbar ist und der user nicht am login vorbei kommt.
+	*/
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -122,7 +177,7 @@ public class MainActivity extends BaseActivity {
 					else
 						loginFailed();
 				}
-			}.execute(SERVER, email, password);
+			}.execute(Settings.getServer(), email, password);
 		} else {
 			Log.v(TAG, "no internet");
 			Toast.makeText(getApplicationContext(), 
@@ -148,7 +203,7 @@ public class MainActivity extends BaseActivity {
 		String password = ((EditText) findViewById(R.id.input_password))
 				.getText().toString();
 
-		SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0)
+		SharedPreferences.Editor editor = getSharedPreferences(Settings.getPrefs_name(), 0)
 				.edit();
 		editor.putString("email", email);
 		editor.putString("password", password);
