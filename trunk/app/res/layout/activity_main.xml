@@ -94,4 +94,13 @@
         android:onClick="onClickServerSettings"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
+    <Button
+        android:id="@+id/tempbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:onClick="onClickTmpAmLoginVorbei"
+        android:text="tmpButtonAmLoginVorbei" />
+
 </RelativeLayout>

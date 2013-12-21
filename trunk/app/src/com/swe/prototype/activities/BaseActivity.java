@@ -65,24 +65,38 @@ public abstract class BaseActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		// hier muss vorher noch geprüft werden ob die Activity nicht gerade schon im vordergrund ist...
+		
 		switch (item.getItemId()) {
 		case R.id.action_accounts:
-			show(AccountsActivity.class);
+			if(!(this instanceof AccountsActivity)){
+				show(AccountsActivity.class);
+			}
 			return true;
 		case R.id.action_settings:
-			show(SettingsActivity.class);
+			if(!(this instanceof SettingsActivity)){
+				show(SettingsActivity.class);
+			}
 			return true;
 		case R.id.action_home:
-			show(MainActivity.class);
+			if(!(this instanceof MainActivity)){
+				show(MainActivity.class);
+			}
 			return true;
 		case R.id.action_contacts:
-			show(ListContactsActivity.class);
+			if(!(this instanceof ListContactsActivity)){
+				show(ListContactsActivity.class);
+			}
 			return true;
 		case R.id.action_calendar:
-			show(CalendarActivity.class);
+			if(!(this instanceof CalendarActivity)){
+				show(CalendarActivity.class);
+			}
 			return true;
 		case R.id.action_notes:
-			show(ListNotesActivity.class);
+			if(!(this instanceof ListNotesActivity)){
+				show(ListNotesActivity.class);
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

@@ -58,6 +58,64 @@ public class MainActivity extends BaseActivity {
 	private static final String TAG = "MainActivity";
 	ProgressDialog dialog;
 	
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		/*String encryption_key = "meinpw";
+		String key_to_enc = "asd";
+		Server server = new Server();
+		 Server.Security s = server.new Security(encryption_key);
+         String encrypted = s.encrypt(key_to_enc);
+         String decrypted = s.decrypt(encrypted);
+         Log.i(TAG,"pin: " + encryption_key + "\n" +
+                 "password: " + key_to_enc + "\n" +
+                 "encrypted: " + encrypted + "\n" +
+                 "decrypted: " + decrypted + "\n" +
+                 "salt: " + s.getSalt());*/
+
+		setContentView(R.layout.activity_main);
+
+		// buttons and listeners for login register
+		Button btn_register = (Button) findViewById(R.id.button_register);
+		btn_register.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				switchToRegister();
+			}
+		});
+
+		Button btn_login = (Button) findViewById(R.id.button_login);
+		btn_login.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				doAuthentication();
+			}
+		});
+	}
+	
+	/* 
+	 * muss am ende gelöscht werden
+	 * */
+	public void onClickTmpAmLoginVorbei(View v){
+		show(CalendarActivity.class);
+		
+	}
+	
+	// wird aufgerufen, wenn der user auf Registrieren-Button klickt
+	private void switchToRegister() {
+		startActivity(new Intent(this, RegisterActivity.class));
+	}
+	
+	/*
+	Die müssen wir überschreiben, damit das optionsmenü nicht sichtbar ist und der user nicht am login vorbei kommt.
+	*/
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
+	
 	/*
 	 * wird aufgerufen sobald user auf das imageview Serversettings clickt*/
 	public void onClickServerSettings(View v){
@@ -98,56 +156,6 @@ public class MainActivity extends BaseActivity {
 
 	}
 	
-
-	
-
-	/*
-	Die müssen wir überschreiben, damit das optionsmenü nicht sichtbar ist und der user nicht am login vorbei kommt.
-	*/
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return true;
-	}
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		/*String encryption_key = "meinpw";
-		String key_to_enc = "asd";
-		Server server = new Server();
-		 Server.Security s = server.new Security(encryption_key);
-         String encrypted = s.encrypt(key_to_enc);
-         String decrypted = s.decrypt(encrypted);
-         Log.i(TAG,"pin: " + encryption_key + "\n" +
-                 "password: " + key_to_enc + "\n" +
-                 "encrypted: " + encrypted + "\n" +
-                 "decrypted: " + decrypted + "\n" +
-                 "salt: " + s.getSalt());*/
-
-		setContentView(R.layout.activity_main);
-
-		// buttons and listeners for login register
-		Button btn_register = (Button) findViewById(R.id.button_register);
-		btn_register.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				switchToRegister();
-			}
-		});
-
-		Button btn_login = (Button) findViewById(R.id.button_login);
-		btn_login.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				doAuthentication();
-			}
-		});
-	}
-	
-	// wird aufgerufen, wenn der user auf Registrieren-Button klickt
-	private void switchToRegister() {
-		startActivity(new Intent(this, RegisterActivity.class));
-	}
 
 	// wird bei login-versuch aufgerufen
 	private void initializeDialog(String message) {
