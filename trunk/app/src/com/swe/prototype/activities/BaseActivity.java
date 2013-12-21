@@ -10,6 +10,7 @@ import org.apache.http.NameValuePair;
 import com.swe.prototype.R;
 import com.swe.prototype.R.id;
 import com.swe.prototype.R.menu;
+import com.swe.prototype.globalsettings.Settings;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -25,10 +26,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 public abstract class BaseActivity extends Activity {
-
 	protected static final String TAG = "BaseActivity";
-	protected static final String PREFS_NAME = "SynchronatorPrefs";
-	protected static final String SERVER = "http://10.0.2.2:45678";
+
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,12 +47,14 @@ public abstract class BaseActivity extends Activity {
 	 */
 	private boolean isLoggedIn() {
 		// Restore preferences
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences settings = getSharedPreferences(Settings.getPrefs_name(), 0);
 		String email = settings.getString("email", null);
 		String password = settings.getString("password", null);
 
 		return email != null && password != null;
 	}
+	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
