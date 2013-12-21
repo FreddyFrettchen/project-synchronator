@@ -12,7 +12,7 @@
     <string name="port">Port:</string>
     <string name="ip_example">10.0.2.2</string>
     <string name="port_example">45678</string>
-    
+    <string name="settings">Settings</string>
 
     
     <!-- action bar stuff -->
