@@ -67,6 +67,8 @@ public class ListContactsActivity extends BaseActivity {
 		server.new GetDataTask() {
 			protected void onPostExecute(ArrayList<EncryptedData> list) {
 				super.onPostExecute(list);
+				
+				if(list == null) return;
 
 				Gson gson = new Gson();
 				ArrayList<ServerContact> contacts = new ArrayList<ServerContact>();
