@@ -25,11 +25,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 
 import com.swe.prototype.R;
+import com.swe.prototype.helpers.Security;
+import com.swe.prototype.models.server.ServerContact;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.globalsettings.Tools;
 import com.swe.prototype.net.server.AsyncUserTask;
 import com.swe.prototype.net.server.Server;
-import com.swe.prototype.net.server.Server.Security;
 
 import android.R.string;
 import android.net.ConnectivityManager;
@@ -63,18 +64,6 @@ public class MainActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		/*String encryption_key = "meinpw";
-		String key_to_enc = "asd";
-		Server server = new Server();
-		 Server.Security s = server.new Security(encryption_key);
-         String encrypted = s.encrypt(key_to_enc);
-         String decrypted = s.decrypt(encrypted);
-         Log.i(TAG,"pin: " + encryption_key + "\n" +
-                 "password: " + key_to_enc + "\n" +
-                 "encrypted: " + encrypted + "\n" +
-                 "decrypted: " + decrypted + "\n" +
-                 "salt: " + s.getSalt());*/
-
 		setContentView(R.layout.activity_main);
 
 		// buttons and listeners for login register
@@ -174,7 +163,6 @@ public class MainActivity extends BaseActivity {
 
 		if (hasInternetConnection()) {
 			initializeDialog(getString(R.string.wait));
-			Server server = new Server();
 			server.new AuthenticateUserTask() {
 				@Override
 				protected void onPostExecute(Boolean success) {
@@ -185,7 +173,7 @@ public class MainActivity extends BaseActivity {
 					else
 						loginFailed();
 				}
-			}.execute(Settings.getServer(), email, password);
+			}.execute();
 		} else {
 			Log.v(TAG, "no internet");
 			Toast.makeText(getApplicationContext(), 

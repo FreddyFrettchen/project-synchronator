@@ -50,25 +50,6 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 	}
 
 	/**
-	 * calculate sha1 for given String s
-	 * 
-	 * @param s
-	 * @return sha1 hashed string
-	 */
-	public String sha1(String s) {
-		MessageDigest digest = null;
-		try {
-			digest = MessageDigest.getInstance("SHA-1");
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		digest.reset();
-		byte[] data = digest.digest(s.getBytes());
-		return String.format("%0" + (data.length * 2) + "X", new BigInteger(1,
-				data));
-	}
-
-	/**
 	 * Sets up a post request and returns it. connect(); function has to be
 	 * called to make the actual network call then.
 	 * 

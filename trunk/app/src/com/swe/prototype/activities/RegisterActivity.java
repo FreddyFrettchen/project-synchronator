@@ -84,7 +84,6 @@ public class RegisterActivity extends BaseActivity {
 		}
 
 		if (hasInternetConnection()) {
-			Server server = new Server();
 			server.new RegisterUserTask() {
 				@Override
 				protected void onPostExecute(Boolean result) {
@@ -94,7 +93,7 @@ public class RegisterActivity extends BaseActivity {
 					else
 						registerFailed();
 				}
-			}.execute(Settings.getServer(), email, password);
+			}.execute();
 		} else {
 			Log.i(TAG, "No internet");
 		}
