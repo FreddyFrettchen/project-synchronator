@@ -49,7 +49,7 @@
             android:label="Notes" >
         </activity>
         <activity
-            android:name="com.swe.prototype.activities.NoteActivity"
+            android:name="com.swe.prototype.activities.ChangeNoteActivity"
             android:label="View Note" >
         </activity>
         <activity

@@ -65,7 +65,6 @@ public abstract class BaseActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// hier muss vorher noch geprüft werden ob die Activity nicht gerade schon im vordergrund ist...
 		
 		switch (item.getItemId()) {
 		case R.id.action_accounts:

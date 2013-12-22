@@ -1,8 +1,10 @@
-package com.swe.prototype.activities;
 
+package com.swe.prototype.activities;
 import android.media.audiofx.BassBoost.Settings;
 import com.swe.prototype.globalsettings.*;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -50,6 +52,7 @@ public class SettingsActivity extends BaseActivity {
 
 		
 	}
+
 	
 	private void returnToLastActivity(){
 		finish();
