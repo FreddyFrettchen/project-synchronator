@@ -11,31 +11,25 @@
         android:showAsAction="never"
         android:title="@string/action_accounts"/>
     <item
-        android:id="@+id/action_home"
-        android:orderInCategory="1"
-        android:showAsAction="always"
-        android:title="@string/action_home"
-        android:icon="@drawable/ic_menu_home"
-        android:visible="true" />
-    <item
         android:id="@+id/action_contacts"
+        android:icon="@drawable/ic_menu_friendslist"
         android:orderInCategory="1"
         android:showAsAction="always"
-        android:icon="@drawable/ic_menu_friendslist"
         android:title="@string/action_contacts"
-        android:visible="true" />
+        android:visible="true"/>
     <item
         android:id="@+id/action_calendar"
         android:icon="@drawable/ic_menu_month"
         android:orderInCategory="2"
         android:showAsAction="always"
         android:title="@string/action_calendar"
-        android:visible="true" />
+        android:visible="true"/>
     <item
         android:id="@+id/action_notes"
+        android:icon="@drawable/perm_group_user_dictionary_write"
         android:orderInCategory="3"
         android:showAsAction="always"
-        android:icon="@drawable/perm_group_user_dictionary_write"
         android:title="@string/action_notes"
-        android:visible="true" />
+        android:visible="true"/>
+
 </menu>

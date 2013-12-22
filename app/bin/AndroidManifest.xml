@@ -64,6 +64,10 @@
             android:name="com.swe.prototype.activities.RegisterActivity"
             android:label="Register" >
         </activity>
+         <activity
+            android:name="com.swe.prototype.activities.CreateContactActivity"
+            android:label="Create Contact" >
+        </activity>
     </application>
 
 </manifest>

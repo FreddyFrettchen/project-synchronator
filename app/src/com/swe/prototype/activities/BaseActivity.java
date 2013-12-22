@@ -10,6 +10,8 @@ import org.apache.http.NameValuePair;
 import com.swe.prototype.R;
 import com.swe.prototype.R.id;
 import com.swe.prototype.R.menu;
+import com.swe.prototype.helpers.Security;
+import com.swe.prototype.net.server.Server;
 import com.swe.prototype.globalsettings.Settings;
 
 import android.app.Activity;
@@ -27,10 +29,12 @@ import android.widget.Button;
 
 public abstract class BaseActivity extends Activity {
 	protected static final String TAG = "BaseActivity";
+	protected Server server;
 
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		server = new Server(Settings.getServer(),"a@a.de",Security.sha1("123"));
 	}
 	
 	/*public void checkLogin(){
@@ -75,11 +79,6 @@ public abstract class BaseActivity extends Activity {
 		case R.id.action_settings:
 			if(!(this instanceof SettingsActivity)){
 				show(SettingsActivity.class);
-			}
-			return true;
-		case R.id.action_home:
-			if(!(this instanceof MainActivity)){
-				show(MainActivity.class);
 			}
 			return true;
 		case R.id.action_contacts:

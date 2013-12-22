@@ -4,7 +4,7 @@
     <string name="app_name">Synchronator</string>
     <string name="action_settings">Settings</string>
     <string name="no_internet">No Internet Access</string>
-	<string name="wait">One moment, please!</string>
+    <string name="wait">One moment, please!</string>
     <string name="login_failed">Login failed!</string>
     <string name="content_description">Content Description.</string>
     <string name="server_settings">Server Settings</string>
@@ -17,7 +17,6 @@
     <string name="cancel">Cancel</string>
     <string name="refreshingtime">Refreshing Time (h)</string>
     <string name="refresh">Refresh</string>
-    
     <!-- action bar stuff -->
     <string name="action_home">Home</string>
     <string name="action_contacts">Contacts</string>
@@ -34,7 +33,6 @@
         <item>Kontakt 6</item>
         <item>Kontakt 7</item>
     </string-array>
-    
     <string-array name="notes_array">
         <item>Notiz 1</item>
         <item>Notiz 2</item>
@@ -44,11 +42,14 @@
         <item>Notiz 6</item>
         <item>Notiz 7</item>
     </string-array>
-        <string name="passwort">Passwort</string>
-        <string name="registrieren">Registrieren</string>
-        <string name="synchronator">Synchronator</string>
-        <string name="login">Login</string>
-        <string name="email">Email</string>
-        
 
+    <string name="passwort">Passwort</string>
+    <string name="registrieren">Registrieren</string>
+    <string name="synchronator">Synchronator</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="edit">Edit</string>
+    <string name="move">Move</string>
+    <string name="delete">Delete</string>
+	<string name="action_add_object">Hinzufügen</string>
 </resources>

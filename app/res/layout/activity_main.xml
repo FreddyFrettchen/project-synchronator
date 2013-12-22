@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/button_login"
         android:layout_alignBottom="@+id/button_login"
-        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignLeft="@+id/text_last_name"
         android:layout_marginLeft="54dp"
         android:text="@string/registrieren" />
 
@@ -29,7 +29,7 @@
         android:src="@drawable/ic_launcher2" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/text_last_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView1"
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button_login"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/text_last_name"
         android:layout_marginTop="51dp"
         android:ems="10"
         android:inputType="textEmailAddress"

@@ -8,4 +8,16 @@ public class ExchangeContact extends Contact {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getNumber() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

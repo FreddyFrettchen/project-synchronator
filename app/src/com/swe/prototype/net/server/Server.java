@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -26,6 +27,12 @@ import javax.crypto.spec.PBEParameterSpec;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.swe.prototype.helpers.Security;
+import com.swe.prototype.models.server.EncryptedData;
+import com.swe.prototype.models.server.ServerContact;
+
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
@@ -40,21 +47,26 @@ import android.util.Log;
 public class Server {
 
 	protected static final String TAG = "Server";
-	protected static final String SERVER = "http://10.0.2.2:45678";
+
+	protected String server_url = null;
+	protected String email = null;
+	protected String password_hash = null;
+	protected Security sec = null;
+
+	public Server(String server_url, String email, String password_hash) {
+		this.server_url = server_url;
+		this.email = email;
+		this.password_hash = password_hash;
+		this.sec = new Security(this.password_hash);
+	}
 
 	/**
 	 * Task for User authentification
-	 * 
-	 * @author batman
 	 */
 	public class AuthenticateUserTask extends AsyncUserTask {
 		protected Boolean doInBackground(String... params) {
-			String serverurl = params[0];
-			String username = params[1];
-			String password = sha1(params[2]);
-
 			try {
-				return authenticate(serverurl, username, password);
+				return authenticate(server_url, email, password_hash);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -64,18 +76,11 @@ public class Server {
 
 	/**
 	 * Task for user registration
-	 * 
-	 * @author batman
-	 * 
 	 */
 	public class RegisterUserTask extends AsyncUserTask {
 		protected Boolean doInBackground(String... params) {
-			String serverurl = params[0];
-			String username = params[1];
-			String password = sha1(params[2]);
-
 			try {
-				return register(serverurl, username, password);
+				return register(server_url, email, password_hash);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -84,23 +89,19 @@ public class Server {
 	}
 
 	/**
-	 * Add data to useraccount on the server
-	 * 
-	 * @author batman
+	 * add data to the useraccount on the server. Task returns true if a new
+	 * entry was created on the server.
 	 */
 	public class AddDataTask extends AsyncDataTask<Boolean> {
 		/**
 		 * @params[2] -> possible values: calendar, contact, note
 		 */
 		protected Boolean doInBackground(String... params) {
-			String serverurl = params[0];
-			String username = params[1];
-			String password = sha1(params[2]);
-			String type = params[2];
-			String data = params[3];
+			String type = params[0];
+			String data = sec.encrypt(params[1]);
 
 			try {
-				return add(serverurl, username, password, type, data);
+				return add(server_url, email, password_hash, type, data);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -110,103 +111,37 @@ public class Server {
 
 	/**
 	 * get data from useraccount on the server to the app. Task returns a list
-	 * of entries of specified Type given in param[2]
-	 * 
-	 * @author batman
+	 * of entries of specified Type given in param[2] the entries are still
+	 * encrypted and json encoded seperatly and have to be processed further.
 	 */
-	public class GetDataTask<Type> extends AsyncDataTask<List<Type>> {
+	public class GetDataTask extends AsyncDataTask<ArrayList<EncryptedData>> {
 		/**
 		 * @params[2] -> possible values: calendar, contacts, notes
 		 */
-		protected List<Type> doInBackground(String... params) {
-			String serverurl = params[0];
-			String username = params[1];
-			String password = sha1(params[2]);
-			String type = params[3];
+		protected ArrayList<EncryptedData> doInBackground(String... params) {
+			String type = params[0];
 
 			String response = null;
 			try {
-				response = get(serverurl, username, password, type);
-				return null;
+				response = get(server_url, email, password_hash, type);
+				Type listType = new TypeToken<ArrayList<EncryptedData>>() {
+				}.getType();
+				ArrayList<EncryptedData> list = (ArrayList<EncryptedData>) new Gson()
+						.fromJson(response, listType);
+				String data = null;
+				for (int i = 0; i < list.size(); i++) {
+					data = list.get(i).data.replace("\n", "").replace("\r", "");
+					//Log.i(TAG,data.length()+"");
+					//Log.i(TAG,data.replace("\n", "").replace("\r", "").length()+"");
+					list.get(i).data = sec.decrypt(data);
+					// contacts.add(gson.fromJson(list.get(i).data, DataType));
+					Log.i(TAG, list.get(i).id + " = " + list.get(i).data);
+				}
+				return list;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			return null;
-		}
-	}
-
-	public class Security {
-
-		Cipher ecipher;
-		Cipher dcipher;
-		byte[] salt = new byte[8];
-		int iterationCount = 200;
-
-		public Security(String passPhrase) {
-			try {
-				// generate a random salt
-				SecureRandom random = new SecureRandom();
-				random.nextBytes(salt);
-
-				// Create the key
-				KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(),
-						salt, iterationCount);
-				SecretKey key = SecretKeyFactory.getInstance(
-						"PBEWithSHA256And256BitAES-CBC-BC").generateSecret(
-						keySpec);
-				ecipher = Cipher.getInstance(key.getAlgorithm());
-				dcipher = Cipher.getInstance(key.getAlgorithm());
-
-				// Prepare the parameter to the ciphers
-				AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt,
-						iterationCount);
-
-				// Create the ciphers
-				ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
-				dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		public String encrypt(String str) {
-			try {
-				// Encode the string into bytes using utf-8
-				byte[] utf8 = str.getBytes("UTF8");
-
-				// Encrypt
-				byte[] enc = ecipher.doFinal(utf8);
-
-				// Encode bytes to base64 to get a string
-				return Base64.encodeToString(enc, Base64.DEFAULT);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-
-		public String decrypt(String str) {
-			try {
-				// Decode base64 to get bytes
-				byte[] dec = Base64.decode(str, Base64.DEFAULT);
-
-				// Decrypt
-				byte[] utf8 = dcipher.doFinal(dec);
-
-				// Decode using utf-8
-				return new String(utf8, "UTF8");
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-
-		public int getIterationCount() {
-			return iterationCount;
-		}
-
-		public String getSalt() {
-			return Base64.encodeToString(salt, Base64.DEFAULT);
 		}
 	}
 }

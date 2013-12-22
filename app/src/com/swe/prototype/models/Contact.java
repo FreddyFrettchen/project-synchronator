@@ -1,7 +1,10 @@
 package com.swe.prototype.models;
 
-public class Contact extends BaseData {
-	protected Contact(Contact c){
-		super(c);
+public abstract class Contact extends BaseData {
+	public Contact(Contact c){
+
 	}
+	
+	public abstract String getName();
+	public abstract String getNumber();
 }
