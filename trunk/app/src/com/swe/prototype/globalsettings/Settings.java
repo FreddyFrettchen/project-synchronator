@@ -11,8 +11,10 @@ public class Settings {
 	private static  String server = "http://10.0.2.2:45678";
 	private static String ip = "10.0.2.2";
 	private static String port = "45678";
-	//in stunden, voreinstellung: alle 6 stunden refreshen
-	private static float refreshTime= 6.0f;
+	
+	// edit mark
+	// auf sekunden umgestellt
+	private static int refreshTime= 6*60*60;
 	
 	public static String getPrefs_name() {
 		return prefs_name;
@@ -32,7 +34,7 @@ public class Settings {
 	}
 	/*
 	 * hab server in ip und port augeteilt, weil man die teilweise einzeln braucht.
-	 * man kann nur über setServer(ip,port) diese 3 werte verändern, garantiert konsistenz.
+	 * man kann nur ï¿½ber setServer(ip,port) diese 3 werte verï¿½ndern, garantiert konsistenz.
 	 * */
 	public static void setServer(String ip, String port) {
 		Settings.server = "http://"+ip+":"+port;
@@ -40,10 +42,10 @@ public class Settings {
 		Settings.port=port;
 		
 	}
-	public static float getRefreshTime() {
+	public static int getRefreshTime() {
 		return refreshTime;
 	}
-	public static void setRefreshTime(float refreshTime) {
+	public static void setRefreshTime(int refreshTime) {
 		Settings.refreshTime = refreshTime;
 	}
 	

@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity {
 	}
 	
 	/* 
-	 * muss am ende gelöscht werden
+	 * muss am ende gelï¿½scht werden
 	 * */
 	public void onClickTmpAmLoginVorbei(View v){
 		show(CalendarActivity.class);
@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity {
 	}
 	
 	/*
-	Die müssen wir überschreiben, damit das optionsmenü nicht sichtbar ist und der user nicht am login vorbei kommt.
+	Die mï¿½ssen wir ï¿½berschreiben, damit das optionsmenï¿½ nicht sichtbar ist und der user nicht am login vorbei kommt.
 	*/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -181,7 +181,7 @@ public class MainActivity extends BaseActivity {
 			//initializeDialog("no internet connection"+R.string.no_internet,true);
 		}
 	}
-
+	
 	private void loginFailed() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 

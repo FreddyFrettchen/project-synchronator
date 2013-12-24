@@ -86,13 +86,13 @@ public abstract class AsyncDataTask<Result> extends
 	}
 
 	protected String sync(String server, String email, String password,
-			String type, String last_sync) throws IOException {
+			String type, int timestamp) throws IOException {
 		String add_url = server + "/data/sync/" + type;
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("password", password));
-		params.add(new BasicNameValuePair("last_sync", last_sync));
+		params.add(new BasicNameValuePair("last_sync", Integer.toString(timestamp)));
 
 		HttpURLConnection request = postRequest(add_url, params);
 		request.connect();
@@ -105,8 +105,6 @@ public abstract class AsyncDataTask<Result> extends
 		s.useDelimiter("\\Z");
 
 		String response = s.next();
-		Log.i(TAG, response);
-
 		return response;
 	}
 }

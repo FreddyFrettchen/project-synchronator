@@ -38,8 +38,8 @@ public class SettingsActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				try{
-					float f = Float.parseFloat(refreshTime.getText().toString());
-					com.swe.prototype.globalsettings.Settings.setRefreshTime(f);
+					int i = Integer.parseInt(refreshTime.getText().toString());
+					com.swe.prototype.globalsettings.Settings.setRefreshTime(i);
 					returnToLastActivity(); 
 				}
 				catch(Exception e){
@@ -59,7 +59,7 @@ public class SettingsActivity extends BaseActivity {
 	}
 	
 	public void onClickRefresh(View v){
-		System.out.println("Refresh button gedrückt");
+		System.out.println("Refresh button gedrï¿½ckt");
 		//muss noch implementiert werden
 	}
 	

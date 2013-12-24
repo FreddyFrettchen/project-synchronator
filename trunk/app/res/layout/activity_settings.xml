@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/text_account_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="38dp"
-        android:layout_toLeftOf="@+id/textView1"
+        android:layout_toLeftOf="@+id/text_account_type"
         android:text="@string/save" />
 
     <Button
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/save_button"
         android:layout_alignBottom="@+id/save_button"
-        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignLeft="@+id/text_account_type"
         android:layout_marginLeft="41dp"
         android:text="@string/cancel" />
 
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textview_refreshingtime"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/text_account_type"
         android:text="@string/refresh" />
 
     <EditText
