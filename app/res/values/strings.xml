@@ -24,6 +24,10 @@
     <string name="action_calendar">Calendar</string>
     <string name="action_accounts">Accounts</string>
 
+    <string-array name="accounts_array">
+        <item>Google</item>
+        <item>Exchange</item>
+    </string-array>
     <string-array name="contacts_array">
         <item>Kontakt 1</item>
         <item>Kontakt 2</item>

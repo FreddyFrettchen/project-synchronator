@@ -83,7 +83,7 @@
         android:src="@drawable/server_settings" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/text_provider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
