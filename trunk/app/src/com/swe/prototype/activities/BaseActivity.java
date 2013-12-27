@@ -17,6 +17,7 @@ import com.swe.prototype.R.menu;
 import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.Account;
 import com.swe.prototype.net.server.Server;
+import com.swe.prototype.services.SynchronatorService;
 import com.swe.prototype.globalsettings.Settings;
 
 import android.app.Activity;
@@ -141,5 +142,15 @@ public abstract class BaseActivity extends Activity {
 		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		return (networkInfo != null && networkInfo.isConnected());
+	}
+	
+	protected void startSyncService(){
+		//new DBTools(this).purgeDatabase();
+		startService(new Intent(this, SynchronatorService.class));
+	}
+	
+	protected void stopSyncService(){
+		
+	}
 	}
 }
