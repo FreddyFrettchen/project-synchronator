@@ -39,14 +39,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import com.swe.prototype.R;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.AccountTable;
+import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.net.server.Server;
 import com.swe.prototype.net.server.Server.AuthenticateUserTask;
 
@@ -84,6 +88,20 @@ public class AccountsActivity extends BaseActivity implements
 		loadermanager.initLoader(1, null, (LoaderCallbacks<Cursor>) this);
 	}
 
+	public void deleteAccount(int id_account) {
+		getContentResolver().delete(CONTENT_URI, "_id = ?",
+				new String[] { id_account + "" });
+		loadermanager.restartLoader(1, null, (LoaderCallbacks<Cursor>) this);
+	}
+
+	public void editAccount(int id_account) {
+		Intent in = new Intent(this, CreateAccountActivity.class);
+		in.putExtra("id_account", id_account);
+		in.putExtra("edit_mode", true);
+		startActivity(in);
+		//loadermanager.restartLoader(1, null, (LoaderCallbacks<Cursor>) this);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, ADD_ACCOUNT_BUTTON, 0, "Add Account");
@@ -97,14 +115,32 @@ public class AccountsActivity extends BaseActivity implements
 			ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.context_menu_contacts, menu);
+		inflater.inflate(R.menu.context_menu_accounts, menu);
+	}
+
+	public boolean onContextItemSelected(MenuItem item) {
+		// Object a = listView.getAdapter().getItem(item.getItemId());
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		
+		switch (item.getItemId()) {
+		case R.id.edit:
+			editAccount((int)info.id);
+			break;
+		case R.id.delete:
+			deleteAccount((int)info.id);
+			break;
+		default:
+			return super.onContextItemSelected(item);
+		}
+		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case ADD_ACCOUNT_BUTTON:
-			show(CreateAccountActivity.class); 
+			show(CreateAccountActivity.class);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

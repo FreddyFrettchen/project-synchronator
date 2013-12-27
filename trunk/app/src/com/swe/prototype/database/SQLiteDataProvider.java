@@ -73,7 +73,7 @@ public class SQLiteDataProvider extends ContentProvider {
 			String[] whereArgs) {
 		String table = getTableName(uri);
 		SQLiteDatabase database = tools.getWritableDatabase();
-		//getContext().getContentResolver().notifyChange(uri, null);
+		getContext().getContentResolver().notifyChange(uri, null);
 		return database.update(table, values, whereClause, whereArgs);
 	}
 
