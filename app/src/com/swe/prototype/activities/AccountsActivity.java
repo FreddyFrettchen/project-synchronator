@@ -86,7 +86,7 @@ public class AccountsActivity extends BaseActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, ADD_ACCOUNT_BUTTON, 0, "add");
+		menu.add(0, ADD_ACCOUNT_BUTTON, 0, "Add Account");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;

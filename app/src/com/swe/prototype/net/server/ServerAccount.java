@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
+import android.database.MergeCursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
