@@ -152,5 +152,5 @@ public abstract class BaseActivity extends Activity {
 	protected void stopSyncService(){
 		
 	}
-	}
+
 }
