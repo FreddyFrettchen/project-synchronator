@@ -1,42 +1,26 @@
 package com.swe.prototype.activities;
 
-import java.util.ArrayList;
-
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
-import android.content.CursorLoader;
-import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
 import com.swe.prototype.R;
 import com.swe.prototype.adapter.ContactAdapter;
-import com.swe.prototype.database.DBTools;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.ServerDataTable;
-import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.Contact;
-import com.swe.prototype.models.server.EncryptedData;
 import com.swe.prototype.models.server.ServerContact;
-import com.swe.prototype.net.server.Server.GetDataTask;
-import com.swe.prototype.services.SynchronatorService;
+
+import java.util.ArrayList;
 
 public class ListContactsActivity extends BaseActivity{
 
