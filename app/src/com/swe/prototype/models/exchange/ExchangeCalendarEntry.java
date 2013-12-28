@@ -92,5 +92,6 @@ public class ExchangeCalendarEntry extends CalendarEntry {
         {
             e.printStackTrace();
         }
+        return false;
     }
 }
