@@ -7,5 +7,5 @@ public abstract class Note extends BaseData {
 	}
 	
 	public abstract string getNote();
-	public abstract string getTitle();
+	public abstract /*string*/void getTitle();
 }
