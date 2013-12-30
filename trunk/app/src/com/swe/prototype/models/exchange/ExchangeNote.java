@@ -27,7 +27,7 @@ public class ExchangeNote extends Note {
 
 	@Override
 	public
-	string getNote() {
+	String getNote() {
 		// TODO Auto-generated method stub
 		return null;
 	}

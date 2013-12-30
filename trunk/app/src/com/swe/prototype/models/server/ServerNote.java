@@ -12,13 +12,13 @@ public class ServerNote extends Note {
 	}
 
 	@Override
-	public string getNote() {
+	public String getNote() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public string getTitle() {
+	public String getTitle() {
 		// TODO Auto-generated method stub
 		return null;
 	}
