@@ -12,7 +12,7 @@ public class GoogleNote extends Note {
 	}
 
 	@Override
-	public string getNote() {
+	public String getNote() {
 		// TODO Auto-generated method stub
 		return null;
 	}
