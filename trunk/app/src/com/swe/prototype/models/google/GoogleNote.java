@@ -18,7 +18,7 @@ public class GoogleNote extends Note {
 	}
 
 	@Override
-	public string getTitle() {
+	public String getTitle() {
 		// TODO Auto-generated method stub
 		return null;
 	}
