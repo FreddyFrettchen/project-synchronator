@@ -60,6 +60,8 @@ public class ChangeNoteActivity extends BaseActivity {
 		if(exchangeCheckbox.isChecked()){
 			System.out.println("Exchange is checked!");
 		}
+		
+		//this.onBackPressed(); und this.finish() funktioniert nicht um zurück zur notizliste zu kommen, vllt neuen intent starten
 	}
 	public void onClickCancel(View v){
 		this.finish();
