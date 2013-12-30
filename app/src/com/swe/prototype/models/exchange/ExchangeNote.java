@@ -34,7 +34,7 @@ public class ExchangeNote extends Note {
 
 	@Override
 	public
-	/*string */void getTitle() {
+	String getTitle() {
         try
         {
             Service service = new Service("https://myserver/ews/Exchange.asmx", "username", "password");
@@ -50,6 +50,7 @@ public class ExchangeNote extends Note {
 
                     System.out.println("Subject = " + task.getSubject());
                     System.out.println("----------------------------------------------------------------");
+                    return task.getSubject();
                 }
             }
         }
@@ -60,7 +61,8 @@ public class ExchangeNote extends Note {
 
             e.printStackTrace();
         }
-	}
+        return "Error";
+    }
 
     public boolean createTask(){
         try
