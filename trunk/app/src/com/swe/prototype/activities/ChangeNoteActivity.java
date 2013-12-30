@@ -1,5 +1,6 @@
 package com.swe.prototype.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,8 +61,11 @@ public class ChangeNoteActivity extends BaseActivity {
 		if(exchangeCheckbox.isChecked()){
 			System.out.println("Exchange is checked!");
 		}
-		
-		//this.onBackPressed(); und this.finish() funktioniert nicht um zurück zur notizliste zu kommen, vllt neuen intent starten
+
+		//this.onBackPressed(); und this.finish() funktioniert nicht um zurück zur notizliste zu kommen
+		Intent intent = new Intent(ChangeNoteActivity.this,ListNotesActivity.class);
+		startActivity(intent);
+		finish();
 	}
 	public void onClickCancel(View v){
 		this.finish();
