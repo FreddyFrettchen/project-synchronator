@@ -34,9 +34,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/text_username"
-        android:ems="10" >
-
-        <requestFocus />
+        android:ems="10" >       
+         <requestFocus />
     </EditText>
 
     <TextView
