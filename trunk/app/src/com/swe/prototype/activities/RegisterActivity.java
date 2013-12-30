@@ -39,7 +39,7 @@ public class RegisterActivity extends BaseActivity {
 	
 
 	/*
-	müssen wir überschreiben, damit das optionsmenü nicht sichtbar ist und der user nicht am registrieren vorbei kommt.
+	muessen wir ueberschreiben, damit das optionsmenue nicht sichtbar ist und der user nicht am registrieren vorbei kommt.
 	*/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

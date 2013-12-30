@@ -28,7 +28,7 @@ public class ChangeNoteActivity extends BaseActivity {
 		changeNotePos = b.getInt("pos");
 		setContentView(R.layout.activity_changenote);
 		// hier dann entsprechend setzen, von wo die daten kommen.
-		// hier dann checkboxen, ausblebenden, je nachdem ob der user den entsprechenden account hinzugefügt hat.
+		// hier dann checkboxen, ausblebenden, je nachdem ob der user den entsprechenden account hinzugefuegt hat.
 		synchronatorCheckbox = (CheckBox) findViewById(R.id.checkBox_synchronator);
 		googleCheckbox = (CheckBox) findViewById(R.id.checkBox_google);
 		exchangeCheckbox = (CheckBox) findViewById(R.id.checkBox_exchange);
@@ -40,7 +40,7 @@ public class ChangeNoteActivity extends BaseActivity {
 	}
 	
 	/*
-	Die müssen wir überschreiben, damit das optionsmenü nicht sichtbar ist.
+	Die muessen wir ueberschreiben, damit das optionsmenue nicht sichtbar ist.
 	*/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,7 +49,7 @@ public class ChangeNoteActivity extends BaseActivity {
 	
 	
 	public void onClickSave(View v){
-		System.out.println("Save wurde gedrückt!");
+		System.out.println("Save wurde gedrueckt!");
 		System.out.println("Text: "+noteText.getText());
 		// hier muss dann der string aus dem edit text geholt werden und an changeNotePos in die datenbank geschrieben werden
 		if(synchronatorCheckbox.isChecked()){
@@ -62,7 +62,7 @@ public class ChangeNoteActivity extends BaseActivity {
 			System.out.println("Exchange is checked!");
 		}
 
-		//this.onBackPressed(); und this.finish() funktioniert nicht um zurück zur notizliste zu kommen
+		//this.onBackPressed(); und this.finish() funktioniert nicht um zurueck zur notizliste zu kommen
 		Intent intent = new Intent(ChangeNoteActivity.this,ListNotesActivity.class);
 		startActivity(intent);
 		finish();
