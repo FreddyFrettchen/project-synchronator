@@ -23,4 +23,10 @@ public class GoogleNote extends Note {
 		return null;
 	}
 
+	@Override
+	public String getAccountTag() {
+		// TODO Auto-generated method stub
+		return "Google";
+	}
+
 }

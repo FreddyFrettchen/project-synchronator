@@ -131,4 +131,9 @@ public class ExchangeNote extends Note {
         }
         return false;
     }
+
+	@Override
+	public String getAccountTag() {
+		return "Exchange";
+	}
 }

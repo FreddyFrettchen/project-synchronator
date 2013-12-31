@@ -18,18 +18,6 @@ public class ExchangeContact extends Contact {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getNumber() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
     public boolean createContact(){
         try
         {
@@ -93,4 +81,33 @@ public class ExchangeContact extends Contact {
         }
         return false;
     }
+
+	@Override
+	public String getLastName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getFirstName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPhoneumber() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAccountTag() {
+		return "Exchange";
+	}
 }

@@ -10,15 +10,32 @@ public class GoogleContact extends Contact {
 	}
 
 	@Override
-	public String getName() {
+	public String getLastName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getNumber() {
+	public String getFirstName() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getPhoneumber() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAccountTag() {
+		return "Google";
 	}
 
 }

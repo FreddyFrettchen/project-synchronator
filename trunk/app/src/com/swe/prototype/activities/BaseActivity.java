@@ -16,6 +16,7 @@ import com.swe.prototype.R.id;
 import com.swe.prototype.R.menu;
 import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.Account;
+import com.swe.prototype.models.AccountManager;
 import com.swe.prototype.net.server.Server;
 import com.swe.prototype.services.SynchronatorService;
 import com.swe.prototype.globalsettings.Settings;
@@ -37,29 +38,14 @@ public abstract class BaseActivity extends Activity {
 	protected static final String TAG = "BaseActivity";
 	protected Server server;
 
-	protected ArrayList<Account> accounts = null;
+	//protected ArrayList<Account> accounts = null;
+	protected AccountManager accounts = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Gson gson = new Gson();
-		SharedPreferences prefs = getSharedPreferences(
-				Settings.getPrefs_name(), 0);
-		// SharedPreferences.Editor editor = prefs.edit();
-
-		Set<String> json = prefs.getStringSet("accounts", null);
-
-		if (json != null) {
-			for (Iterator iterator = json.iterator(); iterator.hasNext();) {
-				String string = (String) iterator.next();
-				accounts.add(gson.fromJson(string, Account.class));
-			}
-		} else {
-			accounts = new ArrayList<Account>();
-			accounts.add(new Server("a@a.de",Security.sha1("123")));
-		}
-		
-		Log.i(TAG,accounts.size()+" accounts loaded");
+		accounts = new AccountManager(this);
+		startSyncService();
 	}
 
 	/*
@@ -146,7 +132,7 @@ public abstract class BaseActivity extends Activity {
 	
 	protected void startSyncService(){
 		//new DBTools(this).purgeDatabase();
-		startService(new Intent(this, SynchronatorService.class));
+		//startService(new Intent(this, SynchronatorService.class));
 	}
 	
 	protected void stopSyncService(){

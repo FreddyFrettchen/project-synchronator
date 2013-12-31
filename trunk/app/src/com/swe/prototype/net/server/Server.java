@@ -45,6 +45,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.BaseAdapter;
 
 /**
  * This class handles all connections between app and storage server.
@@ -167,5 +168,23 @@ public class Server extends Account {
 
 			}
 		}.execute("contacts");
+	}
+
+	@Override
+	public BaseAdapter getContactAdapter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BaseAdapter getNotesAdapter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BaseAdapter getCalendarAdapter() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -8,8 +8,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.nfc.NfcAdapter.CreateNdefMessageCallback;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.swe.prototype.R;
 import com.swe.prototype.globalsettings.Settings;
@@ -26,7 +33,9 @@ import com.swe.prototype.globalsettings.Tools;
 public class ListNotesActivity extends BaseActivity {
 
 	private static final String TAG = "ListNotesActivity";
-
+	private final static int ADD_CONTACT_BUTTON = 0x126;
+	private final static int REFRESH_CONTACT_BUTTON = 0x127;
+	
 	List notes;
 
 	@Override
@@ -178,5 +187,59 @@ public class ListNotesActivity extends BaseActivity {
 		note.setMessage("Nicht vergessen hier den Text aus dem datenmodel zu holen\nNicht vergessen hier den Text aus dem datenmodel zu holen\nNicht vergessen hier den Text aus dem datenmodel zu holen\n\tNicht vergessen hier den Text aus dem datenmodel zu holen\nPosition aus der liste");
 		note.setPositiveButton("Close", null);
 		note.create().show();
+	}
+	
+	private void refreshNotes() {
+		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, ADD_CONTACT_BUTTON, 0, "add");
+		menu.add(0, REFRESH_CONTACT_BUTTON, 0, "refresh");
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.context_menu_contacts, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case REFRESH_CONTACT_BUTTON:
+			Log.i(TAG, "syncing notes");
+			refreshNotes();
+			return true;
+		case ADD_CONTACT_BUTTON:
+			show(ChangeNoteActivity.class);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	public boolean onContextItemSelected(final MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		switch (item.getItemId()) {
+		case R.id.edit:
+			Log.i(TAG, "edit:");
+			return true;
+		case R.id.move:
+			Log.i(TAG, "move:");
+			return true;
+		case R.id.delete:
+			Log.i(TAG, "delete:");
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
 	}
 }
