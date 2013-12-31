@@ -10,13 +10,15 @@ public class AccountTable {
 	public static final String COLUMN_USERNAME = "username";
 	public static final String COLUMN_PASSWORD = "password";
 	public static final String COLUMN_PROVIDER = "provider";
+	public static final String COLUMN_LAST_SYNC = "last_sync";
 
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "create table "
 			+ TABLE_ACCOUNT + "(" + COLUMN_ID
 			+ " integer primary key autoincrement, " + COLUMN_USERNAME
 			+ " text not null, " + COLUMN_PASSWORD + " text not null,"
-			+ COLUMN_PROVIDER + " text not null" + ")";
+			+ COLUMN_PROVIDER + " text not null," 
+			+ COLUMN_LAST_SYNC + " text not null" + ")";
 
 	public static void onCreate(SQLiteDatabase database) {
 		database.execSQL(DATABASE_CREATE);

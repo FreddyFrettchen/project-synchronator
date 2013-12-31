@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.swe.prototype.adapter.ContactAdapter;
 
 import android.os.Environment;
+import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
 
 public abstract class Account {
 	protected String account_type = null;
@@ -61,4 +63,8 @@ public abstract class Account {
 		}
 		return false;
 	}
+
+	public abstract BaseAdapter getContactAdapter();
+	public abstract BaseAdapter getNotesAdapter();
+	public abstract BaseAdapter getCalendarAdapter();
 }

@@ -7,22 +7,23 @@ import java.util.ArrayList;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
-import android.database.MergeCursor;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.swe.prototype.R;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.ServerDataTable;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.AccountBase;
+import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.server.EncryptedData;
+import com.swe.prototype.models.server.ServerContact;
 
 public class ServerAccount extends AccountBase {
 	private final static String TAG = "ServerAccount";
@@ -42,9 +43,9 @@ public class ServerAccount extends AccountBase {
 	@Override
 	public void synchronize() {
 		syncronizeByType("contacts");
-		//syncronizeByType("calendar");
-		//syncronizeByType("notes");
-		//setLastSynchronisationTimestamp
+		syncronizeByType("calendar");
+		syncronizeByType("notes");
+		// setLastSynchronisationTimestamp
 	}
 
 	/**
@@ -93,13 +94,13 @@ public class ServerAccount extends AccountBase {
 		}
 
 	}
-	
-	public int getLastSynchronisationTimestamp(){
-		return (int)(System.currentTimeMillis()/1000L); 
+
+	public int getLastSynchronisationTimestamp() {
+		return 0;// (int) (System.currentTimeMillis() / 1000L);
 	}
-	
-	public void setLastSynchronisationTimestamp(){
-		
+
+	public void setLastSynchronisationTimestamp() {
+
 	}
 
 	/**
@@ -113,23 +114,19 @@ public class ServerAccount extends AccountBase {
 		public SyncDataTask(String data_type) {
 			this.data_type = data_type;
 		}
-		
+
 		protected ArrayList<EncryptedData> doInBackground(String... params) {
 			String response = null;
 			int timestamp = getLastSynchronisationTimestamp();
+			Type listType = new TypeToken<ArrayList<EncryptedData>>() {
+			}.getType();
+
 			try {
-				response = sync(server_url, username, password, this.data_type, timestamp);
-				Type listType = new TypeToken<ArrayList<EncryptedData>>() {
-				}.getType();
+				response = sync(server_url, username, password, this.data_type,
+						timestamp);
 				ArrayList<EncryptedData> list = (ArrayList<EncryptedData>) gson
 						.fromJson(response, listType);
-
-				/*
-				 * String data = null; for (int i = 0; i < list.size(); i++) {
-				 * data = list.get(i).data.replace("\n", "").replace("\r", "");
-				 * list.get(i).data = sec.decrypt(data); Log.i(TAG,
-				 * list.get(i).id + " = " + list.get(i).data); }
-				 */
+				Log.i(TAG, list.size() + " datasets for sync.");
 				return list;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -143,5 +140,163 @@ public class ServerAccount extends AccountBase {
 				return;
 			synchronizeDatabase(this.data_type, list);
 		}
+	}
+
+	/**
+	 * read data from database, decrypt it and return a list of contact objects.
+	 * 
+	 * @return
+	 */
+	public ArrayList<Contact> getContacts() {
+		ArrayList<Contact> contacts = new ArrayList<Contact>();
+		final ContentResolver resolver = this.context.getContentResolver();
+		final Uri dataUri = Uri.withAppendedPath(
+				SQLiteDataProvider.CONTENT_URI,
+				ServerDataTable.TABLE_SERVERDATA);
+		final String[] projection = { ServerDataTable.COLUMN_ID,
+				ServerDataTable.COLUMN_ID_DATA, ServerDataTable.COLUMN_DATA,
+				ServerDataTable.COLUMN_TAG };
+		Cursor cursor = resolver.query(dataUri, projection, "tag = ?",
+				new String[] { "contacts" }, null);
+		if (cursor.moveToFirst()) {
+			do {
+				contacts.add(new EncryptedData(cursor.getInt(0), cursor.getString(2))
+						.toContact());
+			} while (cursor.moveToNext());
+		}
+		Log.i(TAG, "i return " + contacts.size() + " contacts!!");
+		return contacts;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Server (" + this.username + ")";
+	}
+
+	@Override
+	public void createContact(String lastname, String firstname,
+			String phonenumber, String email) {
+		Log.i(TAG, "ich erstelle den contact:" + lastname);
+
+		// send data to server
+		ServerContact contact = new ServerContact(lastname, firstname,
+				phonenumber, email);
+		new AddDataTask() {
+
+		}.execute("contact", contact.toJson());
+	}
+
+	@Override
+	public void createNote() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void createCalendarEntry() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Task for User authentification
+	 */
+	public class AuthenticateUserTask extends AsyncUserTask {
+		protected Boolean doInBackground(String... params) {
+			try {
+				return authenticate(server_url, username, password);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * Task for user registration
+	 */
+	public class RegisterUserTask extends AsyncUserTask {
+		protected Boolean doInBackground(String... params) {
+			try {
+				return register(server_url, username, password);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * add data to the useraccount on the server. Task returns true if a new
+	 * entry was created on the server.
+	 */
+	public class AddDataTask extends AsyncDataTask<Boolean> {
+		/**
+		 * @params[2] -> possible values: calendar, contact, note
+		 */
+		protected Boolean doInBackground(String... params) {
+			String type = params[0];
+			String data = sec.encrypt(params[1]);
+
+			try {
+				return add(server_url, username, password, type, data);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * get data from useraccount on the server to the app. Task returns a list
+	 * of entries of specified Type given in param[2] the entries are still
+	 * encrypted and json encoded seperatly and have to be processed further.
+	 */
+	public class GetDataTask extends AsyncDataTask<ArrayList<EncryptedData>> {
+		/**
+		 * @params[2] -> possible values: calendar, contacts, notes
+		 */
+		protected ArrayList<EncryptedData> doInBackground(String... params) {
+			String type = params[0];
+
+			String response = null;
+			try {
+				response = get(server_url, username, password, type);
+				Type listType = new TypeToken<ArrayList<EncryptedData>>() {
+				}.getType();
+				ArrayList<EncryptedData> list = (ArrayList<EncryptedData>) gson
+						.fromJson(response, listType);
+				String data = null;
+				for (int i = 0; i < list.size(); i++) {
+					data = list.get(i).data.replace("\n", "").replace("\r", "");
+					list.get(i).data = sec.decrypt(data);
+					Log.i(TAG, list.get(i).id + " = " + list.get(i).data);
+				}
+				return list;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
+
+	@Override
+	public BaseAdapter getContactAdapter(Context context, int layout_id) {
+		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,layout_id);
+		adapter.addAll(getContacts());
+		return adapter;
+	}
+
+	@Override
+	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BaseAdapter getCalendarAdapter(Context context, int layout_id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -8,4 +8,5 @@ public abstract class Note extends BaseData {
 	
 	public abstract String getNote();
 	public abstract String getTitle();
+	public abstract String getAccountTag();
 }
