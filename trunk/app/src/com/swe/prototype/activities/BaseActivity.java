@@ -19,6 +19,7 @@ import com.swe.prototype.models.Account;
 import com.swe.prototype.models.AccountManager;
 import com.swe.prototype.net.server.Server;
 import com.swe.prototype.services.SynchronatorService;
+import com.swe.prototype.database.DBTools;
 import com.swe.prototype.globalsettings.Settings;
 
 import android.app.Activity;
@@ -131,7 +132,7 @@ public abstract class BaseActivity extends Activity {
 	}
 	
 	protected void startSyncService(){
-		//new DBTools(this).purgeDatabase();
+		new DBTools(this).purgeDatabase();
 		//startService(new Intent(this, SynchronatorService.class));
 	}
 	
