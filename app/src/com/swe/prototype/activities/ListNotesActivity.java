@@ -122,6 +122,17 @@ public class ListNotesActivity extends BaseActivity {
 		contextMenu.show();
 
 	}
+	
+	protected void createNote(){
+		Intent intent = new Intent(ListNotesActivity.this,
+				ChangeNoteActivity.class);
+		Bundle b = new Bundle();
+		b.putBoolean("createNewNote", true); 
+		intent.putExtras(b);
+		startActivity(intent);
+		finish();
+		
+	}
 
 	protected void deleteNote(int pos) {
 		System.out.println("Delete note:" + pos);
@@ -157,7 +168,8 @@ public class ListNotesActivity extends BaseActivity {
 		Intent intent = new Intent(ListNotesActivity.this,
 				ChangeNoteActivity.class);
 		Bundle b = new Bundle();
-		b.putInt("pos", pos); // Your id
+		b.putInt("pos", pos);
+		b.putBoolean("createNewNote", false);// Your id
 		intent.putExtras(b); // Put your id to your next Intent
 		startActivity(intent);
 		finish();
@@ -191,6 +203,11 @@ public class ListNotesActivity extends BaseActivity {
 	
 	private void refreshNotes() {
 		
+	}
+	
+	@Override
+	protected void addClicked(){
+		this.createNote();
 	}
 	
 	@Override
@@ -242,4 +259,5 @@ public class ListNotesActivity extends BaseActivity {
 			return super.onContextItemSelected(item);
 		}
 	}
+	
 }

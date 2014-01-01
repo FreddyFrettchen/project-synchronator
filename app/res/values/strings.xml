@@ -23,6 +23,7 @@
     <string name="action_notes">Notes</string>
     <string name="action_calendar">Calendar</string>
     <string name="action_accounts">Accounts</string>
+    <string name="action_add">Add</string>
 
     <string-array name="accounts_array">
         <item>Google</item>

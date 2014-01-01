@@ -84,4 +84,28 @@
         android:layout_alignLeft="@+id/checkBox_google"
         android:text="Synchronator" />
 
+<!--    <EditText -->
+<!--         android:id="@+id/edittext_notetitle_changenote" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignParentTop="true" -->
+<!--         android:layout_marginLeft="14dp" -->
+<!--         android:layout_toRightOf="@+id/textview_notetitle_changenote" -->
+<!--         android:ems="10" -->
+<!--         android:text="new Note" -->
+<!--         android:textAppearance="?android:attr/textAppearanceLarge" > -->
+<!--      </EditText>-->
+
+    <EditText
+        android:id="@+id/edittext_notetitle_changenote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textview_notetitle_changenote"
+        android:ems="10"
+        android:lines="1" >
+
+        <requestFocus />
+    </EditText>
+
 </RelativeLayout>

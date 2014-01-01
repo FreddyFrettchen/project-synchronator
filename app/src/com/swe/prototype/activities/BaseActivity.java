@@ -44,7 +44,6 @@ public abstract class BaseActivity extends Activity {
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		accounts = new AccountManager(this);
 		startSyncService();
 	}
@@ -106,6 +105,11 @@ public abstract class BaseActivity extends Activity {
 				show(ListNotesActivity.class);
 			}
 			return true;
+			
+		case R.id.action_add:{
+			this.addClicked();
+			return true;
+		}
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -137,6 +141,12 @@ public abstract class BaseActivity extends Activity {
 	}
 	
 	protected void stopSyncService(){
+		
+	}
+	/*
+	 * Diese Methode sollte von der jeweiligen Activity überschrieben werden, um die Add funktion nutzen zu können.
+	 */
+	protected void addClicked(){
 		
 	}
 
