@@ -50,12 +50,16 @@
             android:label="Calendar" >
         </activity>
         <activity
+            android:name="com.swe.prototype.activities.AddCalendarEventActivity"
+            android:label="Add Calendar Event" >
+        </activity>
+        <activity
             android:name="com.swe.prototype.activities.ListNotesActivity"
             android:label="Notes" >
         </activity>
         <activity
             android:name="com.swe.prototype.activities.ChangeNoteActivity"
-            android:label="View Note" >
+            android:label="Change Note" >
         </activity>
         <activity
             android:name="com.swe.prototype.activities.SettingsActivity"
