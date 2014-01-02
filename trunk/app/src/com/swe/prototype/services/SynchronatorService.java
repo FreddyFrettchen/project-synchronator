@@ -67,10 +67,10 @@ public class SynchronatorService extends Service {
 				prov = cursor.getString(3);
 				if (prov.equals("google")) {
 					accounts.add(new GoogleAccount(this, Settings
-							.getRefreshTime(), username, password));
+							.getRefreshTimeAsInt(), username, password));
 				} else if (prov.equals("exchange")) {
 					accounts.add(new ExchangeAccount(this, Settings
-							.getRefreshTime(), username, password));
+							.getRefreshTimeAsInt(), username, password));
 				}
 			} while (cursor.moveToNext());
 		}

@@ -38,7 +38,7 @@ public class AccountManager {
 		this.accounts = new ArrayList<AccountBase>();
 
 		// server account always exists
-		this.accounts.add(new ServerAccount(context, Settings.getRefreshTime(),
+		this.accounts.add(new ServerAccount(context, Settings.getRefreshTimeAsInt(),
 				"a@a.de", Security.sha1("123")));
 
 		// add other accounts
@@ -48,11 +48,11 @@ public class AccountManager {
 				// check account type
 				if (data.getString(0).equals("Google")) {
 					this.accounts.add(new GoogleAccount(context, Settings
-							.getRefreshTime(), data.getString(1), data
+							.getRefreshTimeAsInt(), data.getString(1), data
 							.getString(2)));
 				} else if (data.getString(0).equals("Exchange")) {
 					this.accounts.add(new ExchangeAccount(context, Settings
-							.getRefreshTime(), data.getString(1), data
+							.getRefreshTimeAsInt(), data.getString(1), data
 							.getString(2)));
 				}
 			} while (data.moveToNext());

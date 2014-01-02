@@ -22,7 +22,7 @@ public class SettingsActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		final EditText refreshTime = (EditText)findViewById(R.id.edittext_refrshingtime);
-		refreshTime.setText(""+com.swe.prototype.globalsettings.Settings.getRefreshTime());
+		refreshTime.setText(""+com.swe.prototype.globalsettings.Settings.getRefreshTimeAsFloat());
 		Button save = (Button) findViewById(R.id.save_button);
 		Button cancle = (Button) findViewById(R.id.cancel_button);
 		cancle.setOnClickListener(new OnClickListener() {
@@ -38,8 +38,8 @@ public class SettingsActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				try{
-					int i = Integer.parseInt(refreshTime.getText().toString());
-					com.swe.prototype.globalsettings.Settings.setRefreshTime(i);
+					float f = Float.parseFloat(refreshTime.getText().toString());
+					com.swe.prototype.globalsettings.Settings.setRefreshTimeAsFloat(f);
 					returnToLastActivity(); 
 				}
 				catch(Exception e){
