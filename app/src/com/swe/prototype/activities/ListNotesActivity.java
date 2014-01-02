@@ -33,8 +33,8 @@ import com.swe.prototype.globalsettings.Tools;
 public class ListNotesActivity extends BaseActivity {
 
 	private static final String TAG = "ListNotesActivity";
-	private final static int ADD_CONTACT_BUTTON = 0x126;
-	private final static int REFRESH_CONTACT_BUTTON = 0x127;
+	//private final static int ADD_CONTACT_BUTTON = 0x126;
+	//private final static int REFRESH_CONTACT_BUTTON = 0x127;
 	
 	List notes;
 
@@ -201,9 +201,9 @@ public class ListNotesActivity extends BaseActivity {
 		note.create().show();
 	}
 	
-	private void refreshNotes() {
+	/*private void refreshNotes() {
 		
-	}
+	}*/
 	
 	@Override
 	protected void addClicked(){
@@ -212,8 +212,8 @@ public class ListNotesActivity extends BaseActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, ADD_CONTACT_BUTTON, 0, "add");
-		menu.add(0, REFRESH_CONTACT_BUTTON, 0, "refresh");
+		//menu.add(0, ADD_CONTACT_BUTTON, 0, "add");
+		//menu.add(0, REFRESH_CONTACT_BUTTON, 0, "refresh");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
@@ -229,7 +229,7 @@ public class ListNotesActivity extends BaseActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+		/*switch (item.getItemId()) {
 		case REFRESH_CONTACT_BUTTON:
 			Log.i(TAG, "syncing notes");
 			refreshNotes();
@@ -237,9 +237,9 @@ public class ListNotesActivity extends BaseActivity {
 		case ADD_CONTACT_BUTTON:
 			show(ChangeNoteActivity.class);
 			return true;
-		default:
+		default:*/
 			return super.onOptionsItemSelected(item);
-		}
+		//}
 	}
 
 	public boolean onContextItemSelected(final MenuItem item) {
