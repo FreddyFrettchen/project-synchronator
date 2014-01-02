@@ -105,7 +105,11 @@ public abstract class BaseActivity extends Activity {
 				show(ListNotesActivity.class);
 			}
 			return true;
-			
+		case R.id.action_logout:
+			if (!(this instanceof MainActivity)) {
+				show(MainActivity.class);
+			}
+			return true;
 		case R.id.action_add:{
 			this.addClicked();
 			return true;
