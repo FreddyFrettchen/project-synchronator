@@ -108,6 +108,8 @@ public class ChangeNoteActivity extends BaseActivity {
 		finish();
 	}
 	public void onClickCancel(View v){
+		Intent intent = new Intent(this,ListNotesActivity.class);
+		startActivity(intent);
 		this.finish();
 	}
 

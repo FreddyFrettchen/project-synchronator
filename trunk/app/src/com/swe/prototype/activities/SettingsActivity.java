@@ -21,7 +21,7 @@ public class SettingsActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
-		final EditText refreshTime = (EditText)findViewById(R.id.edittext_refrshingtime);
+		final EditText refreshTime = (EditText)findViewById(R.id.edittext_refreshingtime);
 		refreshTime.setText(""+com.swe.prototype.globalsettings.Settings.getRefreshTimeAsFloat());
 		Button save = (Button) findViewById(R.id.save_button);
 		Button cancle = (Button) findViewById(R.id.cancel_button);
@@ -59,7 +59,7 @@ public class SettingsActivity extends BaseActivity {
 	}
 	
 	public void onClickRefresh(View v){
-		System.out.println("Refresh button gedr�ckt");
+		System.out.println("Refresh button gedrueckt");
 		//muss noch implementiert werden
 	}
 	
