@@ -107,6 +107,7 @@ public class CreateAccountActivity extends BaseActivity {
 				getEditText(R.id.edit_text_username));
 		values.put(AccountTable.COLUMN_PASSWORD,
 				getEditText(R.id.edit_text_password));
+		values.put("last_sync", "0");
 		getContentResolver().insert(CONTENT_URI, values);
 	}
 

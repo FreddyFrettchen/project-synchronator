@@ -136,7 +136,7 @@ public abstract class BaseActivity extends Activity {
 	}
 	
 	protected void startSyncService(){
-		new DBTools(this).purgeDatabase();
+		//new DBTools(this).purgeDatabase();
 		//startService(new Intent(this, SynchronatorService.class));
 	}
 	
@@ -144,7 +144,7 @@ public abstract class BaseActivity extends Activity {
 		
 	}
 	/*
-	 * Diese Methode sollte von der jeweiligen Activity überschrieben werden, um die Add funktion nutzen zu können.
+	 * Diese Methode sollte von der jeweiligen Activity ï¿½berschrieben werden, um die Add funktion nutzen zu kï¿½nnen.
 	 */
 	protected void addClicked(){
 		

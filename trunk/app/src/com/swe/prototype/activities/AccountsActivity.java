@@ -58,7 +58,7 @@ public class AccountsActivity extends BaseActivity implements
 		LoaderCallbacks<Cursor> {
 
 	private static final String TAG = "AccountsActivity";
-	private final static int ADD_ACCOUNT_BUTTON = 0x122;
+	//private final static int ADD_ACCOUNT_BUTTON = 0x122;
 	private final static Uri CONTENT_URI = Uri.withAppendedPath(
 			SQLiteDataProvider.CONTENT_URI, AccountTable.TABLE_ACCOUNT);
 
@@ -104,10 +104,21 @@ public class AccountsActivity extends BaseActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, ADD_ACCOUNT_BUTTON, 0, "Add Account");
+		//menu.add(0, ADD_ACCOUNT_BUTTON, 0, "Add Account");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_add:
+			show(CreateAccountActivity.class);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	@Override
@@ -134,17 +145,6 @@ public class AccountsActivity extends BaseActivity implements
 			return super.onContextItemSelected(item);
 		}
 		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case ADD_ACCOUNT_BUTTON:
-			show(CreateAccountActivity.class);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
 	}
 
 	@Override
