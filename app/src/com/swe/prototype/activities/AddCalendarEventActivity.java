@@ -216,21 +216,34 @@ public class AddCalendarEventActivity extends BaseActivity{
 	   return null;
 	}
 	private void updateDisplayFrom() {
-	    this.dateDisplayFrom.setText(
-	        new StringBuilder()
-	                // Month is 0 based so add 1
-	                .append(monthFrom + 1).append("-")
-	                .append(dayFrom).append("-")
-	                .append(yearFrom).append(" "));
+		String date = "";
+		if(dayFrom<10){
+			date+="0";
+		}
+		date+=dayFrom+"/";
+		if(monthFrom<9){
+			date+="0";
+		}
+		date+=monthFrom+1;
+		date+="/";
+		date+=yearFrom;
+	    this.dateDisplayFrom.setText(date);
 	}
 	
 	private void updateDisplayTo() {
-	    this.dateDisplayTo.setText(
-	        new StringBuilder()
-	                // Month is 0 based so add 1
-	                .append(monthTo + 1).append("-")
-	                .append(dayTo).append("-")
-	                .append(yearTo).append(" "));
+		String date = "";
+		if(dayTo<10){
+			date+="0";
+		}
+		date+=dayTo+"/";
+		if(monthTo<9){
+			date+="0";
+		}
+		date+=monthTo+1;
+		date+="/";
+		date+=yearTo;
+	    this.dateDisplayTo.setText(date);
+
 	}
 	
 	
