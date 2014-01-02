@@ -160,7 +160,7 @@
     </EditText>
 
     <CheckBox
-        android:id="@+id/checkBox_synchronator_addcontact"
+        android:id="@+id/checkBox_exchange_addcontact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button_save"
@@ -173,12 +173,12 @@
         android:id="@+id/checkBox_google_addcontact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/checkBox_synchronator_addcontact"
-        android:layout_alignLeft="@+id/checkBox_synchronator_addcontact"
+        android:layout_above="@+id/checkBox_exchange_addcontact"
+        android:layout_alignLeft="@+id/checkBox_exchange_addcontact"
         android:text="Google" />
 
     <CheckBox
-        android:id="@+id/checkBox_synchronator_addcontatc"
+        android:id="@+id/checkBox_synchronator_addcontact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/checkBox_google_addcontact"
@@ -189,8 +189,8 @@
         android:id="@+id/textView_savelocation_addcontact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/checkBox_synchronator_addcontatc"
-        android:layout_alignLeft="@+id/checkBox_synchronator_addcontatc"
+        android:layout_above="@+id/checkBox_synchronator_addcontact"
+        android:layout_alignLeft="@+id/checkBox_synchronator_addcontact"
         android:text="Save Location:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -202,12 +202,12 @@
 	    android:layout_above="@+id/textView_savelocation_addcontact"
 	    android:layout_alignLeft="@+id/textView_savelocation_addcontact" 
 	    android:layout_marginBottom="20dp">
-	    <RadioButton
-	        android:id="@+id/radioButton_everyyear"
+		<RadioButton
+	        android:id="@+id/radioButton_everyday"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="Every Year" />
-	
+	        android:text="Every Day" />
+	   	
 	    <RadioButton
 	        android:id="@+id/radioButton_everymonth"
 	        android:layout_width="wrap_content"
@@ -215,10 +215,10 @@
 	        android:text="Every Month" />
 	
 	    <RadioButton
-	        android:id="@+id/radioButton_everyday"
+	        android:id="@+id/radioButton_everyyear"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="Every Day" />
+	        android:text="Every Year" />
 	</RadioGroup>
     <TextView
         android:id="@+id/textView_repeat"

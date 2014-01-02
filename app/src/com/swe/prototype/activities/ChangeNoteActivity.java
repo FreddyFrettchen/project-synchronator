@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.swe.prototype.R;
 
@@ -92,16 +93,24 @@ public class ChangeNoteActivity extends BaseActivity {
 			
 		}
 		// hier muss dann der string aus dem edit text geholt werden und an changeNotePos in die datenbank geschrieben werden
+		int checkedCheckboxCounter =0;
 		if(synchronatorCheckbox.isChecked()){
+			checkedCheckboxCounter++;
 			System.out.println("Synchronator is checked!");
 		}
 		if(googleCheckbox.isChecked()){
+			checkedCheckboxCounter++;
 			System.out.println("google is checked!");
 		}
 		if(exchangeCheckbox.isChecked()){
+			checkedCheckboxCounter++;
 			System.out.println("Exchange is checked!");
 		}
 
+		if(checkedCheckboxCounter==0){
+			Toast.makeText(getApplicationContext(), "You have to check at least one checkbox!", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		//this.onBackPressed(); und this.finish() funktioniert nicht um zurueck zur notizliste zu kommen
 		Intent intent = new Intent(ChangeNoteActivity.this,ListNotesActivity.class);
 		startActivity(intent);
