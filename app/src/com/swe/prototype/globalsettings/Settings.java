@@ -16,6 +16,10 @@ public class Settings {
 	// auf sekunden umgestellt
 	private static int refreshTime= 6*60*60;
 	
+	public static float getRefreshTimeAsFloat(){
+		return refreshTime/3600;
+	}
+	
 	public static String getPrefs_name() {
 		return prefs_name;
 	}
@@ -42,11 +46,15 @@ public class Settings {
 		Settings.port=port;
 		
 	}
-	public static int getRefreshTime() {
+	public static int getRefreshTimeAsInt() {
 		return refreshTime;
 	}
-	public static void setRefreshTime(int refreshTime) {
+	public static void setRefreshTimeAsInt(int refreshTime) {
 		Settings.refreshTime = refreshTime;
+	}
+	
+	public static void setRefreshTimeAsFloat(float refreshTime) {
+		Settings.refreshTime =(int) refreshTime*3600;
 	}
 	
 	

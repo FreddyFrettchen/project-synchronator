@@ -5,10 +5,10 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textView_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="From:"
+        android:text="Date"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
@@ -42,5 +42,34 @@
         android:layout_marginLeft="14dp"
         android:text="Fehlermeldung"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView_datepicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView_date"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView_timepicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView_datepicker"
+        android:layout_alignBottom="@+id/textView_datepicker"
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@+id/textView_datepicker"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView_timepicker"
+        android:layout_alignParentTop="true"
+        android:text="Time"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
