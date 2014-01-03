@@ -1,5 +1,6 @@
 
 package com.swe.prototype.activities;
+import android.content.SharedPreferences;
 import android.media.audiofx.BassBoost.Settings;
 import com.swe.prototype.globalsettings.*;
 import android.os.Bundle;
@@ -40,12 +41,21 @@ public class SettingsActivity extends BaseActivity {
 				try{
 					float f = Float.parseFloat(refreshTime.getText().toString());
 					com.swe.prototype.globalsettings.Settings.setRefreshTimeAsFloat(f);
+					saveRefreshTimePerm(f);
 					returnToLastActivity(); 
 				}
 				catch(Exception e){
 					System.out.println("Refreshing time falsches format");
 				}
 				
+			}
+
+			private void saveRefreshTimePerm(float f) {
+				SharedPreferences pref = getSharedPreferences(com.swe.prototype.globalsettings.Settings.getPrefs_name(), 0);
+				SharedPreferences.Editor editor = pref.edit();
+				String email = pref.getString("email", "");
+				editor.putFloat("refreshTime-" + email, f);
+				editor.commit();
 			}
 		});
 		
