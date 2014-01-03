@@ -3,13 +3,17 @@ package com.swe.prototype.activities;
 import android.content.SharedPreferences;
 import android.media.audiofx.BassBoost.Settings;
 import com.swe.prototype.globalsettings.*;
+import com.swe.prototype.net.server.Server.AuthenticateUserTask;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.swe.prototype.R;
 
@@ -26,6 +30,7 @@ public class SettingsActivity extends BaseActivity {
 		refreshTime.setText(""+com.swe.prototype.globalsettings.Settings.getRefreshTimeAsFloat());
 		Button save = (Button) findViewById(R.id.save_button);
 		Button cancle = (Button) findViewById(R.id.cancel_button);
+		Button refresh = (Button) findViewById(R.id.button_refresh);
 		cancle.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -58,7 +63,19 @@ public class SettingsActivity extends BaseActivity {
 				editor.commit();
 			}
 		});
-		
+		refresh.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (hasInternetConnection()) {
+					onClickRefresh(getCurrentFocus());
+				} else {
+					Log.v(TAG, "no internet");
+					Toast.makeText(getApplicationContext(), 
+		                    R.string.no_internet, Toast.LENGTH_LONG).show();
+					//initializeDialog("no internet connection"+R.string.no_internet,true);
+				}				
+			}
+		});
 
 		
 	}
