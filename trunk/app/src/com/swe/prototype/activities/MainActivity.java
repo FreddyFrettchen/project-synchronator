@@ -85,10 +85,11 @@ public class MainActivity extends BaseActivity {
 	}
 	
 	/* 
-	 * muss am ende gel�scht werden
+	 * muss am ende geloescht werden
 	 * */
 	public void onClickTmpAmLoginVorbei(View v){
-		show(CalendarActivity.class);
+		postLogin();
+		//show(CalendarActivity.class);
 		
 	}
 	
@@ -98,7 +99,7 @@ public class MainActivity extends BaseActivity {
 	}
 	
 	/*
-	Die m�ssen wir �berschreiben, damit das optionsmen� nicht sichtbar ist und der user nicht am login vorbei kommt.
+	Die muessen wir ueberschreiben, damit das optionsmenue nicht sichtbar ist und der user nicht am login vorbei kommt.
 	*/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -192,17 +193,20 @@ public class MainActivity extends BaseActivity {
 		dlgAlert.create().show();
 	}
 
-	/* Speichert logindaten */
+	/* Speichert logindaten und liesst refreshTime des Benutzers */
 	private void postLogin() {
 		String email = ((EditText) findViewById(R.id.input_email)).getText()
 				.toString();
 		String password = ((EditText) findViewById(R.id.input_password))
 				.getText().toString();
 
-		SharedPreferences.Editor editor = getSharedPreferences(Settings.getPrefs_name(), 0)
-				.edit();
+		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(), 0);
+		SharedPreferences.Editor editor = pref.edit();
 		editor.putString("email", email);
 		editor.putString("password", password);
+		if(pref.getFloat("refreshTime-" + email, 0) > 0) {
+			Settings.setRefreshTimeAsFloat(pref.getFloat("refreshTime-" + email, 0));
+		}
 		editor.commit();
 
 		startActivity(new Intent(this, CalendarActivity.class));
