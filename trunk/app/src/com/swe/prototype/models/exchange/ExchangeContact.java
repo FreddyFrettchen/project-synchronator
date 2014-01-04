@@ -1,6 +1,5 @@
 package com.swe.prototype.models.exchange;
 
-//import com.independentsoft.exchange.Contact;
 import com.independentsoft.exchange.FileAsMapping;
 import com.independentsoft.exchange.ItemId;
 import com.independentsoft.exchange.Service;
@@ -21,7 +20,7 @@ public class ExchangeContact extends Contact {
     public boolean createContact(){
         try
         {
-            Service service = new Service("https://myserver/ews/Exchange.asmx", "username", "password");
+            Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx", "bd8299s@ad.fh-aachen.de", "password");
 
             com.independentsoft.exchange.Contact contact = new com.independentsoft.exchange.Contact();
             contact.setGivenName("Bahos");
@@ -49,7 +48,7 @@ public class ExchangeContact extends Contact {
     public boolean findContact(){
         try
         {
-            Service service = new Service("https://myserver/ews/Exchange.asmx", "username", "password");
+            Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx", "bd8299s@ad.fh-aachen.de", "password");
 
             IsEqualTo restriction = new IsEqualTo(ContactPropertyPath.GIVEN_NAME, "Bahos");
 
