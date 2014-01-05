@@ -8,9 +8,9 @@ package com.swe.prototype.globalsettings;
 */
 public class Settings {
 	private static String prefs_name = "SynchronatorPrefs";
-	private static String server = "http://10.0.2.2:45678";
-	private static String ip = "10.0.2.2";
-	private static String port = "45678";
+	private static String server = "http://tranquil-ravine-8657.herokuapp.com";
+	private static String ip = "http://tranquil-ravine-8657.herokuapp.com";
+	private static String port = "80";
 	
 	// edit mark
 	// auf sekunden umgestellt
@@ -23,7 +23,7 @@ public class Settings {
 		Settings.prefs_name = prefs_name;
 	}
 	public static String getServer() {
-		return server;
+		return getIp() + ":" + getPort();
 	}
 	
 	public static String getIp() {

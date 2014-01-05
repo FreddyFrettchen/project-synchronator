@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import com.swe.prototype.R;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.Contact;
+import com.swe.prototype.models.Note;
 
 public class GoogleAccount extends AccountBase {
 
@@ -48,14 +49,14 @@ public class GoogleAccount extends AccountBase {
 
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context,layout_id);
+		return adapter;
 	}
 
 	@Override
 	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context,layout_id);
+		return adapter;
 	}
 
 	@Override

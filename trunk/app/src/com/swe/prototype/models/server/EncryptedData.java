@@ -25,21 +25,21 @@ public class EncryptedData {
 		return this.id;
 	}
 	
-	private String decryptData(){
+	private String decryptData(String key){
 		// TODO pw ersetzen
-		Security sec = new Security(Security.sha1("123"));
+		Security sec = new Security(key);
 		return sec.decrypt(this.data);
 	}
 	
-	public ServerContact toContact(){
-		return ServerContact.fromJson(decryptData());
+	public ServerContact toContact(String key){
+		return ServerContact.fromJson(decryptData(key));
 	}
 	
-	public ServerCalendarEntry toCalendarEntry(){
-		return ServerCalendarEntry.fromJson(decryptData());
+	public ServerCalendarEntry toCalendarEntry(String key){
+		return ServerCalendarEntry.fromJson(decryptData(key));
 	}
 	
-	public ServerNote toNote(){
-		return ServerNote.fromJson(decryptData());
+	public ServerNote toNote(String key){
+		return ServerNote.fromJson(decryptData(key));
 	}
 }

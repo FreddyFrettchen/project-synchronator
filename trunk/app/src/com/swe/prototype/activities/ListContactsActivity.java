@@ -29,8 +29,6 @@ public class ListContactsActivity extends BaseActivity {
 
 	private ListView listView = null;
 	private ContactAdapter adapter;
-	private final static int ADD_CONTACT_BUTTON = 0x123;
-	private final static int REFRESH_CONTACT_BUTTON = 0x124;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,24 +54,14 @@ public class ListContactsActivity extends BaseActivity {
 					int position, long id) {
 				ServerContact o = (ServerContact) listView
 						.getItemAtPosition(position);
-				Log.i(TAG, "clickidi:" + o.toJson());
+				//Log.i(TAG, "clickidi:" + o.toJson());
 				startActivity(in);
 			}
 		});
 	}
 
-	// benachrichtigt jeden account seine kontakte zu erneuern
-	private void refreshContacts() {
-		/*
-		 * for (int i = 0; i < this.accounts.getAccounts().size(); i++) {
-		 * this.accounts.getAccounts().get(i).updateContacts(); }
-		 */
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, ADD_CONTACT_BUTTON, 0, "add");
-		menu.add(0, REFRESH_CONTACT_BUTTON, 0, "refresh");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
@@ -90,18 +78,14 @@ public class ListContactsActivity extends BaseActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case REFRESH_CONTACT_BUTTON:
-			Log.i(TAG, "syncing contacts");
-			refreshContacts();
-			return true;
-		case ADD_CONTACT_BUTTON:
+		case R.id.action_add:
 			show(CreateContactActivity.class);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+	
 	public boolean onContextItemSelected(final MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 				.getMenuInfo();

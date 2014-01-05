@@ -54,6 +54,10 @@
             android:label="Add Calendar Event" android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name="com.swe.prototype.activities.NoteActivity"
+            android:label="Note" android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name="com.swe.prototype.activities.ListNotesActivity"
             android:label="Notes" android:screenOrientation="portrait">
         </activity>

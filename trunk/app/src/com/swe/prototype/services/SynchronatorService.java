@@ -22,7 +22,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class SynchronatorService extends Service {
-	
+
 	private final static String TAG = "SynchronatorService";
 	private final static Uri CONTENT_URI = Uri.withAppendedPath(
 			SQLiteDataProvider.CONTENT_URI, AccountTable.TABLE_ACCOUNT);
@@ -35,47 +35,29 @@ public class SynchronatorService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		this.accounts = new AccountManager(this);
-		Log.i(TAG, "Starting syncthreads on " + this.accounts.getAccounts().size() + " accounts.");
+		Log.i(TAG, "Starting syncthreads on "
+				+ this.accounts.getAccounts().size() + " accounts.");
 		ArrayList<AccountBase> accounts = this.accounts.getAccounts();
 		for (int i = 0; i < accounts.size(); ++i) {
 			accounts.get(i).start();
 		}
+
+		try {
+			for (int i = 0; i < accounts.size(); ++i) {
+				accounts.get(i).join();
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Log.i(TAG, "Stopping Service");
+		this.stopSelf();
 	}
 
 	// load all accounts and start their synchronisation threads
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		return startId;
-	}
-
-	public ArrayList<AccountBase> getAccounts() {
-		ArrayList<AccountBase> accounts = new ArrayList<AccountBase>();
-		// server is added manually. the other accounts are loaded
-		accounts.add(new ServerAccount(this, 100, "a@a.de", Security
-				.sha1("123")));
-
-		// load external accounts
-		SQLiteDataProvider provider = new SQLiteDataProvider();
-		Cursor cursor = provider.query(CONTENT_URI, projection, null, null,
-				null);
-		if (cursor.moveToFirst()) {
-			String username = null;
-			String password = null;
-			String prov = null;
-			do {
-				username = cursor.getString(1);
-				password = cursor.getString(2);
-				prov = cursor.getString(3);
-				if (prov.equals("google")) {
-					accounts.add(new GoogleAccount(this, Settings
-							.getRefreshTimeAsInt(), username, password));
-				} else if (prov.equals("exchange")) {
-					accounts.add(new ExchangeAccount(this, Settings
-							.getRefreshTimeAsInt(), username, password));
-				}
-			} while (cursor.moveToNext());
-		}
-
-		return accounts;
 	}
 
 	@Override
