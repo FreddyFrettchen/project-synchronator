@@ -65,6 +65,21 @@ public class MainActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_main);
+		
+		// Versucht sich ohne Eingabe ein zu loggen, wenn App ohne Logout beendet wurde
+		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(), 0);
+		if(!pref.getString("email", "").toString().equals("")) {
+			EditText email = (EditText) findViewById(R.id.input_email);
+			email.setText(pref.getString("email", null));
+			EditText password = (EditText) findViewById(R.id.input_password);
+			password.setText(pref.getString("password", null));
+			/* Hier muss zum Ende statt postLogin(String, String) doAuthentication() hin !!!!!!!!!!!!!!!!!!!!!!!!!!
+			 * Wegen fehlendem Server erstmal ohne wirkliche Authentifikation
+			 * doAuthentication();
+			 */
+			postLogin(email.toString(), password.toString());
+		}		
+		
 
 		// buttons and listeners for login register
 		Button btn_register = (Button) findViewById(R.id.button_register);
@@ -88,7 +103,7 @@ public class MainActivity extends BaseActivity {
 	 * muss am ende geloescht werden
 	 * */
 	public void onClickTmpAmLoginVorbei(View v){
-		postLogin();
+		postLogin(((EditText) findViewById(R.id.input_email)).getText().toString(),((EditText) findViewById(R.id.input_password)).getText().toString());
 		//show(CalendarActivity.class);
 		
 	}
@@ -157,10 +172,8 @@ public class MainActivity extends BaseActivity {
 	// wird aufgerufen, wenn der user auf Login-Button klickt
 	private void doAuthentication() {
 		
-		String email = ((EditText) findViewById(R.id.input_email)).getText()
-				.toString();
-		String password = ((EditText) findViewById(R.id.input_password))
-				.getText().toString();
+		final String email = ((EditText) findViewById(R.id.input_email)).getText().toString();
+		final String password = ((EditText) findViewById(R.id.input_password)).getText().toString();
 
 		if (hasInternetConnection()) {
 			initializeDialog(getString(R.string.wait));
@@ -170,7 +183,7 @@ public class MainActivity extends BaseActivity {
 					super.onPostExecute(success);
 					dialog.dismiss();
 					if (success)
-						postLogin();
+						postLogin(email,password);
 					else
 						loginFailed();
 				}
@@ -194,11 +207,11 @@ public class MainActivity extends BaseActivity {
 	}
 
 	/* Speichert logindaten und liesst refreshTime des Benutzers */
-	private void postLogin() {
-		String email = ((EditText) findViewById(R.id.input_email)).getText()
+	private void postLogin(String email, String password) {
+		/*String email = ((EditText) findViewById(R.id.input_email)).getText()
 				.toString();
 		String password = ((EditText) findViewById(R.id.input_password))
-				.getText().toString();
+				.getText().toString();*/
 
 		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(), 0);
 		SharedPreferences.Editor editor = pref.edit();
