@@ -107,6 +107,11 @@ public abstract class BaseActivity extends Activity {
 			return true;
 		case R.id.action_logout:
 			if (!(this instanceof MainActivity)) {
+				SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(), 0);
+				SharedPreferences.Editor editor = pref.edit();
+				editor.putString("email", null);
+				editor.putString("password", null);
+				editor.commit();
 				show(MainActivity.class);
 			}
 			return true;
