@@ -86,8 +86,7 @@ public class SettingsActivity extends BaseActivity {
 	}
 	
 	public void onClickRefresh(View v){
-		System.out.println("Refresh button gedrueckt");
-		//muss noch implementiert werden
+		accounts.refreshAllData();
 	}
 	
 	

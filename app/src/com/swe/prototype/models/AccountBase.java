@@ -21,14 +21,7 @@ public abstract class AccountBase extends Thread {
 	}
 
 	public void run() {
-		while (true) {
-			synchronize();
-			try {
-				Thread.sleep(this.refresh_time_sec * 1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		synchronize();
 	}
 
 	public int getRefreshTime() {
@@ -45,7 +38,8 @@ public abstract class AccountBase extends Thread {
 
 	public abstract BaseAdapter getNotesAdapter(Context context, int layout_id);
 
-	public abstract BaseAdapter getCalendarAdapter(Context context, int layout_id);
+	public abstract BaseAdapter getCalendarAdapter(Context context,
+			int layout_id);
 
 	public abstract void createContact(String lastname, String firstname,
 			String phonenumber, String email);

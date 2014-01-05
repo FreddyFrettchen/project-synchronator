@@ -37,15 +37,16 @@ import android.widget.Button;
 
 public abstract class BaseActivity extends Activity {
 	protected static final String TAG = "BaseActivity";
-	protected Server server;
 
-	//protected ArrayList<Account> accounts = null;
+	// protected ArrayList<Account> accounts = null;
 	protected AccountManager accounts = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		accounts = new AccountManager(this);
-		startSyncService();
+
+		if (isLoggedIn())
+			accounts = new AccountManager(this);
+		// startSyncService();
 	}
 
 	/*
@@ -59,7 +60,7 @@ public abstract class BaseActivity extends Activity {
 	 * 
 	 * @return logged in true/false
 	 */
-	private boolean isLoggedIn() {
+	protected boolean isLoggedIn() {
 		// Restore preferences
 		SharedPreferences settings = getSharedPreferences(
 				Settings.getPrefs_name(), 0);
@@ -71,7 +72,6 @@ public abstract class BaseActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -107,7 +107,8 @@ public abstract class BaseActivity extends Activity {
 			return true;
 		case R.id.action_logout:
 			if (!(this instanceof MainActivity)) {
-				SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(), 0);
+				SharedPreferences pref = getSharedPreferences(
+						Settings.getPrefs_name(), 0);
 				SharedPreferences.Editor editor = pref.edit();
 				editor.putString("email", null);
 				editor.putString("password", null);
@@ -115,7 +116,7 @@ public abstract class BaseActivity extends Activity {
 				show(MainActivity.class);
 			}
 			return true;
-		case R.id.action_add:{
+		case R.id.action_add: {
 			this.addClicked();
 			return true;
 		}
@@ -143,20 +144,22 @@ public abstract class BaseActivity extends Activity {
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		return (networkInfo != null && networkInfo.isConnected());
 	}
-	
-	protected void startSyncService(){
-		//new DBTools(this).purgeDatabase();
-		//startService(new Intent(this, SynchronatorService.class));
+
+	protected void startSyncService() {
+		// new DBTools(this).purgeDatabase();
+		// startService(new Intent(this, SynchronatorService.class));
 	}
-	
-	protected void stopSyncService(){
-		
+
+	protected void stopSyncService() {
+
 	}
+
 	/*
-	 * Diese Methode sollte von der jeweiligen Activity �berschrieben werden, um die Add funktion nutzen zu k�nnen.
+	 * Diese Methode sollte von der jeweiligen Activity �berschrieben werden, um
+	 * die Add funktion nutzen zu k�nnen.
 	 */
-	protected void addClicked(){
-		
+	protected void addClicked() {
+
 	}
 
 }

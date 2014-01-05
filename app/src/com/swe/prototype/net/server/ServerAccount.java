@@ -22,6 +22,7 @@ import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.Contact;
+import com.swe.prototype.models.Note;
 import com.swe.prototype.models.server.EncryptedData;
 import com.swe.prototype.models.server.ServerContact;
 
@@ -31,7 +32,7 @@ public class ServerAccount extends AccountBase {
 	protected String server_url = null;
 	protected Security sec = null;
 	protected Gson gson = null;
-
+	
 	public ServerAccount(Context context, int refresh_time_sec,
 			String username, String password) {
 		super(context, refresh_time_sec, username, password);
@@ -161,7 +162,7 @@ public class ServerAccount extends AccountBase {
 		if (cursor.moveToFirst()) {
 			do {
 				contacts.add(new EncryptedData(cursor.getInt(0), cursor.getString(2))
-						.toContact());
+						.toContact(this.password));
 			} while (cursor.moveToNext());
 		}
 		Log.i(TAG, "i return " + contacts.size() + " contacts!!");
@@ -185,6 +186,7 @@ public class ServerAccount extends AccountBase {
 		new AddDataTask() {
 
 		}.execute("contact", contact.toJson());
+		Log.i(TAG,"erstellter kontakt: "+contact.toJson());
 	}
 
 	@Override
@@ -290,8 +292,8 @@ public class ServerAccount extends AccountBase {
 
 	@Override
 	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context,layout_id);
+		return adapter;
 	}
 
 	@Override

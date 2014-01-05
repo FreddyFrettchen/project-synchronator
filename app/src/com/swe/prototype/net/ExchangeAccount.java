@@ -1,6 +1,7 @@
 package com.swe.prototype.net;
 
 import android.content.Context;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
 import com.swe.prototype.models.AccountBase;
@@ -123,14 +124,14 @@ public class ExchangeAccount extends AccountBase {
 
     @Override
     public BaseAdapter getContactAdapter(Context context, int layout_id) {
-        // TODO Auto-generated method stub
-        return null;
+    	ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context,layout_id);
+		return adapter;
     }
 
     @Override
     public BaseAdapter getNotesAdapter(Context context, int layout_id) {
-        // TODO Auto-generated method stub
-        return null;
+    	ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context,layout_id);
+		return adapter;
     }
 
     @Override

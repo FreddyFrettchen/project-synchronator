@@ -31,6 +31,7 @@ import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.globalsettings.Tools;
 import com.swe.prototype.net.server.AsyncUserTask;
 import com.swe.prototype.net.server.Server;
+import com.swe.prototype.net.server.ServerAccount;
 
 import android.R.string;
 import android.net.ConnectivityManager;
@@ -58,28 +59,32 @@ public class MainActivity extends BaseActivity {
 
 	private static final String TAG = "MainActivity";
 	ProgressDialog dialog;
-	
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.activity_main);
 		
-		// Versucht sich ohne Eingabe ein zu loggen, wenn App ohne Logout beendet wurde
-		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(), 0);
-		if(!pref.getString("email", "").toString().equals("")) {
-			EditText email = (EditText) findViewById(R.id.input_email);
-			email.setText(pref.getString("email", null));
-			EditText password = (EditText) findViewById(R.id.input_password);
-			password.setText(pref.getString("password", null));
-			/* Hier muss zum Ende statt postLogin(String, String) doAuthentication() hin !!!!!!!!!!!!!!!!!!!!!!!!!!
-			 * Wegen fehlendem Server erstmal ohne wirkliche Authentifikation
-			 * doAuthentication();
-			 */
-			postLogin(email.toString(), password.toString());
-		}		
-		
+		if(isLoggedIn()){
+			showAndFinish(ListContactsActivity.class);
+		}
+
+		// Versucht sich ohne Eingabe ein zu loggen, wenn App ohne Logout
+		// beendet wurde
+		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(),
+				0);
+		/*
+		 * if(!pref.getString("email", "").toString().equals("")) { EditText
+		 * email = (EditText) findViewById(R.id.input_email);
+		 * email.setText(pref.getString("email", null)); EditText password =
+		 * (EditText) findViewById(R.id.input_password);
+		 * password.setText(pref.getString("password", null)); /* Hier muss zum
+		 * Ende statt postLogin(String, String) doAuthentication() hin
+		 * !!!!!!!!!!!!!!!!!!!!!!!!!! Wegen fehlendem Server erstmal ohne
+		 * wirkliche Authentifikation doAuthentication();
+		 */
+		// postLogin(email.toString(), password.toString());
+		// }
 
 		// buttons and listeners for login register
 		Button btn_register = (Button) findViewById(R.id.button_register);
@@ -98,104 +103,113 @@ public class MainActivity extends BaseActivity {
 			}
 		});
 	}
-	
-	/* 
+
+	/*
 	 * muss am ende geloescht werden
-	 * */
-	public void onClickTmpAmLoginVorbei(View v){
-		postLogin(((EditText) findViewById(R.id.input_email)).getText().toString(),((EditText) findViewById(R.id.input_password)).getText().toString());
-		//show(CalendarActivity.class);
-		
+	 */
+	public void onClickTmpAmLoginVorbei(View v) {
+		postLogin(((EditText) findViewById(R.id.input_email)).getText()
+				.toString(), ((EditText) findViewById(R.id.input_password))
+				.getText().toString());
+		// show(CalendarActivity.class);
+
 	}
-	
+
 	// wird aufgerufen, wenn der user auf Registrieren-Button klickt
 	private void switchToRegister() {
 		startActivity(new Intent(this, RegisterActivity.class));
 	}
-	
+
 	/*
-	Die muessen wir ueberschreiben, damit das optionsmenue nicht sichtbar ist und der user nicht am login vorbei kommt.
-	*/
+	 * Die muessen wir ueberschreiben, damit das optionsmenue nicht sichtbar ist
+	 * und der user nicht am login vorbei kommt.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		return true;
 	}
-	
+
 	/*
-	 * wird aufgerufen sobald user auf das imageview Serversettings clickt*/
-	public void onClickServerSettings(View v){
+	 * wird aufgerufen sobald user auf das imageview Serversettings clickt
+	 */
+	public void onClickServerSettings(View v) {
 		AlertDialog.Builder ssAlert = new AlertDialog.Builder(this);
 		LayoutInflater inflator = getLayoutInflater();
-		View optionDialogView = inflator.inflate(R.layout.dialog_serversettings,
-				null);
-		final EditText ip = (EditText)optionDialogView.findViewById(R.id.editText_ip);
-		final EditText port = (EditText) optionDialogView.findViewById(R.id.editText_port);
+		View optionDialogView = inflator.inflate(
+				R.layout.dialog_serversettings, null);
+		final EditText ip = (EditText) optionDialogView
+				.findViewById(R.id.editText_ip);
+		final EditText port = (EditText) optionDialogView
+				.findViewById(R.id.editText_port);
 		ip.setText(Settings.getIp());
 		port.setText(Settings.getPort());
 		ssAlert.setView(optionDialogView);
-		//final EditText ip = (EditText) optionDialogView.findViewById(R.id.editText_ip);
-		
+		// final EditText ip = (EditText)
+		// optionDialogView.findViewById(R.id.editText_ip);
+
 		ssAlert.setCancelable(true);
 		ssAlert.setTitle("Server Settings");
 		ssAlert.setIcon(getResources().getDrawable(R.drawable.server_settings));
-		ssAlert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+		ssAlert.setPositiveButton("Save",
+				new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				
-				String newIP = ip.getText().toString();
-				String newPort = port.getText().toString();
-				if(Tools.isValidPort(newPort)&&Tools.isValidIP(newIP)){
-					Settings.setServer(newIP, newPort);
-				}
-				else{
-					System.out.println("Server Settings IP oder Port nicht valide!");
-				}
-				
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
 
-			}
-		});
+						String newIP = ip.getText().toString();
+						String newPort = port.getText().toString();
+						if (Tools.isValidPort(newPort)
+								&& Tools.isValidIP(newIP)) {
+							Settings.setServer(newIP, newPort);
+						} else {
+							System.out
+									.println("Server Settings IP oder Port nicht valide!");
+						}
+
+					}
+				});
 		ssAlert.setNegativeButton("Cancel", null);
 		ssAlert.setCancelable(true);
 		ssAlert.create().show();
 
 	}
-	
 
 	// wird bei login-versuch aufgerufen
 	private void initializeDialog(String message) {
-		dialog = ProgressDialog.show(MainActivity.this, "",
-				message, true);
+		dialog = ProgressDialog.show(MainActivity.this, "", message, true);
 		dialog.show();
 	}
-	
+
 	// wird aufgerufen, wenn der user auf Login-Button klickt
 	private void doAuthentication() {
-		
-		final String email = ((EditText) findViewById(R.id.input_email)).getText().toString();
-		final String password = ((EditText) findViewById(R.id.input_password)).getText().toString();
+
+		final String email = ((EditText) findViewById(R.id.input_email))
+				.getText().toString();
+		final String password = ((EditText) findViewById(R.id.input_password))
+				.getText().toString();
 
 		if (hasInternetConnection()) {
 			initializeDialog(getString(R.string.wait));
-			server.new AuthenticateUserTask() {
+			new ServerAccount(this, Settings.getRefreshTimeAsInt(), email,
+					Security.sha1(password)).new AuthenticateUserTask() {
 				@Override
 				protected void onPostExecute(Boolean success) {
 					super.onPostExecute(success);
 					dialog.dismiss();
 					if (success)
-						postLogin(email,password);
+						postLogin(email, password);
 					else
 						loginFailed();
 				}
 			}.execute();
 		} else {
 			Log.v(TAG, "no internet");
-			Toast.makeText(getApplicationContext(), 
-                    R.string.no_internet, Toast.LENGTH_LONG).show();
-			//initializeDialog("no internet connection"+R.string.no_internet,true);
+			Toast.makeText(getApplicationContext(), R.string.no_internet,
+					Toast.LENGTH_LONG).show();
+			// initializeDialog("no internet connection"+R.string.no_internet,true);
 		}
 	}
-	
+
 	private void loginFailed() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
@@ -208,17 +222,20 @@ public class MainActivity extends BaseActivity {
 
 	/* Speichert logindaten und liesst refreshTime des Benutzers */
 	private void postLogin(String email, String password) {
-		/*String email = ((EditText) findViewById(R.id.input_email)).getText()
-				.toString();
-		String password = ((EditText) findViewById(R.id.input_password))
-				.getText().toString();*/
+		/*
+		 * String email = ((EditText) findViewById(R.id.input_email)).getText()
+		 * .toString(); String password = ((EditText)
+		 * findViewById(R.id.input_password)) .getText().toString();
+		 */
 
-		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(), 0);
+		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(),
+				0);
 		SharedPreferences.Editor editor = pref.edit();
 		editor.putString("email", email);
 		editor.putString("password", password);
-		if(pref.getFloat("refreshTime-" + email, 0) > 0) {
-			Settings.setRefreshTimeAsFloat(pref.getFloat("refreshTime-" + email, 0));
+		if (pref.getFloat("refreshTime-" + email, 0) > 0) {
+			Settings.setRefreshTimeAsFloat(pref.getFloat(
+					"refreshTime-" + email, 0));
 		}
 		editor.commit();
 

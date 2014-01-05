@@ -41,6 +41,8 @@ public abstract class AsyncDataTask<Result> extends
 
 		// response code of 200 is accepted and 304 is failed.
 		int response = request.getResponseCode();
+		
+		//Log.i(TAG, "add request returned: "+ response + ". params: "+email+"/"+password+"/"+type+"/"+data);
 
 		return response == 200;
 	}

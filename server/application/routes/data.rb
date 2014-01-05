@@ -7,6 +7,11 @@ class ServerHandler < Sinatra::Base
     PLURAL_ROUTES   = %w{calendar contacts notes}
     SINGULAR_ROUTES = %w{calendar contact note}
 
+    # TODO comment out
+    get '/users' do
+        User.all.to_json
+    end
+
     namespace '/data' do
         # None of this routes is reachable without
         # user verification!

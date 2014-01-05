@@ -14,14 +14,16 @@ import android.widget.EditText;
 
 import com.swe.prototype.R;
 import com.swe.prototype.globalsettings.Settings;
+import com.swe.prototype.helpers.Security;
 import com.swe.prototype.net.server.Server;
+import com.swe.prototype.net.server.ServerAccount;
 import com.swe.prototype.net.server.Server.RegisterUserTask;
 
 public class RegisterActivity extends BaseActivity {
-	
+
 	private static final String TAG = "RegisterActivity";
 	ProgressDialog dialog;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,11 +38,11 @@ public class RegisterActivity extends BaseActivity {
 			}
 		});
 	}
-	
 
 	/*
-	muessen wir ueberschreiben, damit das optionsmenue nicht sichtbar ist und der user nicht am registrieren vorbei kommt.
-	*/
+	 * muessen wir ueberschreiben, damit das optionsmenue nicht sichtbar ist und
+	 * der user nicht am registrieren vorbei kommt.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		return true;
@@ -84,7 +86,8 @@ public class RegisterActivity extends BaseActivity {
 		}
 
 		if (hasInternetConnection()) {
-			server.new RegisterUserTask() {
+			new ServerAccount(this, Settings.getRefreshTimeAsInt(), email,
+					Security.sha1(password)).new RegisterUserTask() {
 				@Override
 				protected void onPostExecute(Boolean result) {
 					dialog.dismiss();
