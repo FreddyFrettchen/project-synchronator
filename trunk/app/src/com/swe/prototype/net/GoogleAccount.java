@@ -65,4 +65,21 @@ public class GoogleAccount extends AccountBase {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.swe.prototype.models.AccountBase#createCalendarEntry(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int)
+	 * parameter:
+	 * startDate,endDate Format: dd/mm/yyyy
+	 * satrTime,endTime Format: hh:mm AM or hh:mm PM
+	 * repeat: 0 == no repeat; 1 == every day; 2 == every month; 3 == every year
+	 * description: String from description edit text;
+	 * 
+	 */
+	@Override
+	public void createCalendarEntry(String startDate, String endDate,
+			String startTime, String endTime, String description, int repeat) {
+		System.out.println("Google: Add CalenderEntry: noch nicht implementiert");
+		
+		
+	}
+
 }

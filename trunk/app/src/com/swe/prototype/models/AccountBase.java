@@ -43,6 +43,18 @@ public abstract class AccountBase extends Thread {
 
 	public abstract void createContact(String lastname, String firstname,
 			String phonenumber, String email);
+	
+
+	/**
+	 * @param startDate Sting: Format: dd/mm/yyyy
+	 * @param endDate	Sting: Format: dd/mm/yyyy
+	 * @param startTime	String hh:mm AM or hh:mm PM | hh:00 ->11 mm:00->59
+	 * @param endTime String hh:mm AM or hh:mm PM | hh:00 ->11 mm:00->59
+	 * @param description Sting from EditText
+	 * @param repeat: int |	0 == no_repeat; 1 == every_day; 2 == every_month; 3 == every_year
+	 */
+	public abstract void createCalendarEntry(String startDate, String endDate,String startTime,String endTime,
+			String description, int repeat);
 
 	public abstract void createNote();
 

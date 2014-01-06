@@ -10,18 +10,22 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter.LengthFilter;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.swe.prototype.R;
+import com.swe.prototype.models.AccountBase;
 
 public class AddCalendarEventActivity extends BaseActivity{
 	private static final String TAG = "AddCalendarEventActivity";
@@ -53,9 +57,7 @@ public class AddCalendarEventActivity extends BaseActivity{
 	static final int TIME_DIALOG_FROM = 2;
 	static final int TIME_DIALOG_TO = 3;
 	
-	CheckBox synchronatorCheckbox;
-	CheckBox googleCheckbox;
-	CheckBox exchangeCheckbox;
+	ListView list_accounts = null;
 	
 	EditText description;
 	
@@ -125,9 +127,15 @@ public class AddCalendarEventActivity extends BaseActivity{
 		//find description edit text
 		description = (EditText) findViewById(R.id.editText_description);
 		//find checkboxes
-		synchronatorCheckbox = (CheckBox) findViewById(R.id.checkBox_synchronator_addcontact);
-		googleCheckbox = (CheckBox) findViewById(R.id.checkBox_google_addcontact);
-		exchangeCheckbox = (CheckBox) findViewById(R.id.checkBox_exchange_addcontact);
+
+		ArrayAdapter<AccountBase> adapter = new ArrayAdapter<AccountBase>(this,
+				android.R.layout.simple_list_item_checked,
+				accounts.getAccounts());
+		list_accounts = (ListView) findViewById(R.id.list_accounts);
+		list_accounts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		list_accounts.setAdapter(adapter);
+
+		
 		// hier muss ich dann noch die checkboxen hiden, falls der user keinen account hinzugefügt hat.
 		
 		//find radio button group
@@ -260,21 +268,26 @@ public class AddCalendarEventActivity extends BaseActivity{
 		//checken ob man überhaut speichern kann oder ob es inkonsistenzen gibt
 		//falls inkonsistenz gibt correctInputChoise() ein Toast mit Fehlermeldung aus!
 		if(correctInputChoise()){
-
-			// achtung die speicheung ist ein bisschen komisch zb month wird ab 0 gezählt, und bei zeit: siehe convertTime
-			System.out.println("fromDate:"+dayFrom+"/"+monthFrom+"/"+yearFrom+" fromTime: "+hourFrom+":"+minuteFrom);
-			// eingegebene Beschreibung
-			String descriptionString = description.getText().toString();
-			System.out.println(descriptionString);
+			String startDate = dateDisplayFrom.getText().toString();
+			String endDate = dateDisplayTo.getText().toString();
+			String startTime = timeDisplayFrom.getText().toString();
+			String endTime = timeDisplayTo.getText().toString();
+			// die dates und times kann ich auch einzeln aus den attributen lesen, falls ich die dinger anders zusammen bauen will.
+			String descr = description.getText().toString();
+			int every=0; 
+			//radio button:  every==0 keine wiederholung,every=1: every_Dayevery=2 : every_month every=3: every_year 
 			int i =radioGroupEvery.getCheckedRadioButtonId();
 			switch(i){
 				case R.id.radioButton_everyday: 
+					every = 1;
 					System.out.println("every day");
 					break;
 				case R.id.radioButton_everymonth: 
+					every=2;
 					System.out.println("every month");
 					break;
 				case R.id.radioButton_everyyear: 
+					every=3;
 					System.out.println("every year");
 					break;
 				default:
@@ -282,23 +295,17 @@ public class AddCalendarEventActivity extends BaseActivity{
 			
 			}
 			
-			int checkboxCounter=0;
-			if(synchronatorCheckbox.isChecked()){
-				checkboxCounter++;
-				System.out.println("Synchronator is checked!");
+			// jetzt auf allen hinzugefügten Accounts speichern.
+			int cntChoice = list_accounts.getCount();
+			SparseBooleanArray selected_accounts = list_accounts
+					.getCheckedItemPositions();
+
+			for (int k = 0; k < cntChoice; k++) {
+				if (selected_accounts.get(k) == true) {
+					accounts.getAccounts().get(k).createCalendarEntry(startDate, endDate, startTime, endTime, descr, every);
+				}
 			}
-			if(googleCheckbox.isChecked()){
-				checkboxCounter++;
-				System.out.println("google is checked!");
-			}
-			if(exchangeCheckbox.isChecked()){
-				checkboxCounter++;
-				System.out.println("Exchange is checked!");
-			}
-			if(checkboxCounter==0){
-				showShortToast("You have to check at least one checkbox!");
-				return;
-			}
+
 			
 			Intent intent = new Intent(AddCalendarEventActivity.this,CalendarActivity.class);
 			startActivity(intent);
