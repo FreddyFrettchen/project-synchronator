@@ -1,5 +1,6 @@
 package com.swe.prototype.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,13 +52,15 @@ public class ListContactsActivity extends BaseActivity {
 		registerForContextMenu(listView);
 		listView.setAdapter(adapter);
 
-		final Intent in = new Intent(this, ContactActivity.class);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				Intent in = new Intent(parent.getContext(), ContactActivity.class);
 				ServerContact o = (ServerContact) listView
 						.getItemAtPosition(position);
-				// Log.i(TAG, "clickidi:" + o.toJson());
+				in.putExtra("name", o.toString());
+				in.putExtra("phone", o.getPhoneumber());
+				in.putExtra("email", o.getEmail());
 				startActivity(in);
 			}
 		});
@@ -108,16 +111,16 @@ public class ListContactsActivity extends BaseActivity {
 			return super.onContextItemSelected(item);
 		}
 	}
-
-	public void editContact(Contact c) {
-		Log.i(TAG, "edit:" + c.toString());
+	
+	public void editContact(Contact c){
+		c.edit(this);
 	}
 
 	public void moveContact(Contact c) {
 		Log.i(TAG, "move:" + c.toString());
 	}
-
-	public void deleteContact(Contact c) {
-		Log.i(TAG, "delete:" + c.toString());
+	
+	public void deleteContact(Contact c){
+		c.delete();
 	}
 }

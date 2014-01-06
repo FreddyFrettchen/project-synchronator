@@ -2,6 +2,7 @@ package com.swe.prototype.models.server;
 
 import com.google.gson.Gson;
 import com.swe.prototype.helpers.Security;
+import com.swe.prototype.models.AccountBase;
 
 public class EncryptedData {
 	public int id;
@@ -30,16 +31,22 @@ public class EncryptedData {
 		Security sec = new Security(key);
 		return sec.decrypt(this.data);
 	}
-
-	public ServerContact toContact(String key) {
-		return ServerContact.fromJson(decryptData(key));
+	
+	public ServerContact toContact(String key, int data_server_id, AccountBase account){
+		ServerContact c = ServerContact.fromJson(decryptData(key));
+		c.setId(data_server_id);
+		c.setAccount(account);
+		return c;
 	}
 
 	public ServerCalendarEntry toCalendarEntry(String key) {
 		return ServerCalendarEntry.fromJson(decryptData(key));
 	}
-
-	public ServerNote toNote(String key) {
-		return ServerNote.fromJson(decryptData(key));
+	
+	public ServerNote toNote(String key, int data_server_id, AccountBase account){
+		ServerNote n = ServerNote.fromJson(decryptData(key));
+		n.setId(data_server_id);
+		n.setAccount(account);
+		return n;
 	}
 }

@@ -3,7 +3,6 @@ package com.swe.prototype.models;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.swe.prototype.R;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.AccountTable;
 import com.swe.prototype.globalsettings.Settings;
@@ -24,7 +23,7 @@ public class AccountManager {
 	private String TAG = "AccountManager";
 	private final static Uri CONTENT_URI = Uri.withAppendedPath(
 			SQLiteDataProvider.CONTENT_URI, AccountTable.TABLE_ACCOUNT);
-	private String[] projection = { AccountTable.COLUMN_PROVIDER,
+	private String[] projection = { AccountTable.COLUMN_ID, AccountTable.COLUMN_PROVIDER,
 			AccountTable.COLUMN_USERNAME, AccountTable.COLUMN_PASSWORD };
 	protected ArrayList<AccountBase> accounts;
 	protected ServerAccount server_account = null;
@@ -64,14 +63,14 @@ public class AccountManager {
 			do {
 				Log.i(TAG, "Account type: " + data.getString(0));
 				// check account type
-				if (data.getString(0).equals("Google")) {
-					this.accounts.add(new GoogleAccount(context, Settings
-							.getRefreshTimeAsInt(), data.getString(1), data
-							.getString(2)));
-				} else if (data.getString(0).equals("Exchange")) {
-					this.accounts.add(new ExchangeAccount(context, Settings
-							.getRefreshTimeAsInt(), data.getString(1), data
-							.getString(2)));
+				if (data.getString(1).equals("Google")) {
+					this.accounts.add(new GoogleAccount(context, data.getInt(0), Settings
+							.getRefreshTimeAsInt(), data.getString(2), data
+							.getString(3)));
+				} else if (data.getString(1).equals("Exchange")) {
+					this.accounts.add(new ExchangeAccount(context, data.getInt(0), Settings
+							.getRefreshTimeAsInt(), data.getString(2), data
+							.getString(3)));
 				}
 			} while (data.moveToNext());
 		}
@@ -82,10 +81,10 @@ public class AccountManager {
 				Settings.getPrefs_name(), 0);
 		String email = settings.getString("email", null);
 		String password = settings.getString("password", null);
-		Log.i(TAG, "email: " + email);
-		Log.i(TAG, "password: " + password);
-		this.server_account = new ServerAccount(context,
-				Settings.getRefreshTimeAsInt(), email, Security.sha1(password));
+		Log.i(TAG,"email: " + email);
+		Log.i(TAG,"password: " + password);
+		this.server_account = new ServerAccount(context, 0, Settings
+				.getRefreshTimeAsInt(), email, Security.sha1(password));
 	}
 
 	public void refreshAllData() {
