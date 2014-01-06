@@ -239,7 +239,7 @@ public class MainActivity extends BaseActivity {
 		}
 		editor.commit();
 
-		startActivity(new Intent(this, CalendarActivity.class));
+		startActivity(new Intent(this, CalendarMonthViewActivity.class));
 		finish();
 	}
 }

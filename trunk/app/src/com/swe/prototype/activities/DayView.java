@@ -2,11 +2,10 @@ package com.swe.prototype.activities;
 
 import android.widget.CalendarView;
 
-public class DayView extends CalendarView {
+public class DayView extends BaseActivity {
 	private static final int CELL_MARGIN = 10;
 
-	public DayView(CalendarActivity activity) {
-		super(activity);
+	public DayView(CalendarView activity) {
 
 		init();
 	}

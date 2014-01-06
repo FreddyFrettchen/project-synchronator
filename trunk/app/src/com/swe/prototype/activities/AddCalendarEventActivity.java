@@ -297,7 +297,7 @@ public class AddCalendarEventActivity extends BaseActivity {
 			}
 
 			Intent intent = new Intent(AddCalendarEventActivity.this,
-					CalendarActivity.class);
+					CalendarMonthViewActivity.class);
 			startActivity(intent);
 			finish();
 		}
@@ -404,7 +404,7 @@ public class AddCalendarEventActivity extends BaseActivity {
 
 	public void onClickCancel(View v) {
 		Intent intent = new Intent(AddCalendarEventActivity.this,
-				CalendarActivity.class);
+				CalendarMonthViewActivity.class);
 		startActivity(intent);
 		this.finish();
 	}
