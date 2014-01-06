@@ -96,8 +96,8 @@ public abstract class BaseActivity extends Activity {
 			}
 			return true;
 		case R.id.action_calendar:
-			if (!(this instanceof CalendarActivity)) {
-				show(CalendarActivity.class);
+			if (!(this instanceof CalendarMonthViewActivity)) {
+				show(CalendarMonthViewActivity.class);
 			}
 			return true;
 		case R.id.action_notes:
