@@ -23,8 +23,10 @@ import com.swe.prototype.database.DBTools;
 import com.swe.prototype.globalsettings.Settings;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -37,6 +39,7 @@ import android.widget.Button;
 
 public abstract class BaseActivity extends Activity {
 	protected static final String TAG = "BaseActivity";
+	final Context context = this;
 
 	// protected ArrayList<Account> accounts = null;
 	protected AccountManager accounts = null;
@@ -107,13 +110,41 @@ public abstract class BaseActivity extends Activity {
 			return true;
 		case R.id.action_logout:
 			if (!(this instanceof MainActivity)) {
-				SharedPreferences pref = getSharedPreferences(
-						Settings.getPrefs_name(), 0);
-				SharedPreferences.Editor editor = pref.edit();
-				editor.putString("email", null);
-				editor.putString("password", null);
-				editor.commit();
-				show(MainActivity.class);
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		 
+				// set title
+				//alertDialogBuilder.setTitle("Your Title");
+	 
+				// set dialog message
+				alertDialogBuilder
+					.setMessage("Do you really want to Logout?")
+					.setCancelable(false)
+					.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							// if this button is clicked, close
+							// current activity
+							SharedPreferences pref = getSharedPreferences(
+									Settings.getPrefs_name(), 0);
+							SharedPreferences.Editor editor = pref.edit();
+							editor.putString("email", null);
+							editor.putString("password", null);
+							editor.commit();
+							show(MainActivity.class);
+						}
+					  })
+					.setNegativeButton("No",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							// if this button is clicked, just close
+							// the dialog box and do nothing
+							dialog.cancel();
+						}
+					});
+	 
+				// create alert dialog
+				AlertDialog alertDialog = alertDialogBuilder.create();
+	 
+				// show it
+				alertDialog.show();
 			}
 			return true;
 		case R.id.action_add: {
