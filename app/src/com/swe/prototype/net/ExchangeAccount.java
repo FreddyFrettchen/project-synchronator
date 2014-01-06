@@ -1,8 +1,21 @@
 package com.swe.prototype.net;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+
+
+import com.independentsoft.exchange.Body;
+import com.independentsoft.exchange.FileAsMapping;
+import com.independentsoft.exchange.ItemId;
+import com.independentsoft.exchange.Service;
+import com.independentsoft.exchange.ServiceException;
+import com.independentsoft.exchange.Task;
+import com.swe.prototype.R;
 
 import com.swe.prototype.models.AccountBase;
 
@@ -53,6 +66,7 @@ public class ExchangeAccount extends AccountBase {
             contact.setBusinessPhone(phonenumber);
             contact.setEmail1Address(email);
             contact.setEmail1Type("SMTP");
+
 
             ItemId itemId = service.createItem(contact);
         } catch (ServiceException e) {
