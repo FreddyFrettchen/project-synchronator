@@ -301,4 +301,13 @@ public class ServerAccount extends AccountBase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void createCalendarEntry(String startDate, String endDate,
+			String startTime, String endTime, String description, int repeat) {
+		System.out.println("Server Add CalenderEntry: noch nicht implementiert");
+		
+	}
+
+	
 }
