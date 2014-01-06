@@ -29,7 +29,7 @@ public class ListContactsActivity extends BaseActivity {
 
 	private ListView listView = null;
 	private ContactAdapter adapter;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,8 +39,11 @@ public class ListContactsActivity extends BaseActivity {
 		// Create the adapter to convert the array to views
 		adapter = new ContactAdapter(this);
 		for (int i = 0; i < this.accounts.getAccounts().size(); i++) {
-			adapter.addAdapter(this.accounts.getAccounts().get(i)
-					.getContactAdapter(this,android.R.layout.simple_list_item_1));
+			adapter.addAdapter(this.accounts
+					.getAccounts()
+					.get(i)
+					.getContactAdapter(this,
+							android.R.layout.simple_list_item_1));
 		}
 
 		// Attach the adapter to a ListView
@@ -54,7 +57,7 @@ public class ListContactsActivity extends BaseActivity {
 					int position, long id) {
 				ServerContact o = (ServerContact) listView
 						.getItemAtPosition(position);
-				//Log.i(TAG, "clickidi:" + o.toJson());
+				// Log.i(TAG, "clickidi:" + o.toJson());
 				startActivity(in);
 			}
 		});
@@ -85,17 +88,17 @@ public class ListContactsActivity extends BaseActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	public boolean onContextItemSelected(final MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 				.getMenuInfo();
-		
-		Contact o = (Contact)listView.getAdapter().getItem(info.position);
+
+		Contact o = (Contact) listView.getAdapter().getItem(info.position);
 		switch (item.getItemId()) {
 		case R.id.edit:
 			editContact(o);
 			return true;
-		case R.id.move:	
+		case R.id.move:
 			moveContact(o);
 			return true;
 		case R.id.delete:
@@ -105,16 +108,16 @@ public class ListContactsActivity extends BaseActivity {
 			return super.onContextItemSelected(item);
 		}
 	}
-	
-	public void editContact(Contact c){
-		Log.i(TAG, "edit:"+c.toString());
+
+	public void editContact(Contact c) {
+		Log.i(TAG, "edit:" + c.toString());
 	}
-	
-	public void moveContact(Contact c){
-		Log.i(TAG, "move:"+c.toString());
+
+	public void moveContact(Contact c) {
+		Log.i(TAG, "move:" + c.toString());
 	}
-	
-	public void deleteContact(Contact c){
-		Log.i(TAG, "delete:"+c.toString());
+
+	public void deleteContact(Contact c) {
+		Log.i(TAG, "delete:" + c.toString());
 	}
 }

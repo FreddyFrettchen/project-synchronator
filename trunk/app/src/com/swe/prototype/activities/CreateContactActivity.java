@@ -58,11 +58,12 @@ public class CreateContactActivity extends BaseActivity {
 
 		for (int i = 0; i < cntChoice; i++) {
 			if (selected_accounts.get(i) == true) {
-				accounts.getAccounts().get(i).createContact(lastname, firstname, phonenumber, email);
+				accounts.getAccounts().get(i)
+						.createContact(lastname, firstname, phonenumber, email);
 			}
 		}
 
-		dialog.dismiss(); 
+		dialog.dismiss();
 		finish();
 	}
 

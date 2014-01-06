@@ -23,9 +23,9 @@ public class ServerNote extends Note {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public static ServerNote fromJson(String json){
-		return new Gson().fromJson(json, ServerNote.class);   
+
+	public static ServerNote fromJson(String json) {
+		return new Gson().fromJson(json, ServerNote.class);
 	}
 
 	@Override

@@ -60,11 +60,11 @@ public class SQLiteDataProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		String table = getTableName(uri);
 		SQLiteDatabase database = tools.getReadableDatabase();
-		
+
 		Cursor cursor = database.query(table, projection, selection,
 				selectionArgs, null, null, sortOrder);
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
-		
+
 		return cursor;
 	}
 

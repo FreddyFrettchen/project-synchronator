@@ -21,41 +21,41 @@ public class GoogleAccount extends AccountBase {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Google ("+this.username+")";
+		return "Google (" + this.username + ")";
 	}
 
 	@Override
 	public void createContact(String lastname, String firstname,
 			String phonenumber, String email) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void createNote() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void createCalendarEntry() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
-		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context,layout_id);
+		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context, layout_id);
 		return adapter;
 	}
 
 	@Override
 	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
-		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context,layout_id);
+		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context, layout_id);
 		return adapter;
 	}
 
@@ -65,21 +65,23 @@ public class GoogleAccount extends AccountBase {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.swe.prototype.models.AccountBase#createCalendarEntry(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int)
-	 * parameter:
-	 * startDate,endDate Format: dd/mm/yyyy
-	 * satrTime,endTime Format: hh:mm AM or hh:mm PM
-	 * repeat: 0 == no repeat; 1 == every day; 2 == every month; 3 == every year
-	 * description: String from description edit text;
+	/*
+	 * (non-Javadoc)
 	 * 
+	 * @see
+	 * com.swe.prototype.models.AccountBase#createCalendarEntry(java.lang.String
+	 * , java.lang.String, java.lang.String, java.lang.String, java.lang.String,
+	 * int) parameter: startDate,endDate Format: dd/mm/yyyy satrTime,endTime
+	 * Format: hh:mm AM or hh:mm PM repeat: 0 == no repeat; 1 == every day; 2 ==
+	 * every month; 3 == every year description: String from description edit
+	 * text;
 	 */
 	@Override
 	public void createCalendarEntry(String startDate, String endDate,
 			String startTime, String endTime, String description, int repeat) {
-		System.out.println("Google: Add CalenderEntry: noch nicht implementiert");
-		
-		
+		System.out
+				.println("Google: Add CalenderEntry: noch nicht implementiert");
+
 	}
 
 }

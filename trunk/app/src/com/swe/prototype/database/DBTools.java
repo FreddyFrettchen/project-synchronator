@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBTools extends SQLiteOpenHelper {
-	
+
 	public static String SERVERDATA_TABLE = "server_data";
 	public static int SERVERDATA_TABLE_ID = 1;
 
@@ -31,15 +31,15 @@ public class DBTools extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldv, int newv) {
-		ServerDataTable.onUpgrade(database,oldv,newv);
-		AccountTable.onUpgrade(database,oldv,newv);
+		ServerDataTable.onUpgrade(database, oldv, newv);
+		AccountTable.onUpgrade(database, oldv, newv);
 	}
 
 	/**
 	 * delete all data from the database
 	 */
-	public void purgeDatabase(){
+	public void purgeDatabase() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		onUpgrade(db,1,1);
+		onUpgrade(db, 1, 1);
 	}
 }

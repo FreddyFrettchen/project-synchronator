@@ -155,8 +155,8 @@ public abstract class BaseActivity extends Activity {
 	}
 
 	/*
-	 * Diese Methode sollte von der jeweiligen Activity �berschrieben werden, um
-	 * die Add funktion nutzen zu k�nnen.
+	 * Diese Methode sollte von der jeweiligen Activity �berschrieben werden,
+	 * um die Add funktion nutzen zu k�nnen.
 	 */
 	protected void addClicked() {
 

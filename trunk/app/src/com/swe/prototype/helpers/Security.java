@@ -20,14 +20,14 @@ public class Security {
 	Cipher ecipher;
 	Cipher dcipher;
 	// solve this better
-	byte[] salt = new String("mysalto2").getBytes();//new byte[8]
+	byte[] salt = new String("mysalto2").getBytes();// new byte[8]
 	int iterationCount = 200;
 
 	public Security(String passPhrase) {
 		try {
 			// generate a random salt
-			//SecureRandom random = new SecureRandom();
-			//random.nextBytes(salt);
+			// SecureRandom random = new SecureRandom();
+			// random.nextBytes(salt);
 
 			// Create the key
 			KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt,
@@ -88,7 +88,7 @@ public class Security {
 	public String getSalt() {
 		return Base64.encodeToString(salt, Base64.DEFAULT);
 	}
-	
+
 	/**
 	 * calculate sha1 for given String s
 	 * 

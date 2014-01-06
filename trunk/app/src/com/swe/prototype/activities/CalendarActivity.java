@@ -14,14 +14,13 @@ public class CalendarActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_calendar);
 	}
-	
+
 	@Override
-	protected void addClicked(){
+	protected void addClicked() {
 		Intent intent = new Intent(CalendarActivity.this,
 				AddCalendarEventActivity.class);
 		startActivity(intent);
 		finish();
 
-		
 	}
 }

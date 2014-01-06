@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public abstract class Contact extends BaseData {
-	
+
 	public Contact(Contact c) {
 
 	}
@@ -17,6 +17,6 @@ public abstract class Contact extends BaseData {
 	public abstract String getPhoneumber();
 
 	public abstract String getEmail();
-	
+
 	public abstract String getAccountTag();
 }

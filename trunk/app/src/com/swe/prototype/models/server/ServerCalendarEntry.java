@@ -9,9 +9,9 @@ public class ServerCalendarEntry extends CalendarEntry {
 		super(ce);
 		// TODO Auto-generated constructor stub
 	}
-	
-	public static ServerCalendarEntry fromJson(String json){
-		return new Gson().fromJson(json, ServerCalendarEntry.class);   
+
+	public static ServerCalendarEntry fromJson(String json) {
+		return new Gson().fromJson(json, ServerCalendarEntry.class);
 	}
 
 }
