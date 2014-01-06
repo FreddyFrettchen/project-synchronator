@@ -26,6 +26,7 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -50,6 +51,7 @@ import android.widget.Toast;
 import com.swe.prototype.R;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.AccountTable;
+import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.net.server.Server;
 import com.swe.prototype.net.server.Server.AuthenticateUserTask;
@@ -131,7 +133,7 @@ public class AccountsActivity extends BaseActivity implements
 
 	public boolean onContextItemSelected(MenuItem item) {
 		// Object a = listView.getAdapter().getItem(item.getItemId());
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+		final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 				.getMenuInfo();
 
 		switch (item.getItemId()) {
@@ -139,7 +141,35 @@ public class AccountsActivity extends BaseActivity implements
 			editAccount((int) info.id);
 			break;
 		case R.id.delete:
-			deleteAccount((int) info.id);
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+			 
+			// set title
+			//alertDialogBuilder.setTitle("Your Title");
+ 
+			// set dialog message
+			alertDialogBuilder
+				.setMessage("Do you want to delete the account?")
+				.setCancelable(false)
+				.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						// if this button is clicked, close
+						// current activity
+						deleteAccount((int) info.id);
+					}
+				  })
+				.setNegativeButton("No",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						// if this button is clicked, just close
+						// the dialog box and do nothing
+						dialog.cancel();
+					}
+				});
+ 
+			// create alert dialog
+			AlertDialog alertDialog = alertDialogBuilder.create();
+ 
+			// show it
+			alertDialog.show();
 			break;
 		default:
 			return super.onContextItemSelected(item);
