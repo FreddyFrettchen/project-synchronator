@@ -55,8 +55,8 @@ public class ServerContact extends Contact {
 	public String getEmail() {
 		return this.email;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return getLastName() + ", " + getFirstName();
 	}
 

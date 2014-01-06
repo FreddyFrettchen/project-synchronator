@@ -32,7 +32,7 @@ public class ServerAccount extends AccountBase {
 	protected String server_url = null;
 	protected Security sec = null;
 	protected Gson gson = null;
-	
+
 	public ServerAccount(Context context, int refresh_time_sec,
 			String username, String password) {
 		super(context, refresh_time_sec, username, password);
@@ -161,14 +161,14 @@ public class ServerAccount extends AccountBase {
 				new String[] { "contacts" }, null);
 		if (cursor.moveToFirst()) {
 			do {
-				contacts.add(new EncryptedData(cursor.getInt(0), cursor.getString(2))
-						.toContact(this.password));
+				contacts.add(new EncryptedData(cursor.getInt(0), cursor
+						.getString(2)).toContact(this.password));
 			} while (cursor.moveToNext());
 		}
 		Log.i(TAG, "i return " + contacts.size() + " contacts!!");
 		return contacts;
 	}
-	
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
@@ -186,7 +186,7 @@ public class ServerAccount extends AccountBase {
 		new AddDataTask() {
 
 		}.execute("contact", contact.toJson());
-		Log.i(TAG,"erstellter kontakt: "+contact.toJson());
+		Log.i(TAG, "erstellter kontakt: " + contact.toJson());
 	}
 
 	@Override
@@ -285,14 +285,15 @@ public class ServerAccount extends AccountBase {
 
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
-		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,layout_id);
+		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,
+				layout_id);
 		adapter.addAll(getContacts());
 		return adapter;
 	}
 
 	@Override
 	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
-		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context,layout_id);
+		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context, layout_id);
 		return adapter;
 	}
 
@@ -305,9 +306,9 @@ public class ServerAccount extends AccountBase {
 	@Override
 	public void createCalendarEntry(String startDate, String endDate,
 			String startTime, String endTime, String description, int repeat) {
-		System.out.println("Server Add CalenderEntry: noch nicht implementiert");
-		
+		System.out
+				.println("Server Add CalenderEntry: noch nicht implementiert");
+
 	}
 
-	
 }

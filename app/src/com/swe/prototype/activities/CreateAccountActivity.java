@@ -33,10 +33,10 @@ public class CreateAccountActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_account);
 
-		if(getIntent().hasExtra("id_account"))
+		if (getIntent().hasExtra("id_account"))
 			id_account = getIntent().getExtras().getInt("id_account");
-		
-		if(getIntent().hasExtra("edit_mode"))
+
+		if (getIntent().hasExtra("edit_mode"))
 			edit_mode = getIntent().getExtras().getBoolean("edit_mode");
 
 		if (edit_mode && id_account != 0)

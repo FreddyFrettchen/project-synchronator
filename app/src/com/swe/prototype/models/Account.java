@@ -12,27 +12,27 @@ public abstract class Account {
 	protected String account_type = null;
 	protected String username = null;
 	protected String password = null;
-	
+
 	protected ArrayList<Contact> contacts = null;
 	protected ArrayList<CalendarEntry> calendar_entries = null;
 	protected ArrayList<Note> notes = null;
-	
-	public Account(String account_type, String username, String password){
+
+	public Account(String account_type, String username, String password) {
 		this.account_type = account_type;
 		this.username = username;
 		this.password = password;
-		
+
 		this.contacts = new ArrayList<Contact>();
 		this.calendar_entries = new ArrayList<CalendarEntry>();
 		this.notes = new ArrayList<Note>();
 	}
-	
+
 	public abstract void updateContacts();
-	
-	public String getIdentifier(){
+
+	public String getIdentifier() {
 		return this.account_type;
 	}
-	
+
 	public ArrayList<Contact> getContacts() {
 		return this.contacts;
 	}
@@ -65,6 +65,8 @@ public abstract class Account {
 	}
 
 	public abstract BaseAdapter getContactAdapter();
+
 	public abstract BaseAdapter getNotesAdapter();
+
 	public abstract BaseAdapter getCalendarAdapter();
 }

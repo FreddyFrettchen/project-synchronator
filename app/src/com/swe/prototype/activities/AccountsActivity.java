@@ -58,7 +58,7 @@ public class AccountsActivity extends BaseActivity implements
 		LoaderCallbacks<Cursor> {
 
 	private static final String TAG = "AccountsActivity";
-	//private final static int ADD_ACCOUNT_BUTTON = 0x122;
+	// private final static int ADD_ACCOUNT_BUTTON = 0x122;
 	private final static Uri CONTENT_URI = Uri.withAppendedPath(
 			SQLiteDataProvider.CONTENT_URI, AccountTable.TABLE_ACCOUNT);
 
@@ -99,12 +99,12 @@ public class AccountsActivity extends BaseActivity implements
 		in.putExtra("id_account", id_account);
 		in.putExtra("edit_mode", true);
 		startActivity(in);
-		//loadermanager.restartLoader(1, null, (LoaderCallbacks<Cursor>) this);
+		// loadermanager.restartLoader(1, null, (LoaderCallbacks<Cursor>) this);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//menu.add(0, ADD_ACCOUNT_BUTTON, 0, "Add Account");
+		// menu.add(0, ADD_ACCOUNT_BUTTON, 0, "Add Account");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
@@ -133,13 +133,13 @@ public class AccountsActivity extends BaseActivity implements
 		// Object a = listView.getAdapter().getItem(item.getItemId());
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 				.getMenuInfo();
-		
+
 		switch (item.getItemId()) {
 		case R.id.edit:
-			editAccount((int)info.id);
+			editAccount((int) info.id);
 			break;
 		case R.id.delete:
-			deleteAccount((int)info.id);
+			deleteAccount((int) info.id);
 			break;
 		default:
 			return super.onContextItemSelected(item);

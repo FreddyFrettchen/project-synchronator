@@ -22,7 +22,7 @@ import android.os.AsyncTask;
 
 public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		AsyncTask<Params, Progress, Result> {
-	
+
 	/**
 	 * urlencodes list of NameValuePairs
 	 * 
@@ -57,8 +57,8 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 	 * @return
 	 * @throws IOException
 	 */
-	public HttpURLConnection postRequest(String _url,
-			List<NameValuePair> params) throws IOException {
+	public HttpURLConnection postRequest(String _url, List<NameValuePair> params)
+			throws IOException {
 
 		URL url = new URL(_url);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();

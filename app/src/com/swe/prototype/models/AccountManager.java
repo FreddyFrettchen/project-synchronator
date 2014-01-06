@@ -82,13 +82,13 @@ public class AccountManager {
 				Settings.getPrefs_name(), 0);
 		String email = settings.getString("email", null);
 		String password = settings.getString("password", null);
-		Log.i(TAG,"email: " + email);
-		Log.i(TAG,"password: " + password);
-		this.server_account = new ServerAccount(context, Settings
-				.getRefreshTimeAsInt(), email, Security.sha1(password));
+		Log.i(TAG, "email: " + email);
+		Log.i(TAG, "password: " + password);
+		this.server_account = new ServerAccount(context,
+				Settings.getRefreshTimeAsInt(), email, Security.sha1(password));
 	}
-	
-	public void refreshAllData(){
+
+	public void refreshAllData() {
 		context.startService(new Intent(context, SynchronatorService.class));
 	}
 }

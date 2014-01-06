@@ -17,8 +17,8 @@ public class AccountTable {
 			+ TABLE_ACCOUNT + "(" + COLUMN_ID
 			+ " integer primary key autoincrement, " + COLUMN_USERNAME
 			+ " text not null, " + COLUMN_PASSWORD + " text not null,"
-			+ COLUMN_PROVIDER + " text not null," 
-			+ COLUMN_LAST_SYNC + " text not null" + ")";
+			+ COLUMN_PROVIDER + " text not null," + COLUMN_LAST_SYNC
+			+ " text not null" + ")";
 
 	public static void onCreate(SQLiteDatabase database) {
 		database.execSQL(DATABASE_CREATE);

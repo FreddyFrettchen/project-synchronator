@@ -46,7 +46,7 @@ public class NoteAdapter extends MergeAdapter {
 			// the getTag returns the viewHolder object set as a tag to the view
 			holder = (ViewHolder) view.getTag();
 		}
-		
+
 		Note o = (Note) getItem(position);
 		holder.title.setText(o.getTitle());
 		holder.account_tag.setText(o.getAccountTag());
