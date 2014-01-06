@@ -17,13 +17,14 @@ import com.independentsoft.exchange.ServiceException;
 import com.independentsoft.exchange.StandardFolder;
 
 import com.swe.prototype.models.CalendarEntry;
+import com.swe.prototype.models.AccountBase;
 
 public class ExchangeCalendarEntry extends CalendarEntry {
 
-	public ExchangeCalendarEntry(CalendarEntry ce) {
-		super(ce);
-		// TODO Auto-generated constructor stub
-	}
+    public ExchangeCalendarEntry(AccountBase account) {
+        super(account);
+        // TODO Auto-generated constructor stub
+    }
 
 	public boolean getExchangeCalendar() {
 		try {

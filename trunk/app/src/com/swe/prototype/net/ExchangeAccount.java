@@ -11,6 +11,14 @@ import com.independentsoft.exchange.FindItemResponse;
 import com.independentsoft.exchange.Service;
 import com.independentsoft.exchange.ServiceException;
 import com.independentsoft.exchange.StandardFolder;
+import com.swe.prototype.models.AccountBase;
+import com.swe.prototype.models.CalendarEntry;
+import com.swe.prototype.models.Contact;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.Body;
 import com.independentsoft.exchange.FileAsMapping;
@@ -23,9 +31,9 @@ import com.swe.prototype.models.Contact;
 
 public class ExchangeAccount extends AccountBase {
 
-	public ExchangeAccount(Context context, int refresh_time_sec,
-			String username, String password) {
-		super(context, refresh_time_sec, username, password);
+	public ExchangeAccount(Context context, int account_id,
+			int refresh_time_sec, String username, String password) {
+		super(context, account_id, refresh_time_sec, username, password);
 	}
 
 	@Override
@@ -65,7 +73,115 @@ public class ExchangeAccount extends AccountBase {
 	}
 
 	@Override
-	public void createNote() {
+	public BaseAdapter getContactAdapter(Context context, int layout_id) {
+		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,
+				layout_id);
+		// adapter.addAll(Contact);
+		try {
+			Service service = new Service(
+					"https://mail.fh-aachen.de/EWS/exchange.asmx",
+					"bd8299s@ad.fh-aachen.de", "password");
+
+			FindItemResponse response = service
+					.findItem(StandardFolder.CONTACTS);
+
+			for (int i = 0; i < response.getItems().size(); i++) {
+				adapter.add((Contact) response.getItems());
+				// System.out.println(response.getItems().get(i).getSubject());
+			}
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getXmlMessage());
+
+			e.printStackTrace();
+		}
+		return adapter;
+	}
+
+	@Override
+	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
+		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context, layout_id);
+		try {
+			Service service = new Service(
+					"https://mail.fh-aachen.de/EWS/exchange.asmx",
+					"bd8299s@ad.fh-aachen.de", "password");
+			FindItemResponse response = service.findItem(StandardFolder.NOTES);
+			for (int i = 0; i < response.getItems().size(); i++) {
+				adapter.add((Note) response.getItems());
+				// System.out.println(response.getItems().get(i).getSubject());
+			}
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getXmlMessage());
+
+			e.printStackTrace();
+		}
+		return adapter;
+	}
+
+	@Override
+	public void editContact(Context context, Contact c) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void editNote(Context context, com.swe.prototype.models.Note n) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void editCalendarEntry(Context context, CalendarEntry ce) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteContact(Contact c) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteNote(com.swe.prototype.models.Note n) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteCalendarEntry(CalendarEntry ce) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public BaseAdapter getCalendarAdapter(Context context, int layout_id) {
+		ArrayAdapter<CalendarEntry> adapter = new ArrayAdapter<CalendarEntry>(
+				context, layout_id);
+		try {
+			Service service = new Service(
+					"https://mail.fh-aachen.de/EWS/exchange.asmx",
+					"bd8299s@ad.fh-aachen.de", "password");
+
+			FindItemResponse response = service
+					.findItem(StandardFolder.CALENDAR);
+
+			for (int i = 0; i < response.getItems().size(); i++) {
+				adapter.add((CalendarEntry) response.getItems());
+				// System.out.println(response.getItems().get(i).getSubject());
+			}
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getXmlMessage());
+
+			e.printStackTrace();
+		}
+		return adapter;
+	}
+
+	@Override
+	public void createNote(String title, String text) {
 		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
@@ -92,7 +208,8 @@ public class ExchangeAccount extends AccountBase {
 	}
 
 	@Override
-	public void createCalendarEntry() {
+	public void createCalendarEntry(String startDate, String endDate,
+			String startTime, String endTime, String description, int repeat) {
 		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
@@ -101,14 +218,14 @@ public class ExchangeAccount extends AccountBase {
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat(
 					"yyyy-MM-dd HH:mm:ss");
-			Date startTime = dateFormat.parse("2014-02-25 16:00:00");
-			Date endTime = dateFormat.parse("2014-02-25 18:00:00");
+			Date _startTime = dateFormat.parse("2014-02-25 16:00:00");
+			Date _endTime = dateFormat.parse("2014-02-25 18:00:00");
 
 			Appointment appointment = new Appointment();
 			appointment.setSubject("Test");
 			appointment.setBody(new Body("Body text"));
-			appointment.setStartTime(startTime);
-			appointment.setEndTime(endTime);
+			appointment.setStartTime(_startTime);
+			appointment.setEndTime(_endTime);
 			appointment.setLocation("My Office");
 			appointment.setReminderIsSet(true);
 			appointment.setReminderMinutesBeforeStart(30);
@@ -122,91 +239,6 @@ public class ExchangeAccount extends AccountBase {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
-	}
-
-	@Override
-	public BaseAdapter getContactAdapter(Context context, int layout_id) {
-		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context, layout_id);
-		// adapter.addAll(Contact);
-        try
-        {
-            Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx", "bd8299s@ad.fh-aachen.de", "password");
-
-            FindItemResponse response = service.findItem(StandardFolder.CONTACTS);
-
-            for (int i = 0; i < response.getItems().size(); i++)
-            {
-                adapter.add((Contact)response.getItems());
-                //System.out.println(response.getItems().get(i).getSubject());
-            }
-        }
-        catch (ServiceException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(e.getXmlMessage());
-
-            e.printStackTrace();
-        }
-		return adapter;
-	}
-
-	@Override
-	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
-		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context, layout_id);
-        try
-        {
-            Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx", "bd8299s@ad.fh-aachen.de", "password");
-
-            FindItemResponse response = service.findItem(StandardFolder.NOTES);
-
-            for (int i = 0; i < response.getItems().size(); i++)
-            {
-                adapter.add((Note)response.getItems());
-                //System.out.println(response.getItems().get(i).getSubject());
-            }
-        }
-        catch (ServiceException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(e.getXmlMessage());
-
-            e.printStackTrace();
-        }
-        return adapter;
-    }
-
-
-	@Override
-	public BaseAdapter getCalendarAdapter(Context context, int layout_id) {
-        ArrayAdapter<CalendarEntry> adapter = new ArrayAdapter<CalendarEntry>(context, layout_id);
-        try
-        {
-            Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx", "bd8299s@ad.fh-aachen.de", "password");
-
-            FindItemResponse response = service.findItem(StandardFolder.CALENDAR);
-
-            for (int i = 0; i < response.getItems().size(); i++)
-            {
-                adapter.add((CalendarEntry)response.getItems());
-                //System.out.println(response.getItems().get(i).getSubject());
-            }
-        }
-        catch (ServiceException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(e.getXmlMessage());
-
-            e.printStackTrace();
-        }
-		return adapter;
-	}
-
-	@Override
-	public void createCalendarEntry(String startDate, String endDate,
-			String startTime, String endTime, String description, int repeat) {
-		System.out
-				.println("Exchnage Add CalenderEntry: noch nicht implementiert");
 
 	}
 

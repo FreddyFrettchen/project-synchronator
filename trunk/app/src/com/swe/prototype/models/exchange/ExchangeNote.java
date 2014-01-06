@@ -15,14 +15,15 @@ import com.independentsoft.exchange.ItemId;
 import android.R.string;
 
 import com.swe.prototype.models.Note;
+import com.swe.prototype.models.AccountBase;
 
 public class ExchangeNote extends Note {
 
 	private string title = null;
 	private string text = null;
 
-	public ExchangeNote(Note n) {
-		super(n);
+	public ExchangeNote(AccountBase account) {
+		super(account);
 		// TODO Auto-generated constructor stub
 	}
 

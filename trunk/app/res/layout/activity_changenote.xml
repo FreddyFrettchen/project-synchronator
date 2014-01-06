@@ -1,99 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <EditText
-        android:id="@+id/edittext_changenote"
-        android:layout_width="wrap_content"
+        android:id="@+id/text_note_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="26dp"
         android:ems="10"
-        android:inputType="textMultiLine" />
-
-    <TextView
-        android:id="@+id/textview_notetitle_changenote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Notiz Titel"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-        <TextView
-        android:id="@+id/text_save_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/checkBox_google"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="40dp"
-        android:layout_marginLeft="48dp"
-        android:text="Save Location:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-
-    <Button
-        android:id="@+id/save_changenote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="220dp"
-        android:layout_marginBottom="50dp"
-        android:onClick="onClickSave"
-        android:text="Save" />
-
-    <Button
-        android:id="@+id/cancel_changenote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/save_changenote"
-        android:layout_alignBottom="@+id/save_changenote"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/save_changenote"
-        android:onClick="onClickCancel"
-        android:text="Cancel" />
-
-    <CheckBox
-        android:id="@+id/checkBox_google"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/save_changenote"
-        android:layout_alignLeft="@+id/text_save_to"
-        android:layout_marginBottom="28dp"
-        android:text="Google" />
-
-    <CheckBox
-        android:id="@+id/checkBox_exchange"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/save_changenote"
-        android:layout_alignLeft="@+id/checkBox_google"
-        android:text="Exchange" />
-
-
-
-    <CheckBox
-        android:id="@+id/checkBox_synchronator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/checkBox_google"
-        android:layout_alignLeft="@+id/checkBox_google"
-        android:text="Synchronator" />
-
-    <EditText
-        android:id="@+id/edittext_notetitle_changenote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textview_notetitle_changenote"
-        android:ems="10"
-        android:lines="1" >
+        android:text="title" >
 
         <requestFocus />
     </EditText>
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/text_note_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.27"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:text="text" />
+    
+    <TextView
+        android:id="@+id/text_save_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/edit_text_saveto"
+        android:text="Save to" />
+
+    <ListView
+        android:id="@+id/list_accounts"
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
+        android:layout_above="@+id/done_button"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/text_note_save_to" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button_note_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.50"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/button_note_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.50"
+            android:text="Create" />
+
+    </LinearLayout>
+
+</LinearLayout>

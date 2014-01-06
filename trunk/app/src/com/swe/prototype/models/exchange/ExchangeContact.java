@@ -1,5 +1,8 @@
 package com.swe.prototype.models.exchange;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.independentsoft.exchange.FileAsMapping;
 import com.independentsoft.exchange.ItemId;
 import com.independentsoft.exchange.Service;
@@ -8,12 +11,15 @@ import com.independentsoft.exchange.ContactPropertyPath;
 import com.independentsoft.exchange.FindItemResponse;
 import com.independentsoft.exchange.IsEqualTo;
 import com.independentsoft.exchange.StandardFolder;
+import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.Contact;
 
 public class ExchangeContact extends Contact {
-	public ExchangeContact(Contact c) {
-		super(c);
-		// TODO Auto-generated constructor stub
+	
+	public static String TAG = "ExchangeContact";
+	
+	public ExchangeContact(AccountBase account, Contact c) {
+		super(account);
 	}
 
 	public boolean createContact() {
@@ -113,5 +119,15 @@ public class ExchangeContact extends Contact {
 	@Override
 	public String getAccountTag() {
 		return "Exchange";
+	}
+
+	@Override
+	public void delete() {
+		Log.i(TAG, "delete:"+this.toString());
+	}
+
+	@Override
+	public void edit(Context context) {
+		Log.i(TAG, "edit:"+this.toString());
 	}
 }

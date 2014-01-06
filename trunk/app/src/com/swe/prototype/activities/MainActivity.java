@@ -190,7 +190,7 @@ public class MainActivity extends BaseActivity {
 
 		if (hasInternetConnection()) {
 			initializeDialog(getString(R.string.wait));
-			new ServerAccount(this, Settings.getRefreshTimeAsInt(), email,
+			new ServerAccount(this, 0, Settings.getRefreshTimeAsInt(), email,
 					Security.sha1(password)).new AuthenticateUserTask() {
 				@Override
 				protected void onPostExecute(Boolean success) {

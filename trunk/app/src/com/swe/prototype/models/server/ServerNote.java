@@ -3,25 +3,34 @@ package com.swe.prototype.models.server;
 import android.R.string;
 
 import com.google.gson.Gson;
+import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.Note;
 
 public class ServerNote extends Note {
+	
+	private int id = -1;
+	private String title = null;
+	private String text = null;
 
-	public ServerNote(Note n) {
-		super(n);
-		// TODO Auto-generated constructor stub
+	public ServerNote(AccountBase account, int id, String title, String text) {
+		super(account);
+		this.id = id;
+		this.title = title;
+		this.text = text;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 
 	@Override
 	public String getNote() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.text;
 	}
 
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.title;
 	}
 
 	public static ServerNote fromJson(String json) {
@@ -32,5 +41,16 @@ public class ServerNote extends Note {
 	public String getAccountTag() {
 		return "Server";
 	}
+	
+	public String toJson() {
+		return new Gson().toJson(this);
+	}
+	
+	public String toString(){
+		return getTitle();
+	}
 
+	public void setId(int data_server_id) {
+		this.id = data_server_id;
+	}
 }

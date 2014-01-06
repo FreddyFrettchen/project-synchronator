@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -15,16 +16,18 @@ import android.widget.BaseAdapter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.swe.prototype.R;
+import com.swe.prototype.activities.CreateContactActivity;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.ServerDataTable;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.AccountBase;
+import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.Note;
 import com.swe.prototype.models.server.EncryptedData;
 import com.swe.prototype.models.server.ServerContact;
+import com.swe.prototype.models.server.ServerNote;
 
 public class ServerAccount extends AccountBase {
 	private final static String TAG = "ServerAccount";
@@ -33,9 +36,9 @@ public class ServerAccount extends AccountBase {
 	protected Security sec = null;
 	protected Gson gson = null;
 
-	public ServerAccount(Context context, int refresh_time_sec,
+	public ServerAccount(Context context, int account_id, int refresh_time_sec,
 			String username, String password) {
-		super(context, refresh_time_sec, username, password);
+		super(context, account_id, refresh_time_sec, username, password);
 		this.server_url = Settings.getServer();
 		this.sec = new Security(this.password);
 		this.gson = new Gson();
@@ -142,14 +145,41 @@ public class ServerAccount extends AccountBase {
 			synchronizeDatabase(this.data_type, list);
 		}
 	}
+	
+	public ArrayList<Note> getNotes() {
+		ArrayList<Note> notes = new ArrayList<Note>();
+		Cursor cursor = getData("notes");
+		if (cursor.moveToFirst()) {
+			do {
+				notes.add(new EncryptedData(cursor.getInt(0), cursor
+						.getString(2)).toNote(this.password,
+						cursor.getInt(1), this));
+			} while (cursor.moveToNext());
+		}
+		Log.i(TAG, "i return " + notes.size() + " notes!!");
+		return notes;
+	}
 
+	public ArrayList<Contact> getContacts() {
+		ArrayList<Contact> contacts = new ArrayList<Contact>();
+		Cursor cursor = getData("contacts");
+		if (cursor.moveToFirst()) {
+			do {
+				contacts.add(new EncryptedData(cursor.getInt(0), cursor
+						.getString(2)).toContact(this.password,
+						cursor.getInt(1), this));
+			} while (cursor.moveToNext());
+		}
+		Log.i(TAG, "i return " + contacts.size() + " contacts!!");
+		return contacts;
+	}
+	
 	/**
 	 * read data from database, decrypt it and return a list of contact objects.
 	 * 
 	 * @return
 	 */
-	public ArrayList<Contact> getContacts() {
-		ArrayList<Contact> contacts = new ArrayList<Contact>();
+	public Cursor getData(String tag) {
 		final ContentResolver resolver = this.context.getContentResolver();
 		final Uri dataUri = Uri.withAppendedPath(
 				SQLiteDataProvider.CONTENT_URI,
@@ -158,15 +188,8 @@ public class ServerAccount extends AccountBase {
 				ServerDataTable.COLUMN_ID_DATA, ServerDataTable.COLUMN_DATA,
 				ServerDataTable.COLUMN_TAG };
 		Cursor cursor = resolver.query(dataUri, projection, "tag = ?",
-				new String[] { "contacts" }, null);
-		if (cursor.moveToFirst()) {
-			do {
-				contacts.add(new EncryptedData(cursor.getInt(0), cursor
-						.getString(2)).toContact(this.password));
-			} while (cursor.moveToNext());
-		}
-		Log.i(TAG, "i return " + contacts.size() + " contacts!!");
-		return contacts;
+				new String[] { tag }, null);
+		return cursor;
 	}
 
 	@Override
@@ -181,8 +204,8 @@ public class ServerAccount extends AccountBase {
 		Log.i(TAG, "ich erstelle den contact:" + lastname);
 
 		// send data to server
-		ServerContact contact = new ServerContact(lastname, firstname,
-				phonenumber, email);
+		ServerContact contact = new ServerContact(this, -1, lastname,
+				firstname, phonenumber, email);
 		new AddDataTask() {
 
 		}.execute("contact", contact.toJson());
@@ -190,15 +213,15 @@ public class ServerAccount extends AccountBase {
 	}
 
 	@Override
-	public void createNote() {
-		// TODO Auto-generated method stub
+	public void createNote(String title, String text) {
+		Log.i(TAG, "ich erstelle den note:" + title);
 
-	}
+		// send data to server
+		ServerNote note = new ServerNote(this, -1, title, text);
+		/*new AddDataTask() {
 
-	@Override
-	public void createCalendarEntry() {
-		// TODO Auto-generated method stub
-
+		}.execute("note", note.toJson());*/
+		Log.i(TAG, "erstellte note: " + note.toJson());
 	}
 
 	/**
@@ -294,21 +317,59 @@ public class ServerAccount extends AccountBase {
 	@Override
 	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
 		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context, layout_id);
+		adapter.addAll(getNotes());
 		return adapter;
 	}
 
 	@Override
 	public BaseAdapter getCalendarAdapter(Context context, int layout_id) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void editContact(Context context, Contact c) {
+		Log.i(TAG, "edit:" + this.toString());
+		Intent in = new Intent(context, CreateContactActivity.class);
+		in.putExtra("edit_mode", true);
+		in.putExtra("account_id", c.getAccount().getAccountId());
+		context.startActivity(in);
+	}
+
+	@Override
+	public void editNote(Context context, Note n) {
+
+	}
+
+	@Override
+	public void editCalendarEntry(Context context, CalendarEntry ce) {
+
+	}
+
+	@Override
+	public void deleteContact(Contact c) {
+		ServerContact contact = (ServerContact) c;
+		Log.i(TAG, "ich lösche den contact mit server_id:" + contact.getId());
+
+		/*
+		 * new AddDataTask() {
+		 * 
+		 * }.execute("contact", contact.toJson()); Log.i(TAG,
+		 * "erstellter kontakt: " + contact.toJson());
+		 */
+	}
+
+	@Override
+	public void deleteNote(Note n) {
+
+	}
+
+	@Override
+	public void deleteCalendarEntry(CalendarEntry ce) {
+
 	}
 
 	@Override
 	public void createCalendarEntry(String startDate, String endDate,
 			String startTime, String endTime, String description, int repeat) {
-		System.out
-				.println("Server Add CalenderEntry: noch nicht implementiert");
-
 	}
-
 }

@@ -86,7 +86,7 @@ public class RegisterActivity extends BaseActivity {
 		}
 
 		if (hasInternetConnection()) {
-			new ServerAccount(this, Settings.getRefreshTimeAsInt(), email,
+			new ServerAccount(this, 0, Settings.getRefreshTimeAsInt(), email,
 					Security.sha1(password)).new RegisterUserTask() {
 				@Override
 				protected void onPostExecute(Boolean result) {
