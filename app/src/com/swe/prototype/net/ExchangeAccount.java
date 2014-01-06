@@ -8,31 +8,17 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
-
-import com.independentsoft.exchange.Body;
-import com.independentsoft.exchange.FileAsMapping;
-import com.independentsoft.exchange.ItemId;
-import com.independentsoft.exchange.Service;
-import com.independentsoft.exchange.ServiceException;
-import com.independentsoft.exchange.Task;
-import com.swe.prototype.R;
-
-import com.swe.prototype.models.AccountBase;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.Body;
-import com.independentsoft.exchange.ItemId;
-import com.independentsoft.exchange.Service;
-import com.independentsoft.exchange.ServiceException;
+import com.independentsoft.exchange.Contact;
 import com.independentsoft.exchange.FileAsMapping;
+import com.independentsoft.exchange.ItemId;
 import com.independentsoft.exchange.Note;
 import com.independentsoft.exchange.NoteColor;
-
+import com.independentsoft.exchange.Service;
+import com.independentsoft.exchange.ServiceException;
 import com.independentsoft.exchange.StandardFolder;
+import com.swe.prototype.models.AccountBase;
 
 public class ExchangeAccount extends AccountBase {
 
@@ -139,6 +125,7 @@ public class ExchangeAccount extends AccountBase {
     @Override
     public BaseAdapter getContactAdapter(Context context, int layout_id) {
     	ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context,layout_id);
+    //	adapter.addAll(Contact);
 		return adapter;
     }
 
