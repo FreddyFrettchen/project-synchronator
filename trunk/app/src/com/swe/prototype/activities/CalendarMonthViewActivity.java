@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import com.swe.prototype.R;
 import com.swe.prototype.adapter.CalendarAdapter;
+import com.swe.prototype.globalsettings.DateOnSaveLocation;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,7 +30,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 	public CalendarAdapter adapter;// adapter instance
 	public Handler handler;// for grabbing some event values for showing the dot
 							// marker.
-	public ArrayList<String> items; // container to store calendar items which
+	public ArrayList<DateOnSaveLocation> items; // container to store calendar items which
 									// needs showing the event marker
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		month = (GregorianCalendar) GregorianCalendar.getInstance();
 		itemmonth = (GregorianCalendar) month.clone();
 
-		items = new ArrayList<String>();
+		items = new ArrayList<DateOnSaveLocation>();
 		adapter = new CalendarAdapter(this, month);
 
 		GridView gridview = (GridView) findViewById(R.id.gridview);
@@ -164,12 +165,12 @@ public class CalendarMonthViewActivity extends BaseActivity {
 			for (int i = 0; i < 7; i++) {
 				itemvalue = df.format(itemmonth.getTime());
 				itemmonth.add(GregorianCalendar.DATE, 1);
-				items.add("2013-12-12");
-				items.add("2014-01-07");
-				items.add("2014-01-15");
-				items.add("2014-01-20");
-				items.add("2014-02-24");
-				items.add("2014-02-28");
+				items.add(new DateOnSaveLocation("2013-12-12", true, true, true));
+				items.add(new DateOnSaveLocation("2014-01-15", true, false, true));
+				items.add(new DateOnSaveLocation("2014-01-20", true, true, false));
+				items.add(new DateOnSaveLocation("2014-02-24", false, false, false));
+				items.add(new DateOnSaveLocation("2014-02-28", false, true, true));
+				
 			}
 
 			adapter.setItems(items);
