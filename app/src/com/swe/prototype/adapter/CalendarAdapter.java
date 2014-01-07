@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.swe.prototype.R;
+import com.swe.prototype.globalsettings.DateOnSaveLocation;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -38,27 +39,27 @@ public class CalendarAdapter extends BaseAdapter {
 	String itemvalue, curentDateString;
 	DateFormat df;
 
-	private ArrayList<String> items;
+	private ArrayList<DateOnSaveLocation> items;
 	public static List<String> dayString;
 	private View previousView;
 
 	public CalendarAdapter(Context c, GregorianCalendar monthCalendar) {
 		CalendarAdapter.dayString = new ArrayList<String>();
-		 Locale.setDefault( Locale.US );
+		Locale.setDefault(Locale.US);
 		month = monthCalendar;
 		selectedDate = (GregorianCalendar) monthCalendar.clone();
 		mContext = c;
 		month.set(GregorianCalendar.DAY_OF_MONTH, 1);
-		this.items = new ArrayList<String>();
+		this.items = new ArrayList<DateOnSaveLocation>();
 		df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		curentDateString = df.format(selectedDate.getTime());
 		refreshDays();
 	}
 
-	public void setItems(ArrayList<String> items) {
+	public void setItems(ArrayList<DateOnSaveLocation> items) {
 		for (int i = 0; i != items.size(); i++) {
 			if (items.get(i).length() == 1) {
-				items.set(i, "0" + items.get(i));
+				items.set(i, items.get(i).setDate("0" + items.get(i).getDate()));
 			}
 		}
 		this.items = items;
@@ -127,13 +128,32 @@ public class CalendarAdapter extends BaseAdapter {
 		}
 
 		// show icon if date is not empty and it exists in the items array
-		ImageView dot_synchro = (ImageView) v.findViewById(R.id.date_icon_synchronator);
-		ImageView dot_exchange = (ImageView) v.findViewById(R.id.date_icon_exchange);
-		ImageView dot_google = (ImageView) v.findViewById(R.id.date_icon_google);
-		if (date.length() > 0 && items != null && items.contains(date)) {
-			dot_synchro.setVisibility(View.VISIBLE);
-			dot_exchange.setVisibility(View.VISIBLE);
-			dot_google.setVisibility(View.VISIBLE);
+		ImageView dot_synchro = (ImageView) v
+				.findViewById(R.id.date_icon_synchronator);
+		ImageView dot_exchange = (ImageView) v
+				.findViewById(R.id.date_icon_exchange);
+		ImageView dot_google = (ImageView) v
+				.findViewById(R.id.date_icon_google);
+		// c
+		boolean itemsContainsDate = false;
+		DateOnSaveLocation dateEvent = null;
+		for (DateOnSaveLocation dosl : items) {
+			if (dosl.getDate().equals(date)) {
+				dateEvent = dosl;
+				itemsContainsDate = true;
+			}
+			;
+		}
+		if (date.length() > 0 && items != null && itemsContainsDate) {
+			if (dateEvent.showS()) {
+				dot_synchro.setVisibility(View.VISIBLE);
+			}
+			if (dateEvent.showE()) {
+				dot_exchange.setVisibility(View.VISIBLE);
+			}
+			if (dateEvent.showG()) {
+				dot_google.setVisibility(View.VISIBLE);
+			}
 			convertView.setBackgroundResource(R.drawable.calendar_cel_event);
 		} else {
 			dot_synchro.setVisibility(View.INVISIBLE);
@@ -156,7 +176,7 @@ public class CalendarAdapter extends BaseAdapter {
 		// clear items
 		items.clear();
 		dayString.clear();
-		Locale.setDefault( Locale.US );
+		Locale.setDefault(Locale.US);
 		pmonth = (GregorianCalendar) month.clone();
 		// month start day. ie; sun, mon, etc
 		firstDay = month.get(GregorianCalendar.DAY_OF_WEEK);
