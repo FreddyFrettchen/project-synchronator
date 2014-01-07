@@ -80,6 +80,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 				((CalendarAdapter) parent.getAdapter()).setSelected(v);
 				String selectedGridDate = CalendarAdapter.dayString
 						.get(position);
+				System.out.println(selectedGridDate);
 				String[] separatedTime = selectedGridDate.split("-");
 				String gridvalueString = separatedTime[2].replaceFirst("^0*",
 						"");// taking last part of date. ie; 2 from 2012-12-02.
@@ -88,18 +89,29 @@ public class CalendarMonthViewActivity extends BaseActivity {
 				if ((gridvalue > 10) && (position < 8)) {
 					setPreviousMonth();
 					refreshCalendar();
+					return; // hier wird dann erstmal der vorherige monat geladen
 				} else if ((gridvalue < 7) && (position > 28)) {
 					setNextMonth();
 					refreshCalendar();
+					return; // hier nächste monat laden
 				}
 				((CalendarAdapter) parent.getAdapter()).setSelected(v);
-
-				showToast(selectedGridDate);
+				
+				showDayView(selectedGridDate);
+				//showToast(selectedGridDate);
 
 			}
 		});
 	}
-
+	
+	private void showDayView(String date){
+		Intent intent = new Intent(CalendarMonthViewActivity.this,
+				CalendarDayViewActivity.class);
+		intent.putExtra("date", date);
+		startActivity(intent);
+	}
+	//falls der user auf den Rechts Pfeil klickt
+	// danach wird auch immer refreshCalendar() aufgerufen
 	protected void setNextMonth() {
 		if (month.get(GregorianCalendar.MONTH) == month
 				.getActualMaximum(GregorianCalendar.MONTH)) {
@@ -112,6 +124,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 
 	}
 
+	//falls der user auf den Links Pfeil klickt
 	protected void setPreviousMonth() {
 		if (month.get(GregorianCalendar.MONTH) == month
 				.getActualMinimum(GregorianCalendar.MONTH)) {
@@ -151,12 +164,12 @@ public class CalendarMonthViewActivity extends BaseActivity {
 			for (int i = 0; i < 7; i++) {
 				itemvalue = df.format(itemmonth.getTime());
 				itemmonth.add(GregorianCalendar.DATE, 1);
-				items.add("2012-09-12");
-				items.add("2012-10-07");
-				items.add("2012-10-15");
-				items.add("2012-10-20");
-				items.add("2012-11-30");
-				items.add("2012-11-28");
+				items.add("2013-12-12");
+				items.add("2014-01-07");
+				items.add("2014-01-15");
+				items.add("2014-01-20");
+				items.add("2014-02-24");
+				items.add("2014-02-28");
 			}
 
 			adapter.setItems(items);
@@ -166,7 +179,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 	@Override
 	protected void addClicked() {
 		Intent intent = new Intent(CalendarMonthViewActivity.this,
-				AddCalendarEventActivity.class);
+				CalendarAddEventActivity.class);
 		startActivity(intent);
 		finish();
 
