@@ -9,7 +9,7 @@
         android:id="@+id/header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/calendar_top" >
+        android:background="@drawable/calendar_top_new" >
 
         <RelativeLayout
             android:id="@+id/previous"
@@ -31,7 +31,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dip"
             android:textColor="#000000"
-            android:textSize="18dip"
+            android:textSize="24dip"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -57,4 +57,5 @@
         android:numColumns="7"
         android:stretchMode="columnWidth" />
 
+       
 </LinearLayout>

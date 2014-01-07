@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.swe.prototype.R;
 import com.swe.prototype.models.AccountBase;
 
-public class AddCalendarEventActivity extends BaseActivity {
+public class CalendarAddEventActivity extends BaseActivity {
 	private static final String TAG = "AddCalendarEventActivity";
 
 	// diese variabeln halten konsistent das zuletzt ausgewählte datum/zeit
@@ -296,7 +296,7 @@ public class AddCalendarEventActivity extends BaseActivity {
 				}
 			}
 
-			Intent intent = new Intent(AddCalendarEventActivity.this,
+			Intent intent = new Intent(CalendarAddEventActivity.this,
 					CalendarMonthViewActivity.class);
 			startActivity(intent);
 			finish();
@@ -403,7 +403,7 @@ public class AddCalendarEventActivity extends BaseActivity {
 	}
 
 	public void onClickCancel(View v) {
-		Intent intent = new Intent(AddCalendarEventActivity.this,
+		Intent intent = new Intent(CalendarAddEventActivity.this,
 				CalendarMonthViewActivity.class);
 		startActivity(intent);
 		this.finish();

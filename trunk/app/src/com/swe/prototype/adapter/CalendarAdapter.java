@@ -103,8 +103,8 @@ public class CalendarAdapter extends BaseAdapter {
 			dayView.setClickable(false);
 			dayView.setFocusable(false);
 		} else {
-			// setting curent month's days in blue color.
-			dayView.setTextColor(Color.BLUE);
+			// setting curent month's days in black color.
+			dayView.setTextColor(Color.BLACK);
 		}
 
 		if (dayString.get(position).equals(curentDateString)) {
@@ -127,11 +127,18 @@ public class CalendarAdapter extends BaseAdapter {
 		}
 
 		// show icon if date is not empty and it exists in the items array
-		ImageView iw = (ImageView) v.findViewById(R.id.date_icon);
+		ImageView dot_synchro = (ImageView) v.findViewById(R.id.date_icon_synchronator);
+		ImageView dot_exchange = (ImageView) v.findViewById(R.id.date_icon_exchange);
+		ImageView dot_google = (ImageView) v.findViewById(R.id.date_icon_google);
 		if (date.length() > 0 && items != null && items.contains(date)) {
-			iw.setVisibility(View.VISIBLE);
+			dot_synchro.setVisibility(View.VISIBLE);
+			dot_exchange.setVisibility(View.VISIBLE);
+			dot_google.setVisibility(View.VISIBLE);
+			convertView.setBackgroundResource(R.drawable.calendar_cel_event);
 		} else {
-			iw.setVisibility(View.INVISIBLE);
+			dot_synchro.setVisibility(View.INVISIBLE);
+			dot_exchange.setVisibility(View.INVISIBLE);
+			dot_google.setVisibility(View.INVISIBLE);
 		}
 		return v;
 	}
