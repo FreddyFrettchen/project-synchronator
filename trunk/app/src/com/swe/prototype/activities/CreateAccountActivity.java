@@ -43,7 +43,7 @@ public class CreateAccountActivity extends BaseActivity {
 			prefill_fields();
 
 		Button save_button = (Button) findViewById(R.id.button_edit_save);
-		save_button.setText(edit_mode ? "EditAccount" : "Save Account");
+		save_button.setText(edit_mode ? "Edit Account" : "Save Account");
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -52,6 +52,15 @@ public class CreateAccountActivity extends BaseActivity {
 				} else {
 					saveAccount(v);
 				}
+				finish();
+			}
+		});
+		
+		Button cancel_button = (Button) findViewById(R.id.button_cancel);
+		//cancel_button.setText("Cancel");
+		cancel_button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
 				finish();
 			}
 		});

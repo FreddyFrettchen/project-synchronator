@@ -56,13 +56,27 @@
         android:ems="10"
         android:inputType="textPassword" />
 
-    <Button
-        android:id="@+id/button_edit_save"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="Edit" />
+        android:layout_alignParentRight="true" >
+
+        <Button
+            android:id="@+id/button_edit_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Edit" />
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Cancel" />
+
+    </LinearLayout>
 
 </RelativeLayout>

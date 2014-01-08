@@ -44,6 +44,15 @@ public class CreateContactActivity extends BaseActivity {
 				saveContact(v);
 			}
 		});
+		
+		Button cancel_button = (Button) findViewById(R.id.cancel_button);
+		cancel_button.setText("Cancel");
+		cancel_button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 	}
 
 	private void saveContact(View v) {
