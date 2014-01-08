@@ -56,6 +56,14 @@ public class ChangeNoteActivity extends BaseActivity {
 				saveNote(v);
 			}
 		});
+		
+		cancel.setText("Cancel");
+		cancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 	}
 
 	private void initializeDialog(String message) {
