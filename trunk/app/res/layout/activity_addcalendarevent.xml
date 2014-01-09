@@ -1,149 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayoutOut"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/button_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="220dp"
-        android:onClick="onClickSave"
-        android:text="Save" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/button_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/button_save"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/button_save"
-        android:onClick="onClickCancel"
-        android:text="Cancel" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date from:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/textView_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="Date from:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/textView_datepicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView_date"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+            <TextView
+                android:id="@+id/textView_datepicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_date_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView_datepicker"
-        android:layout_marginTop="41dp"
-        android:text="Date to:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <Button
+            android:id="@+id/button_changedate_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:onClick="onClickChangeDateFrom"
+            android:text="Change Date" />
 
-    <TextView
-        android:id="@+id/textView_datepicker_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView_date_to"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/button_changedate_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView_datepicker"
-        android:layout_alignBottom="@+id/textView_datepicker"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/textView_datepicker"
-        android:onClick="onClickChangeDateFrom"
-        android:text="Change Date" />
+            <TextView
+                android:id="@+id/textView_date_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="Date to:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button
-        android:id="@+id/button_changedate_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView_datepicker_to"
-        android:layout_alignBottom="@+id/textView_datepicker_to"
-        android:layout_alignLeft="@+id/button_changedate_from"
-        android:onClick="onClickChangeDateTo"
-        android:text="Change Date" />
+            <TextView
+                android:id="@+id/textView_datepicker_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_time_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_cancel"
-        android:layout_alignParentTop="true"
-        android:text="Time from:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <Button
+            android:id="@+id/button_changedate_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:onClick="onClickChangeDateTo"
+            android:text="Change Date" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_timepicker_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView_time_from"
-        android:layout_below="@+id/textView_time_from"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/button_chnagetime_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView_timepicker_from"
-        android:layout_alignBottom="@+id/textView_timepicker_from"
-        android:layout_marginLeft="28dp"
-        android:layout_toRightOf="@+id/textView_timepicker_from"
-        android:onClick="onClickChangeTimeFrom"
-        android:text="Change Time" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView_time_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView_datepicker_to"
-        android:layout_alignLeft="@+id/textView_timepicker_from"
-        android:text="Time to:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/textView_time_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="Time from:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/textView_timepicker_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView_time_to"
-        android:layout_below="@+id/textView_time_to"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+            <TextView
+                android:id="@+id/textView_timepicker_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/button_changetime_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView_timepicker_to"
-        android:layout_alignBottom="@+id/textView_timepicker_to"
-        android:layout_alignLeft="@+id/button_chnagetime_to"
-        android:onClick="onClickChangeTimeTo"
-        android:text="Change Time" />
+        <Button
+            android:id="@+id/button_chnagetime_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_weight="0.25"
+            android:onClick="onClickChangeTimeFrom"
+            android:text="Change Time" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView_time_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="Time to:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/textView_timepicker_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_changetime_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:onClick="onClickChangeTimeTo"
+            android:text="Change Time" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button_changedate_to"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:text="Description:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -152,66 +147,78 @@
         android:id="@+id/editText_description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_description"
-        android:layout_centerHorizontal="true"
         android:ems="10"
         android:inputType="textMultiLine" >
-        <requestFocus />
+
+        <requestFocus android:layout_width="wrap_content" />
     </EditText>
 
-
-
-    
-    <RadioGroup
-        android:id="@+id/radiogroup_every"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-	    android:layout_below="@+id/textView_repeat">
-		<RadioButton
-	        android:id="@+id/radioButton_everyday"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Every Day" />
-	   	
-	    <RadioButton
-	        android:id="@+id/radioButton_everymonth"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Every Month" />
-	
-	    <RadioButton
-	        android:id="@+id/radioButton_everyyear"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Every Year" />
-	</RadioGroup>
     <TextView
         android:id="@+id/textView_repeat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText_description"
         android:layout_marginTop="20dp"
         android:text="Repeat:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-    
+
+    <RadioGroup
+        android:id="@+id/radiogroup_every"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/radioButton_everyday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Every Day" />
+
+        <RadioButton
+            android:id="@+id/radioButton_everymonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Every Month" />
+
+        <RadioButton
+            android:id="@+id/radioButton_everyyear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Every Year" />
+    </RadioGroup>
+
     <TextView
         android:id="@+id/textView_savelocation_addCalEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/radiogroup_every"
         android:layout_marginTop="20dp"
         android:text="Save on Account:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-    
+
     <ListView
         android:id="@+id/list_accounts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView_savelocation_addCalEntry"
-        android:layout_above="@+id/button_save">
-
+        android:layout_height="370dp" >
     </ListView>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="onClickSave"
+            android:text="Save" />
+        
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="onClickCancel"
+            android:text="Cancel" />
+
+    </LinearLayout>
+
+</LinearLayout>
