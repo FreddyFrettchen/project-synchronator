@@ -110,11 +110,12 @@ public abstract class AsyncDataTask<Result> extends
 
 	protected Boolean delete(String server, String email, String password,
 			String type, int data_id) throws IOException {
-		String add_url = server + "/data/delete/" + type + '/' + data_id;
+		String add_url = server + "/data/delete/" + type;
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("password", password));
+		params.add(new BasicNameValuePair("data_id", data_id+""));
 
 		HttpURLConnection request = postRequest(add_url, params);
 		request.connect();
