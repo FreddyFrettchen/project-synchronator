@@ -61,9 +61,14 @@ public class ChangeNoteActivity extends BaseActivity {
 		cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				finish();
+				toNotes();
 			}
 		});
+	}
+	
+	private void toNotes(){
+		startActivity(new Intent(this,ListNotesActivity.class));
+		finish();
 	}
 
 	private void initializeDialog(String message) {
