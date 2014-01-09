@@ -1,17 +1,8 @@
 package com.swe.prototype.models.server;
 
-import java.io.IOException;
-
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-
 import com.google.gson.Gson;
-import com.swe.prototype.activities.CreateContactActivity;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.Contact;
-import com.swe.prototype.net.server.Server;
-import com.swe.prototype.net.server.Server.AddDataTask;
 
 public class ServerContact extends Contact {
 	
@@ -38,11 +29,11 @@ public class ServerContact extends Contact {
 	}
 
 	public String toJson() {
-		return new Gson().toJson(this);
+		return getGsonInstance().toJson(this);
 	}
 
 	public static ServerContact fromJson(String json) {
-		return new Gson().fromJson(json, ServerContact.class);
+		return getGsonInstance().fromJson(json, ServerContact.class);
 	}
 	
 	public int getId(){

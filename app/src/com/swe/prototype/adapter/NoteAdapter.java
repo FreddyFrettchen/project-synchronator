@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.commonsware.cwac.merge.MergeAdapter;
 import com.swe.prototype.R;
-import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.Note;
 
 public class NoteAdapter extends MergeAdapter {
@@ -37,9 +36,9 @@ public class NoteAdapter extends MergeAdapter {
 			holder = new ViewHolder();
 			LayoutInflater li = (LayoutInflater) this.context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = li.inflate(R.layout.list_item_contact, null);
-			holder.title = (TextView) view.findViewById(R.id.name);
-			holder.account_tag = (TextView) view.findViewById(R.id.account_tag);
+			view = li.inflate(R.layout.list_item_note, null);
+			holder.title = (TextView) view.findViewById(R.id.list_note_title);
+			holder.account_tag = (TextView) view.findViewById(R.id.list_note_account_tag);
 			// the setTag is used to store the data within this view
 			view.setTag(holder);
 		} else {

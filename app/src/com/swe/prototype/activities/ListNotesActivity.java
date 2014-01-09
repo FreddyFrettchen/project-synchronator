@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import com.swe.prototype.R;
 import com.swe.prototype.adapter.NoteAdapter;
-import com.swe.prototype.models.Contact;
+import com.swe.prototype.models.Note;
 
 public class ListNotesActivity extends BaseActivity {
 
@@ -25,6 +25,7 @@ public class ListNotesActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_listnotes);
 		invalidateOptionsMenu();
+		
 		// Create the adapter to convert the array to views
 		adapter = new NoteAdapter(this);
 		for (int i = 0; i < this.accounts.getAccounts().size(); i++) {
@@ -65,7 +66,7 @@ public class ListNotesActivity extends BaseActivity {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 				.getMenuInfo();
 
-		Contact o = (Contact) listView.getAdapter().getItem(info.position);
+		Note o = (Note) listView.getAdapter().getItem(info.position);
 		switch (item.getItemId()) {
 		case R.id.edit:
 			editNote(o);
@@ -81,16 +82,16 @@ public class ListNotesActivity extends BaseActivity {
 		}
 	}
 
-	public void editNote(Contact c) {
-		Log.i(TAG, "edit:" + c.toString());
+	public void editNote(Note c) {
+		c.edit(this);
 	}
 
-	public void moveNote(Contact c) {
+	public void moveNote(Note c) {
 		Log.i(TAG, "move:" + c.toString());
 	}
 
-	public void deleteNote(Contact c) {
-		Log.i(TAG, "delete:" + c.toString());
+	public void deleteNote(Note c) {
+		c.delete();
 	}
 
 }

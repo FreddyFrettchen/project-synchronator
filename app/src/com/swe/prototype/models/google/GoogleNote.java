@@ -30,4 +30,10 @@ public class GoogleNote extends Note {
 		return "Google";
 	}
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -43,9 +43,6 @@ public abstract class AsyncDataTask<Result> extends
 		// response code of 200 is accepted and 304 is failed.
 		int response = request.getResponseCode();
 
-		// Log.i(TAG, "add request returned: "+ response +
-		// ". params: "+email+"/"+password+"/"+type+"/"+data);
-
 		return response == 200;
 	}
 
@@ -69,7 +66,6 @@ public abstract class AsyncDataTask<Result> extends
 		s.useDelimiter("\\Z");
 
 		String response = s.next();
-		Log.i(TAG, response);
 
 		return response;
 	}
@@ -107,9 +103,22 @@ public abstract class AsyncDataTask<Result> extends
 		} else {
 			s = new Scanner(request.getInputStream());
 		}
-		s.useDelimiter("\\Z");
 
 		String response = s.next();
 		return response;
+	}
+
+	protected Boolean delete(String server, String email, String password,
+			String type, int data_id) throws IOException {
+		String add_url = server + "/data/delete/" + type + '/' + data_id;
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("email", email));
+		params.add(new BasicNameValuePair("password", password));
+
+		HttpURLConnection request = postRequest(add_url, params);
+		request.connect();
+		
+		return request.getResponseCode() == 200;
 	}
 }

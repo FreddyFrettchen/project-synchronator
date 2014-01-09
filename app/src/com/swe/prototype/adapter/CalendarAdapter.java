@@ -154,7 +154,8 @@ public class CalendarAdapter extends BaseAdapter {
 			if (dateEvent.showG()) {
 				dot_google.setVisibility(View.VISIBLE);
 			}
-			convertView.setBackgroundResource(R.drawable.calendar_cel_event);
+			// TODO RESOURCE FEHLT?
+			//convertView.setBackgroundResource(R.drawable.calendar_cel_event);
 		} else {
 			dot_synchro.setVisibility(View.INVISIBLE);
 			dot_exchange.setVisibility(View.INVISIBLE);
