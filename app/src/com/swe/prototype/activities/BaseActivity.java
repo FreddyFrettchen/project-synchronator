@@ -132,11 +132,11 @@ public abstract class BaseActivity extends Activity {
 						context);
 
 				// set title
-				// alertDialogBuilder.setTitle("Your Title");
+				alertDialogBuilder.setTitle("Do you really want to Logout?");
 
 				// set dialog message
 				alertDialogBuilder
-						.setMessage("Do you really want to Logout?")
+						//.setMessage("Do you really want to Logout?")
 						.setCancelable(false)
 						.setPositiveButton("Yes",
 								new DialogInterface.OnClickListener() {
