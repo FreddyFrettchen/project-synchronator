@@ -1,7 +1,5 @@
 package com.swe.prototype.models.server;
 
-import android.R.string;
-
 import com.google.gson.Gson;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.Note;
@@ -34,7 +32,7 @@ public class ServerNote extends Note {
 	}
 
 	public static ServerNote fromJson(String json) {
-		return new Gson().fromJson(json, ServerNote.class);
+		return getGsonInstance().fromJson(json, ServerNote.class);
 	}
 
 	@Override
@@ -43,7 +41,7 @@ public class ServerNote extends Note {
 	}
 	
 	public String toJson() {
-		return new Gson().toJson(this);
+		return getGsonInstance().toJson(this);
 	}
 	
 	public String toString(){

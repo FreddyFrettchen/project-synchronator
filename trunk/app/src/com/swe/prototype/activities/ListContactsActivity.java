@@ -1,8 +1,6 @@
 package com.swe.prototype.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -17,12 +15,8 @@ import android.widget.ListView;
 
 import com.swe.prototype.R;
 import com.swe.prototype.adapter.ContactAdapter;
-import com.swe.prototype.database.SQLiteDataProvider;
-import com.swe.prototype.database.tables.ServerDataTable;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.server.ServerContact;
-
-import java.util.ArrayList;
 
 public class ListContactsActivity extends BaseActivity {
 
@@ -52,23 +46,11 @@ public class ListContactsActivity extends BaseActivity {
 		registerForContextMenu(listView);
 		listView.setAdapter(adapter);
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Intent in = new Intent(parent.getContext(), ContactActivity.class);
-				ServerContact o = (ServerContact) listView
-						.getItemAtPosition(position);
-				in.putExtra("name", o.toString());
-				in.putExtra("phone", o.getPhoneumber());
-				in.putExtra("email", o.getEmail());
-				startActivity(in);
-			}
-		});
+		listView.setOnItemClickListener(new ViewListItem());
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -111,16 +93,29 @@ public class ListContactsActivity extends BaseActivity {
 			return super.onContextItemSelected(item);
 		}
 	}
-	
-	public void editContact(Contact c){
+
+	public void editContact(Contact c) {
 		c.edit(this);
 	}
 
 	public void moveContact(Contact c) {
 		Log.i(TAG, "move:" + c.toString());
 	}
-	
-	public void deleteContact(Contact c){
+
+	public void deleteContact(Contact c) {
 		c.delete();
+	}
+
+	class ViewListItem implements OnItemClickListener {
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			Intent in = new Intent(parent.getContext(), ContactActivity.class);
+			ServerContact o = (ServerContact) listView
+					.getItemAtPosition(position);
+			in.putExtra("name", o.toString());
+			in.putExtra("phone", o.getPhoneumber());
+			in.putExtra("email", o.getEmail());
+			startActivity(in);
+		}
 	}
 }

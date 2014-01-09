@@ -14,7 +14,10 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.swe.prototype.activities.CreateContactActivity;
 import com.swe.prototype.database.SQLiteDataProvider;
@@ -26,8 +29,8 @@ import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.Note;
 import com.swe.prototype.models.server.EncryptedData;
-import com.swe.prototype.models.server.ServerContact;
 import com.swe.prototype.models.server.ServerNote;
+import com.swe.prototype.models.server.ServerContact;
 
 public class ServerAccount extends AccountBase {
 	private final static String TAG = "ServerAccount";
@@ -145,15 +148,53 @@ public class ServerAccount extends AccountBase {
 			synchronizeDatabase(this.data_type, list);
 		}
 	}
-	
+
+	private class DeleteDataTask extends
+			AsyncDataTask<ArrayList<EncryptedData>> {
+		private String data_type = null;
+		private int data_id = 0;
+
+		public DeleteDataTask(String data_type, int data_id) {
+			this.data_type = data_type;
+			this.data_id = data_id;
+		}
+
+		/**
+		 * param[0] data id
+		 */
+		protected ArrayList<EncryptedData> doInBackground(String... params) {
+			Boolean response = null;
+			int timestamp = getLastSynchronisationTimestamp();
+			Type listType = new TypeToken<ArrayList<EncryptedData>>() {
+			}.getType();
+
+			try {
+				response = delete(server_url, username, password,
+						this.data_type, this.data_id);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+
+		protected void onPostExecute(ArrayList<EncryptedData> list) {
+			super.onPostExecute(list);
+			if (list == null)
+				return;
+			synchronizeDatabase(this.data_type, list);
+		}
+	}
+
 	public ArrayList<Note> getNotes() {
 		ArrayList<Note> notes = new ArrayList<Note>();
 		Cursor cursor = getData("notes");
 		if (cursor.moveToFirst()) {
 			do {
+				Log.i(TAG, "Decrypting Notes");
 				notes.add(new EncryptedData(cursor.getInt(0), cursor
-						.getString(2)).toNote(this.password,
-						cursor.getInt(1), this));
+						.getString(2)).toNote(this.password, cursor.getInt(1),
+						this));
 			} while (cursor.moveToNext());
 		}
 		Log.i(TAG, "i return " + notes.size() + " notes!!");
@@ -164,6 +205,7 @@ public class ServerAccount extends AccountBase {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
 		Cursor cursor = getData("contacts");
 		if (cursor.moveToFirst()) {
+			Log.i(TAG, "Decrypting Contacts");
 			do {
 				contacts.add(new EncryptedData(cursor.getInt(0), cursor
 						.getString(2)).toContact(this.password,
@@ -173,7 +215,7 @@ public class ServerAccount extends AccountBase {
 		Log.i(TAG, "i return " + contacts.size() + " contacts!!");
 		return contacts;
 	}
-	
+
 	/**
 	 * read data from database, decrypt it and return a list of contact objects.
 	 * 
@@ -218,9 +260,10 @@ public class ServerAccount extends AccountBase {
 
 		// send data to server
 		ServerNote note = new ServerNote(this, -1, title, text);
-		/*new AddDataTask() {
 
-		}.execute("note", note.toJson());*/
+		new AddDataTask() {
+		}.execute("note", note.toJson());
+
 		Log.i(TAG, "erstellte note: " + note.toJson());
 	}
 
@@ -350,12 +393,10 @@ public class ServerAccount extends AccountBase {
 		ServerContact contact = (ServerContact) c;
 		Log.i(TAG, "ich lösche den contact mit server_id:" + contact.getId());
 
-		/*
-		 * new AddDataTask() {
-		 * 
-		 * }.execute("contact", contact.toJson()); Log.i(TAG,
-		 * "erstellter kontakt: " + contact.toJson());
-		 */
+		new DeleteDataTask("contact", ((ServerContact)c).getId()) {
+		}.execute("contact", contact.toJson());
+		Log.i(TAG, "erstellter kontakt: " + contact.toJson());
+
 	}
 
 	@Override

@@ -132,4 +132,10 @@ public class ExchangeNote extends Note {
 	public String getAccountTag() {
 		return "Exchange";
 	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

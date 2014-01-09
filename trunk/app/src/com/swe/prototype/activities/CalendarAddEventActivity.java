@@ -30,7 +30,7 @@ import com.swe.prototype.models.AccountBase;
 public class CalendarAddEventActivity extends BaseActivity {
 	private static final String TAG = "AddCalendarEventActivity";
 
-	// diese variabeln halten konsistent das zuletzt ausgewählte datum/zeit
+	// diese variabeln halten konsistent das zuletzt ausgewï¿½hlte datum/zeit
 	private int yearFrom;
 	private int monthFrom;
 	private int dayFrom;
@@ -128,7 +128,7 @@ public class CalendarAddEventActivity extends BaseActivity {
 		list_accounts.setAdapter(adapter);
 
 		// hier muss ich dann noch die checkboxen hiden, falls der user keinen
-		// account hinzugefügt hat.
+		// account hinzugefï¿½gt hat.
 
 		// find radio button group
 		radioGroupEvery = (RadioGroup) findViewById(R.id.radiogroup_every);
@@ -249,7 +249,7 @@ public class CalendarAddEventActivity extends BaseActivity {
 	}
 
 	public void onClickSave(View v) {
-		// checken ob man überhaut speichern kann oder ob es inkonsistenzen gibt
+		// checken ob man ï¿½berhaut speichern kann oder ob es inkonsistenzen gibt
 		// falls inkonsistenz gibt correctInputChoise() ein Toast mit
 		// Fehlermeldung aus!
 		if (correctInputChoise()) {
@@ -282,7 +282,7 @@ public class CalendarAddEventActivity extends BaseActivity {
 
 			}
 
-			// jetzt auf allen hinzugefügten Accounts speichern.
+			// jetzt auf allen hinzugefï¿½gten Accounts speichern.
 			int cntChoice = list_accounts.getCount();
 			SparseBooleanArray selected_accounts = list_accounts
 					.getCheckedItemPositions();
@@ -310,8 +310,8 @@ public class CalendarAddEventActivity extends BaseActivity {
 	}
 
 	/**
-	 * Methode Prüft, ob: a) date und zeit von FROM < date und zeit von TO b) ob
-	 * die ausgewählte radio button option gültig ist (bsp: Every Day:
+	 * Methode Prï¿½ft, ob: a) date und zeit von FROM < date und zeit von TO b) ob
+	 * die ausgewï¿½hlte radio button option gï¿½ltig ist (bsp: Every Day:
 	 * zeitspannne muss kleiner als ein Tag sein)
 	 * 
 	 * @return
@@ -319,7 +319,7 @@ public class CalendarAddEventActivity extends BaseActivity {
 	private boolean correctInputChoise() {
 		this.getMinutesBetweenSelectedDates();
 		/*
-		 * //so könnte man s auch lösen, hat dann aber keine schönen
+		 * //so kï¿½nnte man s auch lï¿½sen, hat dann aber keine schï¿½nen
 		 * Fehlermeldungen if(this.getMinutesBetweenSelectedDates()<0){
 		 * showShortToast("From Time < To Time"); };
 		 */
@@ -345,7 +345,7 @@ public class CalendarAddEventActivity extends BaseActivity {
 						return false;
 					}
 					if (hourFrom == hourTo) {
-						// über diese bedingung kann man die küzest mögliche
+						// ï¿½ber diese bedingung kann man die kï¿½zest mï¿½gliche
 						// minuten zeit eines events einstellen.
 						if (minuteFrom >= minuteTo) {
 							this.showShortToast("From Time >= To Time");
@@ -384,7 +384,7 @@ public class CalendarAddEventActivity extends BaseActivity {
 			}
 			break;
 		default:
-			// keine option ausgewählt
+			// keine option ausgewï¿½hlt
 		}
 		return true;
 	}

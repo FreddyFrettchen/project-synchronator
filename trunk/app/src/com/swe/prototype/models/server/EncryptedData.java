@@ -1,10 +1,14 @@
 package com.swe.prototype.models.server;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.AccountBase;
 
 public class EncryptedData {
+	private static String TAG = "EncryptedData";
+	
 	public int id;
 	public String data;
 
@@ -33,6 +37,7 @@ public class EncryptedData {
 	}
 	
 	public ServerContact toContact(String key, int data_server_id, AccountBase account){
+		Log.i(TAG,"Decrypting Contact id:" + data_server_id);
 		ServerContact c = ServerContact.fromJson(decryptData(key));
 		c.setId(data_server_id);
 		c.setAccount(account);
@@ -44,7 +49,9 @@ public class EncryptedData {
 	}
 	
 	public ServerNote toNote(String key, int data_server_id, AccountBase account){
+		Log.i(TAG,"Decrypting Note id:" + data_server_id);
 		ServerNote n = ServerNote.fromJson(decryptData(key));
+		Log.i(TAG,"text is : " + n.getNote());
 		n.setId(data_server_id);
 		n.setAccount(account);
 		return n;

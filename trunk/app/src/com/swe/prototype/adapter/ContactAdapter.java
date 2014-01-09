@@ -54,7 +54,7 @@ public class ContactAdapter extends MergeAdapter {
 		}
 
 		Contact o = (Contact) getItem(position);
-
+		
 		holder.name.setText(o.toString());
 		holder.number.setText(o.getPhoneumber());
 		holder.account_tag.setText(o.getAccountTag());
