@@ -146,7 +146,6 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public void deleteNote(com.swe.prototype.models.Note n) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
