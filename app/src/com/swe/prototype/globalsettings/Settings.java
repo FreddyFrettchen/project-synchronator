@@ -42,6 +42,7 @@ public class Settings {
 	 * garantiert konsistenz.
 	 */
 	public static void setServer(String ip, String port) {
+		//TODO auf https umstellen
 		Settings.server = "http://" + ip + ":" + port;
 		Settings.ip = ip;
 		Settings.port = port;
@@ -51,6 +52,7 @@ public class Settings {
 		return refreshTime;
 	}
 
+	//seconds
 	public static void setRefreshTimeAsInt(int refreshTime) {
 		Settings.refreshTime = refreshTime;
 	}

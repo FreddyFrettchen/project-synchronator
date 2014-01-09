@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.NameValuePair;
 
@@ -36,8 +39,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 public abstract class BaseActivity extends Activity {
+	private ScheduledExecutorService scheduleTaskExecutor;
+
 	protected static final String TAG = "BaseActivity";
 	final Context context = this;
 
@@ -46,17 +52,29 @@ public abstract class BaseActivity extends Activity {
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		scheduleTaskExecutor = Executors.newScheduledThreadPool(2);
 
-		if (isLoggedIn())
+		if (isLoggedIn()) {
 			accounts = new AccountManager(this);
-		// startSyncService();
-	}
 
-	/*
-	 * public void checkLogin(){ if( getClassTag().equals("MainActivity") )
-	 * return; if (!(isLoggedIn() && isPublic())) { startActivity(new
-	 * Intent(this, MainActivity.class)); finish(); } }
-	 */
+			scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+				public void run() {
+					accounts.synchronize();
+					//Log.i(TAG, "refreshing data");
+
+					runOnUiThread(new Runnable() {
+						public void run() {
+							syncDone();
+						}
+					});
+				}
+			}, 0, Settings.getRefreshTimeAsInt(), TimeUnit.SECONDS);
+		}
+	}
+	
+	private void syncDone(){
+		Toast.makeText(this, "Synchronisation complete.", Toast.LENGTH_SHORT).show();
+	}
 
 	/**
 	 * Checks if we have logincreds saved for a user
@@ -110,39 +128,45 @@ public abstract class BaseActivity extends Activity {
 			return true;
 		case R.id.action_logout:
 			if (!(this instanceof MainActivity)) {
-				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-		 
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						context);
+
 				// set title
-				//alertDialogBuilder.setTitle("Your Title");
-	 
+				// alertDialogBuilder.setTitle("Your Title");
+
 				// set dialog message
 				alertDialogBuilder
-					.setMessage("Do you really want to Logout?")
-					.setCancelable(false)
-					.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,int id) {
-							// if this button is clicked, close
-							// current activity
-							SharedPreferences pref = getSharedPreferences(
-									Settings.getPrefs_name(), 0);
-							SharedPreferences.Editor editor = pref.edit();
-							editor.putString("email", null);
-							editor.putString("password", null);
-							editor.commit();
-							show(MainActivity.class);
-						}
-					  })
-					.setNegativeButton("No",new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,int id) {
-							// if this button is clicked, just close
-							// the dialog box and do nothing
-							dialog.cancel();
-						}
-					});
-	 
+						.setMessage("Do you really want to Logout?")
+						.setCancelable(false)
+						.setPositiveButton("Yes",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										// if this button is clicked, close
+										// current activity
+										SharedPreferences pref = getSharedPreferences(
+												Settings.getPrefs_name(), 0);
+										SharedPreferences.Editor editor = pref
+												.edit();
+										editor.putString("email", null);
+										editor.putString("password", null);
+										editor.commit();
+										show(MainActivity.class);
+									}
+								})
+						.setNegativeButton("No",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										// if this button is clicked, just close
+										// the dialog box and do nothing
+										dialog.cancel();
+									}
+								});
+
 				// create alert dialog
 				AlertDialog alertDialog = alertDialogBuilder.create();
-	 
+
 				// show it
 				alertDialog.show();
 			}
@@ -176,18 +200,9 @@ public abstract class BaseActivity extends Activity {
 		return (networkInfo != null && networkInfo.isConnected());
 	}
 
-	protected void startSyncService() {
-		// new DBTools(this).purgeDatabase();
-		// startService(new Intent(this, SynchronatorService.class));
-	}
-
-	protected void stopSyncService() {
-
-	}
-
 	/*
-	 * Diese Methode sollte von der jeweiligen Activity �berschrieben werden,
-	 * um die Add funktion nutzen zu k�nnen.
+	 * Diese Methode sollte von der jeweiligen Activity �berschrieben werden, um
+	 * die Add funktion nutzen zu k�nnen.
 	 */
 	protected void addClicked() {
 

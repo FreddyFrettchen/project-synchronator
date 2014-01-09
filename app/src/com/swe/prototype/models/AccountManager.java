@@ -90,4 +90,10 @@ public class AccountManager {
 	public void refreshAllData() {
 		context.startService(new Intent(context, SynchronatorService.class));
 	}
+	
+	public void synchronize() {
+		for (int i = 0; i < this.accounts.size(); i++) {
+			this.accounts.get(i).synchronize();
+		}
+	}
 }
