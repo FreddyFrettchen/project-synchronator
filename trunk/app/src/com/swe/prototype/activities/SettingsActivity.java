@@ -31,9 +31,9 @@ public class SettingsActivity extends BaseActivity {
 				+ com.swe.prototype.globalsettings.Settings
 						.getRefreshTimeAsFloat());
 		Button save = (Button) findViewById(R.id.save_button);
-		Button cancle = (Button) findViewById(R.id.cancel_button);
+		Button cancel = (Button) findViewById(R.id.cancel_button);
 		Button refresh = (Button) findViewById(R.id.button_refresh);
-		cancle.setOnClickListener(new OnClickListener() {
+		cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

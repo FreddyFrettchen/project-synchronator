@@ -88,6 +88,60 @@ public class AccountsActivity extends BaseActivity implements
 		registerForContextMenu(listView);
 		listView.setAdapter(mAdapter);
 		loadermanager.initLoader(1, null, (LoaderCallbacks<Cursor>) this);
+		
+		final Button delete_synchronator = (Button) findViewById(R.id.button_delete_synchronator);
+		delete_synchronator.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+				 
+				// set title
+				alertDialogBuilder.setTitle("Do you want to delete your Synchronator account?");
+	 
+				// set dialog message
+				alertDialogBuilder
+					.setMessage("Warning! You will lose all your Data!")
+					.setCancelable(false)
+					.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							// if this button is clicked, close
+							// current activity
+							deleteSynchronator();
+						}
+					})
+					.setNegativeButton("No",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							// if this button is clicked, just close
+							// the dialog box and do nothing
+							dialog.cancel();
+						}
+					});
+				
+				// create alert dialog
+				AlertDialog alertDialog = alertDialogBuilder.create();
+	 
+				// show it
+				alertDialog.show();
+			}
+		});
+	}
+	
+
+	private void deleteSynchronator() {
+		// TODO Auto-generated method stub
+		
+		/*
+		 * Hier noch mehr zum löschen des Accounts
+		 */
+		
+		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(), 0);
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putString("email", null);
+		editor.putString("password", null);
+		editor.commit();
+		show(MainActivity.class);
 	}
 
 	public void deleteAccount(int id_account) {
@@ -144,11 +198,11 @@ public class AccountsActivity extends BaseActivity implements
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 			 
 			// set title
-			//alertDialogBuilder.setTitle("Your Title");
+			alertDialogBuilder.setTitle("Do you want to delete the account?");
  
 			// set dialog message
 			alertDialogBuilder
-				.setMessage("Do you want to delete the account?")
+				//.setMessage("Do you want to delete the account?")
 				.setCancelable(false)
 				.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,int id) {
