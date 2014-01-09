@@ -48,7 +48,7 @@ class ServerHandler < Sinatra::Base
             # which is the id of the object to be updated.
             # New data has to be provided by the field "data".
             namespace '/update' do
-                post "/#{route}/:id" do
+                post "/#{route}" do
                     changed = @user.send("#{route}_dataset")
                     .where(:id => @params[:id])
                     .update(:data => @params['data'])
@@ -57,10 +57,10 @@ class ServerHandler < Sinatra::Base
             end
             
             namespace '/delete' do
-                post "/#{route}/:id" do
+                post "/#{route}" do
                     changed = @user.send("#{route}_dataset")
-                    .where(:id => @params[:id])
-                    .delete
+                    .where(:id => @params['data_id'])
+                    .destroy
                     halt( (changed == 1) ? 200 : 404 )
                 end
             end
