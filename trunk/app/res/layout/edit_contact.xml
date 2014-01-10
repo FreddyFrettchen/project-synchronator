@@ -1,99 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentRight="true"
+    android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:orientation="vertical" >
+      <TextView
+          android:id="@+id/text_last_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Lastname" />
 
-        <TextView
-            android:id="@+id/text_last_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lastname" />
+      <EditText
+          android:id="@+id/edit_text_last_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ems="10"
+          android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/edit_text_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+      <TextView
+          android:id="@+id/text_first_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Name" />
 
-        <TextView
-            android:id="@+id/text_first_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Name" />
+      <EditText
+          android:id="@+id/edit_text_first_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ems="10"
+          android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/edit_text_first_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+      <TextView
+          android:id="@+id/text_phonenumber"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Phonenumber" />
 
-        <TextView
-            android:id="@+id/text_phonenumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Phonenumber" />
+      <EditText
+          android:id="@+id/edit_text_phonenumber"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ems="10"
+          android:inputType="phone" />
 
-        <EditText
-            android:id="@+id/edit_text_phonenumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="phone" />
+      <TextView
+          android:id="@+id/text_email"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="E-Mail" />
 
-        <TextView
-            android:id="@+id/text_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="E-Mail" />
+      <EditText
+          android:id="@+id/edit_text_email"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ems="10"
+          android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/edit_text_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textEmailAddress" />
+      <TextView
+          android:id="@+id/text_save_to"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Save to" />
 
-        <TextView
-            android:id="@+id/text_save_to"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save to" />
+      <ListView
+          android:id="@+id/list_accounts"
+          android:layout_width="wrap_content"
+          android:layout_height="525dp" >
 
-        <ListView
-            android:id="@+id/list_accounts"
-            android:layout_width="match_parent"
-            android:layout_height="178dp" >
+      </ListView>
 
-        </ListView>
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+          <Button
+              android:id="@+id/done_button"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="0.5"
+              android:text="Edit" />
 
-            <Button
-                android:id="@+id/done_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="Edit" />
-            
-            <Button
-                android:id="@+id/cancel_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="Cancel" />
-        </LinearLayout>
+          <Button
+              android:id="@+id/cancel_button"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="0.5"
+              android:text="Cancel" />
+      </LinearLayout>
 
-    </LinearLayout>
-
-</RelativeLayout>
+  </LinearLayout>
