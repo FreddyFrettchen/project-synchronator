@@ -36,7 +36,7 @@ class User < Sequel::Model(:user)
     def self.register( email, password )
         registration = self.new( :email => email,
                                 :password => password,
-                                :approved => false ) # TODO this should be false for production
+                                :approved => true ) # TODO this should be false for production
         registration.valid?? registration.save : false 
     end
 
@@ -53,7 +53,14 @@ class User < Sequel::Model(:user)
         return false if self.approved == true
         self.destroy
     end
-     
+
+    def delete_account
+        self.contacts.each(&:destroy)
+        self.calendar.each(&:destroy)
+        self.notes.each(&:destroy)
+        self.destroy
+    end
+
     #@override
     def to_s
         "<USER ID:#{self.id} MAIL:#{self.email} APPROVED:#{self.approved} REG:#{self.register}>" 
