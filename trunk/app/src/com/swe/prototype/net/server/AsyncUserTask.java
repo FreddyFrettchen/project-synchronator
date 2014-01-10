@@ -36,6 +36,22 @@ public abstract class AsyncUserTask extends
 
 		return response == 200;
 	}
+	
+	protected boolean delete(String server, String email, String password)
+			throws IOException {
+		String authentification_url = server + "/user/delete";
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("email", email));
+		params.add(new BasicNameValuePair("password", password));
+
+		HttpURLConnection request = postRequest(authentification_url, params);
+		request.connect();
+
+		int response = request.getResponseCode();
+
+		return response == 200;
+	}
 
 	protected boolean register(String server, String email, String password)
 			throws IOException {
