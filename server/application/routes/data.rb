@@ -50,7 +50,7 @@ class ServerHandler < Sinatra::Base
             namespace '/update' do
                 post "/#{route}" do
                     changed = @user.send("#{route}_dataset")
-                    .where(:id => @params[:id])
+                    .where(:id => @params['data_id'])
                     .update(:data => @params['data'])
                     halt( changed.eql(1) ? 200 : 404 )
                 end

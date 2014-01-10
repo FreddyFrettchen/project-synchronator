@@ -19,5 +19,11 @@ class ServerHandler < Sinatra::Base
                 halt( success ? 200 : 403 )
             end
         end
+
+        post "/delete" do
+           user = User.authenticate(@email, @password)
+           halt(500) unless user
+           print user.destroy
+        end
     end
 end

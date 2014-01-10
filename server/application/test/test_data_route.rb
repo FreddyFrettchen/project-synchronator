@@ -86,7 +86,8 @@ class TestDataRoute < Test::Unit::TestCase
     credentials["data"] = "UPDATEDDATA"
     # now we update this data
     data.each_pair do |route,entry|
-        post "/data/update/#{route}/#{entry["id"].to_s}", credentials
+        credentials["data_id"] = entry["id"].to_s
+        post "/data/update/#{route}", credentials
         assert_equal 200 , last_response.status
         post "/data/get/#{route}", credentials
         assert_equal credentials["data"], JSON.parse(last_response.body).first["data"]
