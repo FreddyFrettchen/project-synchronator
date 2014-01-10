@@ -32,4 +32,16 @@ class TestUserRoute < Test::Unit::TestCase
     post '/user/authenticate', credentials
     assert_equal 200, last_response.status
   end
+  
+  def test_delete
+    credentials = {"email" => "delete@mail.com", "password" => "dpd"}
+    post '/user/register', credentials
+    # user has to be approved
+    post '/user/authenticate', credentials
+    assert_equal 403, last_response.status
+
+    User.find(:email => credentials["email"]).approve!
+    post '/user/authenticate', credentials
+    assert_equal 200, last_response.status
+  end
 end

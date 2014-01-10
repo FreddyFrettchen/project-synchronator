@@ -36,7 +36,7 @@ class User < Sequel::Model(:user)
     def self.register( email, password )
         registration = self.new( :email => email,
                                 :password => password,
-                                :approved => true ) # TODO this should be false for production
+                                :approved => false ) # TODO this should be false for production
         registration.valid?? registration.save : false 
     end
 
