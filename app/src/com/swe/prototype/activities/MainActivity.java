@@ -30,7 +30,6 @@ import com.swe.prototype.models.server.ServerContact;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.globalsettings.Tools;
 import com.swe.prototype.net.server.AsyncUserTask;
-import com.swe.prototype.net.server.Server;
 import com.swe.prototype.net.server.ServerAccount;
 
 import android.R.string;
@@ -58,7 +57,7 @@ import android.widget.Toast;
 public class MainActivity extends BaseActivity {
 
 	private static final String TAG = "MainActivity";
-	ProgressDialog dialog;
+	private ProgressDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,29 +68,12 @@ public class MainActivity extends BaseActivity {
 			showAndFinish(ListContactsActivity.class);
 		}
 
-		// Versucht sich ohne Eingabe ein zu loggen, wenn App ohne Logout
-		// beendet wurde
-		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(),
-				0);
-		/*
-		 * if(!pref.getString("email", "").toString().equals("")) { EditText
-		 * email = (EditText) findViewById(R.id.input_email);
-		 * email.setText(pref.getString("email", null)); EditText password =
-		 * (EditText) findViewById(R.id.input_password);
-		 * password.setText(pref.getString("password", null)); /* Hier muss zum
-		 * Ende statt postLogin(String, String) doAuthentication() hin
-		 * !!!!!!!!!!!!!!!!!!!!!!!!!! Wegen fehlendem Server erstmal ohne
-		 * wirkliche Authentifikation doAuthentication();
-		 */
-		// postLogin(email.toString(), password.toString());
-		// }
-
 		// buttons and listeners for login register
 		Button btn_register = (Button) findViewById(R.id.button_register);
 		btn_register.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				switchToRegister();
+				show(RegisterActivity.class);
 			}
 		});
 
@@ -102,22 +84,6 @@ public class MainActivity extends BaseActivity {
 				doAuthentication();
 			}
 		});
-	}
-
-	/*
-	 * muss am ende geloescht werden
-	 */
-	public void onClickTmpAmLoginVorbei(View v) {
-		postLogin(((EditText) findViewById(R.id.input_email)).getText()
-				.toString(), ((EditText) findViewById(R.id.input_password))
-				.getText().toString());
-		// show(CalendarActivity.class);
-
-	}
-
-	// wird aufgerufen, wenn der user auf Registrieren-Button klickt
-	private void switchToRegister() {
-		startActivity(new Intent(this, RegisterActivity.class));
 	}
 
 	/*
@@ -203,10 +169,8 @@ public class MainActivity extends BaseActivity {
 				}
 			}.execute();
 		} else {
-			Log.v(TAG, "no internet");
 			Toast.makeText(getApplicationContext(), R.string.no_internet,
 					Toast.LENGTH_LONG).show();
-			// initializeDialog("no internet connection"+R.string.no_internet,true);
 		}
 	}
 
@@ -222,15 +186,8 @@ public class MainActivity extends BaseActivity {
 
 	/* Speichert logindaten und liesst refreshTime des Benutzers */
 	private void postLogin(String email, String password) {
-		/*
-		 * String email = ((EditText) findViewById(R.id.input_email)).getText()
-		 * .toString(); String password = ((EditText)
-		 * findViewById(R.id.input_password)) .getText().toString();
-		 */
-
-		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(),
-				0);
-		SharedPreferences.Editor editor = pref.edit();
+		SharedPreferences pref = getPreferences();
+		SharedPreferences.Editor editor = getPreferences().edit();
 		editor.putString("email", email);
 		editor.putString("password", password);
 		if (pref.getFloat("refreshTime-" + email, 0) > 0) {
@@ -238,6 +195,7 @@ public class MainActivity extends BaseActivity {
 					"refreshTime-" + email, 0));
 		}
 		editor.commit();
+		getSynchronatorApplication().onApplicationLogin();
 
 		startActivity(new Intent(this, CalendarMonthViewActivity.class));
 		finish();

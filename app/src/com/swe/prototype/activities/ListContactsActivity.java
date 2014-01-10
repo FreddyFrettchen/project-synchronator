@@ -67,7 +67,7 @@ public class ListContactsActivity extends BaseActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_add:
-			show(CreateContactActivity.class);
+			showAndFinish(CreateContactActivity.class);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

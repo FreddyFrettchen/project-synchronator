@@ -15,9 +15,7 @@ import android.widget.EditText;
 import com.swe.prototype.R;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.helpers.Security;
-import com.swe.prototype.net.server.Server;
 import com.swe.prototype.net.server.ServerAccount;
-import com.swe.prototype.net.server.Server.RegisterUserTask;
 
 public class RegisterActivity extends BaseActivity {
 

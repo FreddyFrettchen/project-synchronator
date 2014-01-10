@@ -1,33 +1,16 @@
 package com.swe.prototype.activities;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.http.NameValuePair;
-
-import com.google.gson.Gson;
 import com.swe.prototype.R;
-import com.swe.prototype.R.id;
-import com.swe.prototype.R.menu;
-import com.swe.prototype.helpers.Security;
-import com.swe.prototype.models.Account;
+import com.swe.prototype.SynchronatorApplication;
 import com.swe.prototype.models.AccountManager;
-import com.swe.prototype.net.server.Server;
-import com.swe.prototype.services.SynchronatorService;
-import com.swe.prototype.database.DBTools;
 import com.swe.prototype.globalsettings.Settings;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,19 +18,14 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 public abstract class BaseActivity extends Activity {
 	private ScheduledExecutorService scheduleTaskExecutor;
 
 	protected static final String TAG = "BaseActivity";
-	final Context context = this;
-
-	// protected ArrayList<Account> accounts = null;
 	protected AccountManager accounts = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,41 +34,25 @@ public abstract class BaseActivity extends Activity {
 
 		if (isLoggedIn()) {
 			accounts = new AccountManager(this);
-
-			scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
-				public void run() {
-					accounts.synchronize();
-					//Log.i(TAG, "refreshing data");
-
-					runOnUiThread(new Runnable() {
-						public void run() {
-							syncDone();
-						}
-					});
-				}
-			}, 0, Settings.getRefreshTimeAsInt(), TimeUnit.SECONDS);
 		}
 	}
 	
-	private void syncDone(){
-		Toast.makeText(this, "Synchronisation complete.", Toast.LENGTH_SHORT).show();
-	}
-
-	/**
-	 * Checks if we have logincreds saved for a user
-	 * 
-	 * @return logged in true/false
-	 */
 	protected boolean isLoggedIn() {
-		// Restore preferences
-		SharedPreferences settings = getSharedPreferences(
-				Settings.getPrefs_name(), 0);
-		String email = settings.getString("email", null);
-		String password = settings.getString("password", null);
-
-		return email != null && password != null;
+		return getSynchronatorApplication().isLoggedIn();
 	}
 
+	protected AccountManager getAccountManager() {
+		return getSynchronatorApplication().getAccountManager();
+	}
+
+	public SynchronatorApplication getSynchronatorApplication() {
+		return ((SynchronatorApplication) getApplication());
+	}
+
+	public SharedPreferences getPreferences(){
+		return getSynchronatorApplication().getPreferences();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -99,7 +61,6 @@ public abstract class BaseActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
 		switch (item.getItemId()) {
 		case R.id.action_accounts:
 			if (!(this instanceof AccountsActivity)) {
@@ -129,14 +90,14 @@ public abstract class BaseActivity extends Activity {
 		case R.id.action_logout:
 			if (!(this instanceof MainActivity)) {
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-						context);
+						this);
 
 				// set title
 				alertDialogBuilder.setTitle("Do you really want to Logout?");
 
 				// set dialog message
 				alertDialogBuilder
-						//.setMessage("Do you really want to Logout?")
+						// .setMessage("Do you really want to Logout?")
 						.setCancelable(false)
 						.setPositiveButton("Yes",
 								new DialogInterface.OnClickListener() {
@@ -201,8 +162,8 @@ public abstract class BaseActivity extends Activity {
 	}
 
 	/*
-	 * Diese Methode sollte von der jeweiligen Activity �berschrieben werden, um
-	 * die Add funktion nutzen zu k�nnen.
+	 * Diese Methode sollte von der jeweiligen Activity überschrieben werden, um
+	 * die Add funktion nutzen zu können.
 	 */
 	protected void addClicked() {
 

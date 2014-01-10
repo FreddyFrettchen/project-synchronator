@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import com.independentsoft.exchange.FindItemResponse;
@@ -44,14 +45,26 @@ import com.swe.prototype.models.Contact;
 
 public class ExchangeAccount extends AccountBase {
 
+	private static final String TAG = "ExchangeAccount";
+
 	public ExchangeAccount(Context context, int account_id,
 			int refresh_time_sec, String username, String password) {
 		super(context, account_id, refresh_time_sec, username, password);
 	}
 
 	@Override
-	public void synchronize() {
-		/* TODO Auto-generated method stub */
+	public void synchronizeNotes() {
+
+	}
+
+	@Override
+	public void synchronizeContacts() {
+
+	}
+
+	@Override
+	public void synchronizeCalendarEntries() {
+
 	}
 
 	@Override
@@ -160,145 +173,145 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public void editContact(Context context, Contact c) {
 		// TODO Auto-generated method stub
-		try
-        {
+		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
 					"bd8299s@ad.fh-aachen.de", "password");
 
+			IsEqualTo restriction = new IsEqualTo(
+					ContactPropertyPath.EMAIL1_ADDRESS, c.getEmail());
 
-            IsEqualTo restriction = new IsEqualTo(ContactPropertyPath.EMAIL1_ADDRESS, c.getEmail());
+			FindItemResponse response = service.findItem(
+					StandardFolder.CONTACTS, restriction);
 
-            FindItemResponse response = service.findItem(StandardFolder.CONTACTS, restriction);
+			for (int i = 0; i < response.getItems().size(); i++) {
+				if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact) {
+					ItemId itemId = response.getItems().get(i).getItemId();
 
-            for (int i = 0; i < response.getItems().size(); i++)
-            {
-                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact)
-                {
-                    ItemId itemId = response.getItems().get(i).getItemId();
+					Property businessPhonePropertyFN = new Property(
+							ContactPropertyPath.GIVEN_NAME, c.getFirstName());
+					Property businessPhonePropertyLN = new Property(
+							ContactPropertyPath.SURNAME, c.getLastName());
+					Property businessPhonePropertyBP = new Property(
+							ContactPropertyPath.BUSINESS_PHONE,
+							c.getPhoneumber());
 
-                    Property businessPhonePropertyFN = new Property(ContactPropertyPath.GIVEN_NAME, c.getFirstName());
-                    Property businessPhonePropertyLN = new Property(ContactPropertyPath.SURNAME, c.getLastName());
-                    Property businessPhonePropertyBP = new Property(ContactPropertyPath.BUSINESS_PHONE, c.getPhoneumber());
+					itemId = service
+							.updateItem(itemId, businessPhonePropertyFN);
+					itemId = service
+							.updateItem(itemId, businessPhonePropertyLN);
+					itemId = service
+							.updateItem(itemId, businessPhonePropertyBP);
+				}
+			}
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getXmlMessage());
 
-                    itemId = service.updateItem(itemId, businessPhonePropertyFN);
-                    itemId = service.updateItem(itemId, businessPhonePropertyLN);
-                    itemId = service.updateItem(itemId, businessPhonePropertyBP);
-                }
-            }
-        }
-        catch (ServiceException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(e.getXmlMessage());
+			e.printStackTrace();
+		}
+	}
 
-            e.printStackTrace();
-        }
-    }
-	
 	@Override
 	public void editNote(Context context, com.swe.prototype.models.Note n) {
 		// TODO Auto-generated method stub
-		try
-        {
+		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
 					"bd8299s@ad.fh-aachen.de", "password");
 
+			IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT,
+					n.getTitle());
 
-            IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT, n.getTitle());
+			FindItemResponse response = service.findItem(StandardFolder.NOTES,
+					restriction);
 
-            FindItemResponse response = service.findItem(StandardFolder.NOTES, restriction);
+			for (int i = 0; i < response.getItems().size(); i++) {
+				if (response.getItems().get(i) instanceof com.independentsoft.exchange.Note) {
+					ItemId itemId = response.getItems().get(i).getItemId();
 
-            for (int i = 0; i < response.getItems().size(); i++)
-            {
-                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Note)
-                {
-                    ItemId itemId = response.getItems().get(i).getItemId();
+					Property noteProperty = new Property(NotePropertyPath.BODY,
+							n.getNote());
 
-                    Property noteProperty = new Property(NotePropertyPath.BODY, n.getNote());
+					itemId = service.updateItem(itemId, noteProperty);
+				}
+			}
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getXmlMessage());
 
-                    itemId = service.updateItem(itemId, noteProperty);
-                }
-            }
-        }
-        catch (ServiceException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(e.getXmlMessage());
-
-            e.printStackTrace();
-        }
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public void editCalendarEntry(Context context, CalendarEntry ce) {
 		// TODO Auto-generated method stub
-		}
+	}
 
 	@Override
 	public void deleteContact(Contact c) {
-		 try
-	        {
-			 String vergleichsString = "";
-	        	Service service = new Service(
-						"https://mail.fh-aachen.de/EWS/exchange.asmx",
-						"bd8299s@ad.fh-aachen.de", "password");
+		try {
+			String vergleichsString = "";
+			Service service = new Service(
+					"https://mail.fh-aachen.de/EWS/exchange.asmx",
+					"bd8299s@ad.fh-aachen.de", "password");
 
-	            FindItemResponse contactItems = service.findItem(StandardFolder.CONTACTS);
-	         
-	            //falls vorname oder nachname nicht angegeben ist, wird das leerzeichen nicht mit abgefragt
-	            if(!(c.getFirstName().isEmpty() || c.getLastName().isEmpty())){
-	            	vergleichsString = c.getFirstName()+c.getLastName();
-	            }
-	            
-	            for (int i = 0; i < contactItems.getItems().size(); i++)
-	            {
-	            	if(contactItems.getItems().get(i).getSubject().equals(vergleichsString)){
-	            	System.out.println(contactItems.getItems().get(i).getSubject());
-	                Response response = service.deleteItem(contactItems.getItems().get(i).getItemId(), DeleteType.HARD_DELETE);
-	            	}
-	            	else{
-	            		System.out.println("Löschen nicht Erfolgreich: " + contactItems.getItems().get(i));
-	            	}
-	            }
-	        }
-	        catch (ServiceException e)
-	        {
-	            System.out.println(e.getMessage());
-	            System.out.println(e.getXmlMessage());
+			FindItemResponse contactItems = service
+					.findItem(StandardFolder.CONTACTS);
 
-	            e.printStackTrace();
-	        }
+			// falls vorname oder nachname nicht angegeben ist, wird das
+			// leerzeichen nicht mit abgefragt
+			if (!(c.getFirstName().isEmpty() || c.getLastName().isEmpty())) {
+				vergleichsString = c.getFirstName() + c.getLastName();
+			}
+
+			for (int i = 0; i < contactItems.getItems().size(); i++) {
+				if (contactItems.getItems().get(i).getSubject()
+						.equals(vergleichsString)) {
+					System.out.println(contactItems.getItems().get(i)
+							.getSubject());
+					Response response = service.deleteItem(contactItems
+							.getItems().get(i).getItemId(),
+							DeleteType.HARD_DELETE);
+				} else {
+					System.out.println("Lï¿½schen nicht Erfolgreich: "
+							+ contactItems.getItems().get(i));
+				}
+			}
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getXmlMessage());
+
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void deleteNote(com.swe.prototype.models.Note n) {
 		// TODO Auto-generated method stub
-		try
-        {
-        	Service service = new Service(
+		try {
+			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
 					"bd8299s@ad.fh-aachen.de", "password");
 
-        	IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT, n.getTitle());
-        	
-            FindItemResponse notesItems = service.findItem(StandardFolder.NOTES, restriction);
-         
-            
-            for (int i = 0; i < notesItems.getItems().size(); i++)
-            {
-            	Response response = service.deleteItem(notesItems.getItems().get(i).getItemId(), DeleteType.HARD_DELETE);
-            }
-        }
-        catch (ServiceException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(e.getXmlMessage());
+			IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT,
+					n.getTitle());
 
-            e.printStackTrace();
-        }
+			FindItemResponse notesItems = service.findItem(
+					StandardFolder.NOTES, restriction);
+
+			for (int i = 0; i < notesItems.getItems().size(); i++) {
+				Response response = service.deleteItem(notesItems.getItems()
+						.get(i).getItemId(), DeleteType.HARD_DELETE);
+			}
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getXmlMessage());
+
+			e.printStackTrace();
+		}
 
 	}
 
@@ -346,8 +359,8 @@ public class ExchangeAccount extends AccountBase {
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat(
 					"yyyy-MM-dd HH:mm:ss");
-			Date _startTime = dateFormat.parse(startDate + startTime);//"2014-02-25 16:00:00");
-			Date _endTime = dateFormat.parse(endDate + endTime);//"2014-02-25 18:00:00");
+			Date _startTime = dateFormat.parse(startDate + startTime);// "2014-02-25 16:00:00");
+			Date _endTime = dateFormat.parse(endDate + endTime);// "2014-02-25 18:00:00");
 
 			Appointment appointment = new Appointment();
 			appointment.setSubject("");
@@ -357,7 +370,8 @@ public class ExchangeAccount extends AccountBase {
 			appointment.setLocation(description);
 			appointment.setReminderIsSet(true);
 			appointment.setReminderMinutesBeforeStart(30);
-			//appointment.setReminderNextTime(repeat); Reminder noch finden und repeat??? was übergibt es mir
+			// appointment.setReminderNextTime(repeat); Reminder noch finden und
+			// repeat??? was ï¿½bergibt es mir
 
 			ItemId itemId = service.createItem(appointment);
 		} catch (ServiceException e) {
@@ -370,5 +384,5 @@ public class ExchangeAccount extends AccountBase {
 		}
 
 	}
-	
+
 }
