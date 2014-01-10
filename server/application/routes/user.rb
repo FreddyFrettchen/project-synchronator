@@ -23,7 +23,7 @@ class ServerHandler < Sinatra::Base
         post "/delete" do
            user = User.authenticate(@email, @password)
            halt(500) unless user
-           print user.destroy
+           halt(user.delete_account ? 200 : 500 )
         end
     end
 end
