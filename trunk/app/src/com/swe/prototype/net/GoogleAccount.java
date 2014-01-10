@@ -38,11 +38,20 @@ public class GoogleAccount extends AccountBase {
 	}
 
 	@Override
-	public void synchronize() {
-		// TODO Auto-generated method stub
+	public void synchronizeNotes() {
 		Log.i(TAG, "Synchronize wurde aufgerufen!");
 	}
 
+	@Override
+	public void synchronizeContacts() {
+		Log.i(TAG, "Synchronize wurde aufgerufen!");
+	}
+	
+	@Override
+	public void synchronizeCalendarEntries() {
+		Log.i(TAG, "Synchronize wurde aufgerufen!");
+	}
+	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

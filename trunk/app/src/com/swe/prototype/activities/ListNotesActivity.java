@@ -7,11 +7,15 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.swe.prototype.R;
 import com.swe.prototype.adapter.NoteAdapter;
 import com.swe.prototype.models.Note;
+import com.swe.prototype.models.server.ServerContact;
 
 public class ListNotesActivity extends BaseActivity {
 
@@ -92,6 +96,19 @@ public class ListNotesActivity extends BaseActivity {
 
 	public void deleteNote(Note c) {
 		c.delete();
+	}
+	
+	class ViewListItem implements OnItemClickListener {
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			Intent in = new Intent(parent.getContext(), NoteActivity.class);
+			ServerContact o = (ServerContact) listView
+					.getItemAtPosition(position);
+			in.putExtra("name", o.toString());
+			in.putExtra("phone", o.getPhoneumber());
+			in.putExtra("email", o.getEmail());
+			startActivity(in);
+		}
 	}
 
 }

@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.swe.prototype.activities.CreateContactActivity;
+import com.swe.prototype.activities.ListContactsActivity;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.ServerDataTable;
 import com.swe.prototype.globalsettings.Settings;
@@ -47,14 +48,6 @@ public class ServerAccount extends AccountBase {
 		this.gson = new Gson();
 	}
 
-	@Override
-	public void synchronize() {
-		syncronizeByType("contacts");
-		syncronizeByType("calendar");
-		syncronizeByType("notes");
-		// setLastSynchronisationTimestamp
-	}
-
 	/**
 	 * @param data_type
 	 *            -> possible values: calendar, contacts, notes
@@ -75,13 +68,13 @@ public class ServerAccount extends AccountBase {
 
 	private void synchronizeDatabase(String data_type,
 			ArrayList<EncryptedData> data) {
+		String where;
+		String[] args;
+		ContentValues values = new ContentValues();
 		Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
 				"server_data");
 
 		// first try to find entry and update it, or save if new
-		ContentValues values = new ContentValues();
-		String where;
-		String[] args;
 		for (EncryptedData encryptedData : data) {
 			where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
 					+ ServerDataTable.COLUMN_TAG + " = ?";
@@ -171,6 +164,8 @@ public class ServerAccount extends AccountBase {
 			try {
 				response = delete(server_url, username, password,
 						this.data_type, this.data_id);
+				Log.i(TAG, "response of deleting " + this.data_type + ": "
+						+ (response ? "True" : "False"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -243,15 +238,17 @@ public class ServerAccount extends AccountBase {
 	@Override
 	public void createContact(String lastname, String firstname,
 			String phonenumber, String email) {
-		Log.i(TAG, "ich erstelle den contact:" + lastname);
+		Log.i(TAG, "Creating Contact.");
 
 		// send data to server
 		ServerContact contact = new ServerContact(this, -1, lastname,
 				firstname, phonenumber, email);
 		new AddDataTask() {
-
+			protected void onPostExecute(Boolean result) {
+				// sync data
+				synchronizeContacts();
+			}
 		}.execute("contact", contact.toJson());
-		Log.i(TAG, "erstellter kontakt: " + contact.toJson());
 	}
 
 	@Override
@@ -371,9 +368,11 @@ public class ServerAccount extends AccountBase {
 
 	@Override
 	public void editContact(Context context, Contact c) {
-		Log.i(TAG, "edit:" + this.toString());
+		ServerContact contact = (ServerContact) c;
+		Log.i(TAG, "edit:" + contact.toString());
 		Intent in = new Intent(context, CreateContactActivity.class);
 		in.putExtra("edit_mode", true);
+		in.putExtra("data_id", contact.getId());
 		in.putExtra("account_id", c.getAccount().getAccountId());
 		context.startActivity(in);
 	}
@@ -393,15 +392,17 @@ public class ServerAccount extends AccountBase {
 		ServerContact contact = (ServerContact) c;
 		Log.i(TAG, "ich lösche den contact mit server_id:" + contact.getId());
 
-		new DeleteDataTask("contact", ((ServerContact)c).getId()) {
-		}.execute("contact", contact.toJson());
-		Log.i(TAG, "erstellter kontakt: " + contact.toJson());
-
+		new DeleteDataTask("contacts", ((ServerContact) c).getId()) {
+		}.execute();
 	}
 
 	@Override
 	public void deleteNote(Note n) {
+		ServerNote contact = (ServerNote) n;
+		Log.i(TAG, "ich lösche den contact mit server_id:" + contact.getId());
 
+		new DeleteDataTask("notes", contact.getId()) {
+		}.execute();
 	}
 
 	@Override
@@ -412,5 +413,20 @@ public class ServerAccount extends AccountBase {
 	@Override
 	public void createCalendarEntry(String startDate, String endDate,
 			String startTime, String endTime, String description, int repeat) {
+	}
+
+	@Override
+	public void synchronizeContacts() {
+		syncronizeByType("contacts");
+	}
+
+	@Override
+	public void synchronizeNotes() {
+		syncronizeByType("notes");
+	}
+
+	@Override
+	public void synchronizeCalendarEntries() {
+		syncronizeByType("calendar");
 	}
 }

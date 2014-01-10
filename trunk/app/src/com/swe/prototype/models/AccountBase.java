@@ -23,7 +23,7 @@ public abstract class AccountBase extends Thread {
 	}
 
 	public void run() {
-		synchronize();
+		synchronizeAll();
 	}
 
 	public int getRefreshTime() {
@@ -37,8 +37,18 @@ public abstract class AccountBase extends Thread {
 	public int getAccountId() {
 		return this.account_id;
 	}
+	
+	public void synchronizeAll(){
+		synchronizeContacts();
+		synchronizeNotes();
+		synchronizeCalendarEntries();
+	}
 
-	public abstract void synchronize();
+	public abstract void synchronizeContacts();
+
+	public abstract void synchronizeNotes();
+
+	public abstract void synchronizeCalendarEntries();
 
 	public abstract BaseAdapter getContactAdapter(Context context, int layout_id);
 
@@ -51,8 +61,8 @@ public abstract class AccountBase extends Thread {
 			String phonenumber, String email);
 
 	public abstract void createNote(String title, String text);
-	
-    /**
+
+	/**
 	 * @param startDate
 	 *            Sting: Format: dd/mm/yyyy
 	 * @param endDate

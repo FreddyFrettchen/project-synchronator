@@ -16,17 +16,32 @@ import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.server.ServerContact;
 import com.swe.prototype.net.server.AsyncDataTask;
-import com.swe.prototype.net.server.Server;
 
 public class CreateContactActivity extends BaseActivity {
 
 	private static final String TAG = "CreateContactActivity";
 	ProgressDialog dialog = null;
 	ListView list_accounts = null;
-
+	
+	private int id_account = 0;
+	private int data_id = 0;
+	private boolean edit_mode = false;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_contact);
+		
+		if (getIntent().hasExtra("id_account"))
+			id_account = getIntent().getExtras().getInt("id_account");
+		
+		if (getIntent().hasExtra("data_id"))
+			data_id = getIntent().getExtras().getInt("edit_mode");
+		
+		if (getIntent().hasExtra("edit_mode"))
+			edit_mode = getIntent().getExtras().getBoolean("edit_mode");
+
+		if (edit_mode && id_account != 0)
+			prefill_fields();
 
 		ArrayAdapter<AccountBase> adapter = new ArrayAdapter<AccountBase>(this,
 				android.R.layout.simple_list_item_checked,
@@ -54,6 +69,10 @@ public class CreateContactActivity extends BaseActivity {
 			}
 		});
 	}
+	
+	private void prefill_fields(){
+		
+	}
 
 	private void saveContact(View v) {
 		String lastname = getEditText(R.id.edit_text_last_name);
@@ -73,7 +92,7 @@ public class CreateContactActivity extends BaseActivity {
 		}
 
 		dialog.dismiss();
-		finish();
+		showAndFinish(ListContactsActivity.class);
 	}
 
 	private void initializeDialog(String message) {

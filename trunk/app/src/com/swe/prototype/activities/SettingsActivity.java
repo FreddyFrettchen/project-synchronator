@@ -3,7 +3,6 @@ package com.swe.prototype.activities;
 import android.content.SharedPreferences;
 import android.media.audiofx.BassBoost.Settings;
 import com.swe.prototype.globalsettings.*;
-import com.swe.prototype.net.server.Server.AuthenticateUserTask;
 
 import android.os.Bundle;
 import android.util.Log;

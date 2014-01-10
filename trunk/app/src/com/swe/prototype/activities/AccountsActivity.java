@@ -53,8 +53,6 @@ import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.AccountTable;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.models.AccountBase;
-import com.swe.prototype.net.server.Server;
-import com.swe.prototype.net.server.Server.AuthenticateUserTask;
 
 public class AccountsActivity extends BaseActivity implements
 		LoaderCallbacks<Cursor> {
@@ -95,7 +93,7 @@ public class AccountsActivity extends BaseActivity implements
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
 				 
 				// set title
 				alertDialogBuilder.setTitle("Do you want to delete your Synchronator account?");
@@ -133,7 +131,7 @@ public class AccountsActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		
 		/*
-		 * Hier noch mehr zum löschen des Accounts
+		 * Hier noch mehr zum lï¿½schen des Accounts
 		 */
 		
 		SharedPreferences pref = getSharedPreferences(Settings.getPrefs_name(), 0);
@@ -195,7 +193,7 @@ public class AccountsActivity extends BaseActivity implements
 			editAccount((int) info.id);
 			break;
 		case R.id.delete:
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
 			 
 			// set title
 			alertDialogBuilder.setTitle("Do you want to delete the account?");
