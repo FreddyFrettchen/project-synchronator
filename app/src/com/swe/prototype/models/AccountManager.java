@@ -110,7 +110,7 @@ public class AccountManager {
 		return this.accounts;
 	}
 
-	public ServerAccount getServerAccount() {
+	public AccountBase getServerAccount() {
 		return this.server_account;
 	}
 }

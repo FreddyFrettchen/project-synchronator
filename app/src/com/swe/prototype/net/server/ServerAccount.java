@@ -21,6 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.swe.prototype.activities.CreateContactActivity;
 import com.swe.prototype.activities.ListContactsActivity;
+import com.swe.prototype.database.DBTools;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.ServerDataTable;
 import com.swe.prototype.globalsettings.Settings;
@@ -95,6 +96,36 @@ public class ServerAccount extends AccountBase {
 
 	}
 
+	private void synchronizeDatabaseIds(String data_type,
+			ArrayList<Integer> data) {
+		String where;
+		String[] args;
+		ContentValues values = new ContentValues();
+		Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
+				"server_data");
+
+		// delete entries that are not in the id list
+/*
+		for (EncryptedData encryptedData : data) {
+			where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
+					+ ServerDataTable.COLUMN_TAG + " = ?";
+			args = new String[] { encryptedData.getId() + "", data_type };
+			values.put("data_id", encryptedData.getId());
+			values.put("data", encryptedData.getData());
+			values.put("tag", data_type);
+			// check if entry exists
+			if (entryExists(contentUri, where, args)) {
+				// update entry
+				this.context.getContentResolver().update(contentUri, values,
+						where, args);
+			} else {
+				// create new entry
+				this.context.getContentResolver().insert(contentUri, values);
+			}
+		}*/
+
+	}
+
 	public int getLastSynchronisationTimestamp() {
 		return 0;// (int) (System.currentTimeMillis() / 1000L);
 	}
@@ -116,16 +147,16 @@ public class ServerAccount extends AccountBase {
 		}
 
 		protected ArrayList<EncryptedData> doInBackground(String... params) {
-			String response = null;
+			String response_sync = null;
 			int timestamp = getLastSynchronisationTimestamp();
 			Type listType = new TypeToken<ArrayList<EncryptedData>>() {
 			}.getType();
 
 			try {
-				response = sync(server_url, username, password, this.data_type,
-						timestamp);
+				response_sync = sync(server_url, username, password,
+						this.data_type, timestamp);
 				ArrayList<EncryptedData> list = (ArrayList<EncryptedData>) gson
-						.fromJson(response, listType);
+						.fromJson(response_sync, listType);
 				Log.i(TAG, list.size() + " datasets for sync.");
 				return list;
 			} catch (IOException e) {
@@ -133,12 +164,37 @@ public class ServerAccount extends AccountBase {
 			}
 			return null;
 		}
+	}
 
-		protected void onPostExecute(ArrayList<EncryptedData> list) {
+	private class SyncIdsTask extends AsyncDataTask<ArrayList<Integer>> {
+		private String data_type = null;
+
+		public SyncIdsTask(String data_type) {
+			this.data_type = data_type;
+		}
+
+		protected ArrayList<Integer> doInBackground(String... params) {
+			String response_ids = null;
+			Type listType_ids = new TypeToken<ArrayList<Integer>>() {
+			}.getType();
+
+			try {
+				response_ids = ids(server_url, username, password,
+						this.data_type);
+				ArrayList<Integer> ids_list = (ArrayList<Integer>) gson
+						.fromJson(response_ids, listType_ids);
+				return ids_list;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		protected void onPostExecute(ArrayList<Integer> list) {
 			super.onPostExecute(list);
 			if (list == null)
 				return;
-			synchronizeDatabase(this.data_type, list);
+			synchronizeDatabaseIds(this.data_type, list);
 		}
 	}
 
@@ -192,7 +248,6 @@ public class ServerAccount extends AccountBase {
 						this));
 			} while (cursor.moveToNext());
 		}
-		Log.i(TAG, "i return " + notes.size() + " notes!!");
 		return notes;
 	}
 
@@ -207,7 +262,6 @@ public class ServerAccount extends AccountBase {
 						cursor.getInt(1), this));
 			} while (cursor.moveToNext());
 		}
-		Log.i(TAG, "i return " + contacts.size() + " contacts!!");
 		return contacts;
 	}
 
@@ -264,6 +318,16 @@ public class ServerAccount extends AccountBase {
 		Log.i(TAG, "erstellte note: " + note.toJson());
 	}
 
+	public void deleteAccount() {
+		Log.i(TAG, "Deleting user account.");
+		new DeleteUserTask() {
+			protected void onPostExecute(Boolean result) {
+				// if deletion successful, clean database
+				new DBTools(context).purgeDatabase();
+			};
+		}.execute();
+	}
+
 	/**
 	 * Task for User authentification
 	 */
@@ -271,6 +335,20 @@ public class ServerAccount extends AccountBase {
 		protected Boolean doInBackground(String... params) {
 			try {
 				return authenticate(server_url, username, password);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * Task for User account deletion
+	 */
+	public class DeleteUserTask extends AsyncUserTask {
+		protected Boolean doInBackground(String... params) {
+			try {
+				return delete(server_url, username, password);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

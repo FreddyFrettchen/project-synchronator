@@ -107,6 +107,27 @@ public abstract class AsyncDataTask<Result> extends
 		String response = s.next();
 		return response;
 	}
+	
+	protected String ids(String server, String email, String password,
+			String type) throws IOException {
+		String add_url = server + "/data/ids/" + type;
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("email", email));
+		params.add(new BasicNameValuePair("password", password));
+		
+		HttpURLConnection request = postRequest(add_url, params);
+		request.connect();
+		Scanner s;
+		if (request.getResponseCode() != 200) {
+			s = new Scanner(request.getErrorStream());
+		} else {
+			s = new Scanner(request.getInputStream());
+		}
+
+		String response = s.next();
+		return response;
+	}
 
 	protected Boolean delete(String server, String email, String password,
 			String type, int data_id) throws IOException {
