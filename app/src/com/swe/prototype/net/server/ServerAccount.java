@@ -53,8 +53,12 @@ public class ServerAccount extends AccountBase {
 	 * @param data_type
 	 *            -> possible values: calendar, contacts, notes
 	 */
-	private void syncronizeByType(String data_type) {
-		new SyncDataTask(data_type).execute();
+	private void synchronizeByType(final String data_type) {
+		new SyncDataTask(data_type){
+			protected void onPostExecute(java.util.ArrayList<EncryptedData> result) {
+				synchronizeDatabase(data_type, result);
+			};
+		}.execute();
 	}
 
 	private boolean entryExists(Uri contentUri, String where, String[] args) {
@@ -495,16 +499,16 @@ public class ServerAccount extends AccountBase {
 
 	@Override
 	public void synchronizeContacts() {
-		syncronizeByType("contacts");
+		synchronizeByType("contacts");
 	}
 
 	@Override
 	public void synchronizeNotes() {
-		syncronizeByType("notes");
+		synchronizeByType("notes");
 	}
 
 	@Override
 	public void synchronizeCalendarEntries() {
-		syncronizeByType("calendar");
+		synchronizeByType("calendar");
 	}
 }
