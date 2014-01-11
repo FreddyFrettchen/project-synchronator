@@ -6,7 +6,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-
+/*
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.contacts.ContactEntry;
@@ -24,11 +24,12 @@ import com.google.gdata.data.extensions.PostCode;
 import com.google.gdata.data.extensions.Region;
 import com.google.gdata.data.extensions.Street;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
+
+*/
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.Note;
-
 public class GoogleAccount extends AccountBase {
 	private final static String TAG = "GoogleKalender";
 
@@ -65,7 +66,7 @@ public class GoogleAccount extends AccountBase {
 
 		Log.i(TAG, "CreateContact!!!!!!!!!!!!!!");
 		System.out.println("CreateContact!!!!!!!!!!!!");
-		try
+		/*try
     	{
     		ContactsService myService = new ContactsService("<var>YOUR_APPLICATION_NAME</var>");
     		myService.setUserCredentials(this.username, this.password);
@@ -104,7 +105,7 @@ public class GoogleAccount extends AccountBase {
 	    	postalAddress.setRel("http://schemas.google.com/g/2005#work");
 	    	postalAddress.setPrimary(true);
 	    	contact.addStructuredPostalAddress(postalAddress);
-	    	*/// Ask the service to insert the new entry
+	    	/// Ask the service to insert the new entry
 	    	URL postUrl = new URL("https://www.google.com/m8/feeds/contacts/default/full");
 	    	ContactEntry createdContact = myService.insert(postUrl, contact);
 	    	System.out.println("Contact's ID: " + createdContact.getId());
@@ -113,6 +114,7 @@ public class GoogleAccount extends AccountBase {
     	{
     		System.out.println(e);
     	}
+    	*/
 	}
 
 	@Override
