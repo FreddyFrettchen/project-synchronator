@@ -8,15 +8,14 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name" />
+        android:text="@string/lastname" />
 
     <TextView
         android:id="@+id/contact_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="TextView" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/textView2"
@@ -24,15 +23,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
-        android:text="Phone" />
+        android:text="@string/phonenumber" />
 
     <TextView
         android:id="@+id/contact_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/contact_name"
-        android:layout_below="@+id/contact_name"
-        android:text="TextView" />
+        android:layout_below="@+id/contact_name" />
 
     <TextView
         android:id="@+id/textView3"
@@ -40,14 +38,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView2"
-        android:text="Email" />
+        android:text="@string/email" />
 
     <TextView
         android:id="@+id/contact_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/contact_phone"
-        android:layout_below="@+id/contact_phone"
-        android:text="TextView" />
+        android:layout_below="@+id/contact_phone" />
 
 </RelativeLayout>

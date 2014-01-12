@@ -10,7 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="TextView" />
+        android:text="@string/lastname" />
 
     <TextView
         android:id="@+id/number"
@@ -19,7 +19,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/name"
-        android:text="TextView"
+        android:text="@string/phonenumber"
         android:textSize="10sp" />
 
     <TextView
@@ -28,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/number"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="TextView" />
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>

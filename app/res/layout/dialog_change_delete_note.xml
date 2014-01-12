@@ -8,12 +8,12 @@
         android:id="@+id/change_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Change" />
+        android:text="@string/change" />
 
     <Button
         android:id="@+id/delete_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Delete" />
+        android:text="@string/delete" />
 
 </LinearLayout>
