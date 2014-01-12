@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import com.commonsware.cwac.merge.MergeAdapter;
 import com.swe.prototype.R;
 import com.swe.prototype.globalsettings.DateOnSaveLocation;
 
@@ -19,7 +20,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CalendarAdapter extends BaseAdapter {
+public class CalendarAdapter extends MergeAdapter {
+	
+	private static class ViewHolder {
+		protected TextView name;
+		protected TextView number;
+		protected TextView account_tag;
+	}
+	
 	private Context mContext;
 
 	private java.util.Calendar month;
@@ -44,11 +52,11 @@ public class CalendarAdapter extends BaseAdapter {
 	private View previousView;
 
 	public CalendarAdapter(Context c, GregorianCalendar monthCalendar) {
+		mContext = c;
 		CalendarAdapter.dayString = new ArrayList<String>();
 		Locale.setDefault(Locale.US);
 		month = monthCalendar;
 		selectedDate = (GregorianCalendar) monthCalendar.clone();
-		mContext = c;
 		month.set(GregorianCalendar.DAY_OF_MONTH, 1);
 		this.items = new ArrayList<DateOnSaveLocation>();
 		df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);

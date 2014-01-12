@@ -30,7 +30,7 @@ import com.swe.prototype.models.AccountBase;
 public class CalendarAddEventActivity extends BaseActivity {
 	private static final String TAG = "AddCalendarEventActivity";
 
-	// diese variabeln halten konsistent das zuletzt ausgew�hlte datum/zeit
+	// diese variabeln halten konsistent das zuletzt ausgewählte datum/zeit
 	private int yearFrom;
 	private int monthFrom;
 	private int dayFrom;

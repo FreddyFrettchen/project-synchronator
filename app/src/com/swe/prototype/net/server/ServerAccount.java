@@ -31,6 +31,7 @@ import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.Note;
 import com.swe.prototype.models.server.EncryptedData;
+import com.swe.prototype.models.server.ServerCalendarEntry;
 import com.swe.prototype.models.server.ServerNote;
 import com.swe.prototype.models.server.ServerContact;
 
@@ -54,8 +55,9 @@ public class ServerAccount extends AccountBase {
 	 *            -> possible values: calendar, contacts, notes
 	 */
 	private void synchronizeByType(final String data_type) {
-		new SyncDataTask(data_type){
-			protected void onPostExecute(java.util.ArrayList<EncryptedData> result) {
+		new SyncDataTask(data_type) {
+			protected void onPostExecute(
+					java.util.ArrayList<EncryptedData> result) {
 				synchronizeDatabase(data_type, result);
 			};
 		}.execute();
@@ -109,24 +111,18 @@ public class ServerAccount extends AccountBase {
 				"server_data");
 
 		// delete entries that are not in the id list
-/*
-		for (EncryptedData encryptedData : data) {
-			where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
-					+ ServerDataTable.COLUMN_TAG + " = ?";
-			args = new String[] { encryptedData.getId() + "", data_type };
-			values.put("data_id", encryptedData.getId());
-			values.put("data", encryptedData.getData());
-			values.put("tag", data_type);
-			// check if entry exists
-			if (entryExists(contentUri, where, args)) {
-				// update entry
-				this.context.getContentResolver().update(contentUri, values,
-						where, args);
-			} else {
-				// create new entry
-				this.context.getContentResolver().insert(contentUri, values);
-			}
-		}*/
+		/*
+		 * for (EncryptedData encryptedData : data) { where =
+		 * ServerDataTable.COLUMN_ID_DATA + " = ? AND " +
+		 * ServerDataTable.COLUMN_TAG + " = ?"; args = new String[] {
+		 * encryptedData.getId() + "", data_type }; values.put("data_id",
+		 * encryptedData.getId()); values.put("data", encryptedData.getData());
+		 * values.put("tag", data_type); // check if entry exists if
+		 * (entryExists(contentUri, where, args)) { // update entry
+		 * this.context.getContentResolver().update(contentUri, values, where,
+		 * args); } else { // create new entry
+		 * this.context.getContentResolver().insert(contentUri, values); } }
+		 */
 
 	}
 
@@ -253,6 +249,20 @@ public class ServerAccount extends AccountBase {
 			} while (cursor.moveToNext());
 		}
 		return notes;
+	}
+	
+	public ArrayList<CalendarEntry> getCalendarEntries() {
+		ArrayList<CalendarEntry> entries = new ArrayList<CalendarEntry>();
+		Cursor cursor = getData("calendar");
+		if (cursor.moveToFirst()) {
+			do {
+				Log.i(TAG, "Decrypting CalendarEntries");
+				entries.add(new EncryptedData(cursor.getInt(0), cursor
+						.getString(2)).toCalendarEntry(this.password, cursor.getInt(1),
+						this));
+			} while (cursor.moveToNext());
+		}
+		return entries;
 	}
 
 	public ArrayList<Contact> getContacts() {
@@ -445,7 +455,9 @@ public class ServerAccount extends AccountBase {
 
 	@Override
 	public BaseAdapter getCalendarAdapter(Context context, int layout_id) {
-		return null;
+		ArrayAdapter<CalendarEntry> adapter = new ArrayAdapter<CalendarEntry>(context, layout_id);
+		adapter.addAll(getCalendarEntries());
+		return adapter;
 	}
 
 	@Override
@@ -495,6 +507,17 @@ public class ServerAccount extends AccountBase {
 	@Override
 	public void createCalendarEntry(String startDate, String endDate,
 			String startTime, String endTime, String description, int repeat) {
+		Log.i(TAG, "Creating Contact.");
+
+		// send data to server
+		ServerCalendarEntry centry = new ServerCalendarEntry(this, -1,
+				startDate, endDate, startTime, endTime, description, repeat);
+		new AddDataTask() {
+			protected void onPostExecute(Boolean result) {
+				// sync data
+				synchronizeCalendarEntries();
+			}
+		}.execute("calendar", centry.toJson());
 	}
 
 	@Override

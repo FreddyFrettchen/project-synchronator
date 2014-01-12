@@ -56,4 +56,13 @@ public class EncryptedData {
 		n.setAccount(account);
 		return n;
 	}
+	
+	public ServerCalendarEntry toCalendarEntry(String key, int data_server_id, AccountBase account){
+		Log.i(TAG,"Decrypting CalendarEntry id:" + data_server_id);
+		ServerCalendarEntry e = ServerCalendarEntry.fromJson(decryptData(key));
+		Log.i(TAG,"end time is : " + e.getEndTime());
+		e.setId(data_server_id);
+		e.setAccount(account);
+		return e;
+	}
 }

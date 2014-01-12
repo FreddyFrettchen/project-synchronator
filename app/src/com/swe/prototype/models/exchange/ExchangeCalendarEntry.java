@@ -102,4 +102,40 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 		}
 		return false;
 	}
+
+	@Override
+	public String getStartDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getEndDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStartTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getEndTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getRepeat() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
