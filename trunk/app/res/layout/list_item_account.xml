@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Username" />
+        android:text="@string/username" />
 
     <TextView
         android:id="@+id/text_provider"
@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/text_username"
-        android:text="Provider" />
+        android:text="@string/provider" />
 
 </RelativeLayout>

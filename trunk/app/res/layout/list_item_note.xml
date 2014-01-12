@@ -8,14 +8,13 @@
         android:id="@+id/list_note_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/title" />
 
     <TextView
         android:id="@+id/list_note_account_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="TextView" />
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>

@@ -34,7 +34,7 @@
         android:layout_alignLeft="@+id/TextView02"
         android:layout_alignParentTop="true"
         android:layout_marginTop="87dp"
-        android:text="Registrierung:"
+        android:text="@string/registrierung"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -44,7 +44,7 @@
         android:layout_below="@+id/text_email"
         android:layout_marginTop="132dp"
         android:layout_toLeftOf="@+id/button_login"
-        android:text="Email Adresse:"
+        android:text="@string/email"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -56,7 +56,7 @@
         android:layout_marginTop="33dp"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:text="Mustermann@web.de" />
+        android:text="@string/mustermannAweb_de" />
 
     <View
         android:id="@+id/view1"
@@ -82,7 +82,7 @@
         android:layout_above="@+id/register_input_password"
         android:layout_alignLeft="@+id/register_input_password"
         android:layout_marginBottom="18dp"
-        android:text="Passwort:"
+        android:text="@string/password_textview"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -106,7 +106,7 @@
         android:layout_alignLeft="@+id/register_input_password_rep"
         android:layout_below="@+id/register_input_password"
         android:layout_marginTop="49dp"
-        android:text="Passwort wiederholen:"
+        android:text="@string/password_wiederholen_textview"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
