@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import com.swe.prototype.R;
 import com.swe.prototype.adapter.CalendarAdapter;
+import com.swe.prototype.adapter.ContactAdapter;
 import com.swe.prototype.globalsettings.DateOnSaveLocation;
 
 import android.app.Activity;
@@ -30,24 +31,33 @@ public class CalendarMonthViewActivity extends BaseActivity {
 	public CalendarAdapter adapter;// adapter instance
 	public Handler handler;// for grabbing some event values for showing the dot
 							// marker.
-	public ArrayList<DateOnSaveLocation> items; // container to store calendar items which
-									// needs showing the event marker
+	public ArrayList<DateOnSaveLocation> items; // container to store calendar
+												// items which
+
+	// needs showing the event marker
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_calendar_month_view);
-		 Locale.setDefault( Locale.US );
+		Locale.setDefault(Locale.US);
 		month = (GregorianCalendar) GregorianCalendar.getInstance();
 		itemmonth = (GregorianCalendar) month.clone();
 
-		items = new ArrayList<DateOnSaveLocation>();
+		//items = new ArrayList<DateOnSaveLocation>();
 		adapter = new CalendarAdapter(this, month);
+		for (int i = 0; i < this.accounts.getAccounts().size(); i++) {
+			adapter.addAdapter(this.accounts
+					.getAccounts()
+					.get(i)
+					.getCalendarAdapter(this,
+							R.layout.item_calendar_month_view));
+		}
 
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(adapter);
 
-		handler = new Handler();
-		handler.post(calendarUpdater);
+		//handler = new Handler();
+		//handler.post(calendarUpdater);
 
 		TextView title = (TextView) findViewById(R.id.title);
 		title.setText(android.text.format.DateFormat.format("MMMM yyyy", month));
@@ -90,28 +100,30 @@ public class CalendarMonthViewActivity extends BaseActivity {
 				if ((gridvalue > 10) && (position < 8)) {
 					setPreviousMonth();
 					refreshCalendar();
-					return; // hier wird dann erstmal der vorherige monat geladen
+					return; // hier wird dann erstmal der vorherige monat
+							// geladen
 				} else if ((gridvalue < 7) && (position > 28)) {
 					setNextMonth();
 					refreshCalendar();
-					return; // hier nächste monat laden
+					return; // hier nï¿½chste monat laden
 				}
 				((CalendarAdapter) parent.getAdapter()).setSelected(v);
-				
+
 				showDayView(selectedGridDate);
-				//showToast(selectedGridDate);
+				// showToast(selectedGridDate);
 
 			}
 		});
 	}
-	
-	private void showDayView(String date){
+
+	private void showDayView(String date) {
 		Intent intent = new Intent(CalendarMonthViewActivity.this,
 				CalendarDayViewActivity.class);
 		intent.putExtra("date", date);
 		startActivity(intent);
 	}
-	//falls der user auf den Rechts Pfeil klickt
+
+	// falls der user auf den Rechts Pfeil klickt
 	// danach wird auch immer refreshCalendar() aufgerufen
 	protected void setNextMonth() {
 		if (month.get(GregorianCalendar.MONTH) == month
@@ -125,7 +137,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 
 	}
 
-	//falls der user auf den Links Pfeil klickt
+	// falls der user auf den Links Pfeil klickt
 	protected void setPreviousMonth() {
 		if (month.get(GregorianCalendar.MONTH) == month
 				.getActualMinimum(GregorianCalendar.MONTH)) {
@@ -160,23 +172,28 @@ public class CalendarMonthViewActivity extends BaseActivity {
 			items.clear();
 
 			// Print dates of the current week
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 			String itemvalue;
 			for (int i = 0; i < 7; i++) {
 				itemvalue = df.format(itemmonth.getTime());
 				itemmonth.add(GregorianCalendar.DATE, 1);
 				items.add(new DateOnSaveLocation("2013-12-12", true, true, true));
-				items.add(new DateOnSaveLocation("2014-01-15", true, false, true));
-				items.add(new DateOnSaveLocation("2014-01-20", true, true, false));
-				items.add(new DateOnSaveLocation("2014-02-24", false, false, false));
-				items.add(new DateOnSaveLocation("2014-02-28", false, true, true));
-				
+				items.add(new DateOnSaveLocation("2014-01-15", true, false,
+						true));
+				items.add(new DateOnSaveLocation("2014-01-20", true, true,
+						false));
+				items.add(new DateOnSaveLocation("2014-02-24", false, false,
+						false));
+				items.add(new DateOnSaveLocation("2014-02-28", false, true,
+						true));
+
 			}
 
 			adapter.setItems(items);
 			adapter.notifyDataSetChanged();
 		}
 	};
+
 	@Override
 	protected void addClicked() {
 		Intent intent = new Intent(CalendarMonthViewActivity.this,
