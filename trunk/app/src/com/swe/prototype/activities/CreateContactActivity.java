@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.swe.prototype.R;
 import com.swe.prototype.models.AccountBase;
@@ -55,8 +56,34 @@ public class CreateContactActivity extends BaseActivity {
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				initializeDialog("Creating contact...");
-				saveContact(v);
+				if(correctInputChoise()) {
+					initializeDialog("Creating contact...");
+					saveContact(v);
+				}
+			}
+
+			private boolean correctInputChoise() {
+				// TODO Auto-generated method stub
+				
+				if(getEditText(R.id.edit_text_last_name).isEmpty() || getEditText(R.id.edit_text_first_name).isEmpty() || getEditText(R.id.edit_text_phonenumber).isEmpty() || getEditText(R.id.edit_text_email).isEmpty()) {
+					this.showShortToast("Alle Felder müssen ausgefüllt sein!");
+					return false;
+				}
+				int cntChoice = list_accounts.getCount();
+				SparseBooleanArray selected_accounts = list_accounts
+						.getCheckedItemPositions();
+				
+				for (int i = 0; i < cntChoice; i++) {
+					if (selected_accounts.get(i) == true) {
+						return true;
+					}
+				}
+				this.showShortToast("Mindestens ein Server muss gewählt sein!");
+				return false;
+			}
+			
+			private void showShortToast(String message) {
+				Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 			}
 		});
 		

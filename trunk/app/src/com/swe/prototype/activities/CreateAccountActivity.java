@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.swe.prototype.R;
 import com.swe.prototype.database.SQLiteDataProvider;
@@ -47,12 +48,14 @@ public class CreateAccountActivity extends BaseActivity {
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (edit_mode) {
-					updateAccount(v);
-				} else {
-					saveAccount(v);
+				if(correctInputChoise()) {
+					if (edit_mode) {
+						updateAccount(v);
+					} else {
+						saveAccount(v);
+					}
+					finish();
 				}
-				finish();
 			}
 		});
 		
@@ -118,6 +121,19 @@ public class CreateAccountActivity extends BaseActivity {
 				getEditText(R.id.edit_text_password));
 		values.put("last_sync", "0");
 		getContentResolver().insert(CONTENT_URI, values);
+	}
+	
+	private boolean correctInputChoise() {
+		// TODO Auto-generated method stub
+		if(getEditText(R.id.edit_text_username).isEmpty() || getEditText(R.id.edit_text_password).isEmpty()) {
+			this.showShortToast("Username und Password müssen ausgefüllt sein!");
+			return false;
+		}
+		return true;
+	}
+	
+	private void showShortToast(String message) {
+		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 	}
 
 	private void setEditText(int id, String text) {
