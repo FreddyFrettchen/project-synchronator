@@ -155,6 +155,7 @@ public class ServerAccount extends AccountBase {
 			try {
 				response_sync = sync(server_url, username, password,
 						this.data_type, timestamp);
+				
 				ArrayList<EncryptedData> list = (ArrayList<EncryptedData>) gson
 						.fromJson(response_sync, listType);
 				Log.i(TAG, list.size() + " datasets for sync.");
@@ -250,7 +251,7 @@ public class ServerAccount extends AccountBase {
 		}
 		return notes;
 	}
-	
+
 	public ArrayList<CalendarEntry> getCalendarEntries() {
 		ArrayList<CalendarEntry> entries = new ArrayList<CalendarEntry>();
 		Cursor cursor = getData("calendar");
@@ -258,8 +259,8 @@ public class ServerAccount extends AccountBase {
 			do {
 				Log.i(TAG, "Decrypting CalendarEntries");
 				entries.add(new EncryptedData(cursor.getInt(0), cursor
-						.getString(2)).toCalendarEntry(this.password, cursor.getInt(1),
-						this));
+						.getString(2)).toCalendarEntry(this.password,
+						cursor.getInt(1), this));
 			} while (cursor.moveToNext());
 		}
 		return entries;
@@ -455,7 +456,8 @@ public class ServerAccount extends AccountBase {
 
 	@Override
 	public BaseAdapter getCalendarAdapter(Context context, int layout_id) {
-		ArrayAdapter<CalendarEntry> adapter = new ArrayAdapter<CalendarEntry>(context, layout_id);
+		ArrayAdapter<CalendarEntry> adapter = new ArrayAdapter<CalendarEntry>(
+				context, layout_id);
 		adapter.addAll(getCalendarEntries());
 		return adapter;
 	}

@@ -16,6 +16,7 @@ import com.swe.prototype.R;
 import com.swe.prototype.adapter.NoteAdapter;
 import com.swe.prototype.models.Note;
 import com.swe.prototype.models.server.ServerContact;
+import com.swe.prototype.models.server.ServerNote;
 
 public class ListNotesActivity extends BaseActivity {
 
@@ -41,6 +42,7 @@ public class ListNotesActivity extends BaseActivity {
 		listView = (ListView) findViewById(R.id.note_list_view);
 		registerForContextMenu(listView);
 		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new ViewListItem());
 	}
 
 	protected void createNote() {
@@ -102,11 +104,11 @@ public class ListNotesActivity extends BaseActivity {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			Intent in = new Intent(parent.getContext(), NoteActivity.class);
-			ServerContact o = (ServerContact) listView
+			ServerNote sn = (ServerNote) listView
 					.getItemAtPosition(position);
-			in.putExtra("name", o.toString());
-			in.putExtra("phone", o.getPhoneumber());
-			in.putExtra("email", o.getEmail());
+			in.putExtra("title", sn.getTitle());
+			in.putExtra("text", sn.getNote()
+					);
 			startActivity(in);
 		}
 	}
