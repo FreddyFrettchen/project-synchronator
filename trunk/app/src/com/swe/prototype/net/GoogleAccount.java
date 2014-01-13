@@ -145,8 +145,8 @@ public class GoogleAccount extends AccountBase {
 	{
 	   	try
 	   	{
-	   		TestGoogle tg = new TestGoogle();
-	   		tg.googletest();
+	   		//TestGoogle tg = new TestGoogle();
+	   		//tg.googletest();
 	   		//ContactsService myService = new ContactsService("<var>YOUR_APPLICATION_NAME</var>");
 	   		/*myService.setUserCredentials(this.username, this.password);
 	   		// Request the feed

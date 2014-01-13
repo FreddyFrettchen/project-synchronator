@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import org.apache.http.NameValuePair;
@@ -104,8 +105,15 @@ public abstract class AsyncDataTask<Result> extends
 			s = new Scanner(request.getInputStream());
 		}
 
-		String response = s.next();
-		return response;
+		String response = null;
+		try{
+			return s.next();
+		} catch (NoSuchElementException e){
+			e.printStackTrace();
+		}
+		
+		// error occured pulling data, suppling empty dataset
+		return "[]";
 	}
 	
 	protected String ids(String server, String email, String password,

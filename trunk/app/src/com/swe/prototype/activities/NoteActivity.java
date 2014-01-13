@@ -5,14 +5,24 @@ import com.swe.prototype.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class NoteActivity extends Activity {
 	private static final String TAG = "NoteActivity";
 	ProgressDialog dialog;
+	
+	private TextView title 	= null;
+	private TextView text 	= null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_changenote);
+		setContentView(R.layout.activity_note);
+		
+		title = (TextView)findViewById(R.id.note_title);
+		text = (TextView)findViewById(R.id.note_text);
+		
+		title.setText(getIntent().getExtras().getString("title"));
+		text.setText(getIntent().getExtras().getString("text"));
 	}
 }
