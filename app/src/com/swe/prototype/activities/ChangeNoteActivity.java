@@ -60,7 +60,7 @@ public class ChangeNoteActivity extends BaseActivity {
 			
 			private boolean correctInputChoise() {
 				// TODO Auto-generated method stub
-				if(title.getText().toString().equals("") || text.getText().toString().equals("")) {
+				if(title.getText().toString().equals("")) {
 					this.showShortToast("Alle Felder müssen ausgefüllt sein!");
 					return false;
 				}
