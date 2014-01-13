@@ -249,6 +249,7 @@ public class CalendarAddEventActivity extends BaseActivity {
 	}
 
 	public void onClickSave(View v) {
+		//"2014-02-25 16:00:00" so hätten wir das gerne!!!
 		// checken ob man ï¿½berhaut speichern kann oder ob es inkonsistenzen gibt
 		// falls inkonsistenz gibt correctInputChoise() ein Toast mit
 		// Fehlermeldung aus!

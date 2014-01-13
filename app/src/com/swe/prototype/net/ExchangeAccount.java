@@ -51,7 +51,6 @@ public class ExchangeAccount extends AccountBase {
 			int refresh_time_sec, String username, String password) {
 		super(context, account_id, refresh_time_sec, username, password);
 	}
-
 	@Override
 	public void synchronizeNotes() {
 
@@ -357,10 +356,9 @@ public class ExchangeAccount extends AccountBase {
 					this.username, this.password);// "bd8299s@ad.fh-aachen.de",
 													// "password");
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat(
-					"yyyy-MM-dd HH:mm:ss");
-			Date _startTime = dateFormat.parse(startDate + startTime);// "2014-02-25 16:00:00");
-			Date _endTime = dateFormat.parse(endDate + endTime);// "2014-02-25 18:00:00");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date _startTime = dateFormat.parse(startDate + " " + startTime);// "2014-02-25 16:00:00");
+			Date _endTime = dateFormat.parse(endDate + " " + endTime);// "2014-02-25 18:00:00");
 
 			Appointment appointment = new Appointment();
 			appointment.setSubject("");
