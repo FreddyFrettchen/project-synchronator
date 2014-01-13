@@ -3,7 +3,9 @@ package com.swe.prototype.activities;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.swe.prototype.R;
+import com.swe.prototype.database.tables.AccountTable;
 import com.swe.prototype.models.AccountBase;
 
 public class ChangeNoteActivity extends BaseActivity {
@@ -30,13 +33,24 @@ public class ChangeNoteActivity extends BaseActivity {
 	ListView list_accounts = null;
 	ProgressDialog dialog = null;
 
+	private int id_account = -1;
+	private boolean edit_mode = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_changenote);
-		
-        title = (EditText) findViewById(R.id.text_note_title);
+
+		if (getIntent().hasExtra("edit_mode"))
+			edit_mode = getIntent().getExtras().getBoolean("edit_mode");
+
+		if (getIntent().hasExtra("id_account"))
+			id_account = getIntent().getExtras().getInt("id_account");
+
+		if (edit_mode && id_account != 0)
+			prefill_fields();
+
+		title = (EditText) findViewById(R.id.text_note_title);
 		text = (EditText) findViewById(R.id.text_note_note);
 		cancel = (Button) findViewById(R.id.button_note_cancel);
 		done = (Button) findViewById(R.id.button_note_done);
@@ -52,37 +66,38 @@ public class ChangeNoteActivity extends BaseActivity {
 		done.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(correctInputChoise()) {
+				if (correctInputChoise()) {
 					initializeDialog("Creating note...");
 					saveNote(v);
 				}
 			}
-			
+
 			private boolean correctInputChoise() {
 				// TODO Auto-generated method stub
-				if(title.getText().toString().equals("")) {
-					this.showShortToast("Alle Felder müssen ausgefüllt sein!");
+				if (title.getText().toString().equals("")) {
+					this.showShortToast("Alle Felder mÃ¼ssen ausgefÃ¼llt sein!");
 					return false;
 				}
 				int cntChoice = list_accounts.getCount();
 				SparseBooleanArray selected_accounts = list_accounts
 						.getCheckedItemPositions();
-				
+
 				for (int i = 0; i < cntChoice; i++) {
 					if (selected_accounts.get(i) == true) {
 						return true;
 					}
 				}
-				this.showShortToast("Mindestens ein Server muss gewählt sein!");
+				this.showShortToast("Mindestens ein Server muss gewÃ¤hlt sein!");
 				return false;
 			}
-			
+
 			private void showShortToast(String message) {
-				Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), message,
+						Toast.LENGTH_SHORT).show();
 			}
-			
+
 		});
-		
+
 		cancel.setText("Cancel");
 		cancel.setOnClickListener(new OnClickListener() {
 			@Override
@@ -91,9 +106,26 @@ public class ChangeNoteActivity extends BaseActivity {
 			}
 		});
 	}
-	
-	private void toNotes(){
-		startActivity(new Intent(this,ListNotesActivity.class));
+
+	// load account from db
+	protected void prefill_fields() {
+		/*String[] projection = { AccountTable.COLUMN_PROVIDER,
+				AccountTable.COLUMN_USERNAME, AccountTable.COLUMN_PASSWORD };
+		Cursor data = getContentResolver().query(CONTENT_URI, projection,
+				"_id = ?", new String[] { id_account + "" }, null);
+
+		if (data.moveToFirst()) {
+			setSpinner(R.id.spinner_account, getAccountPos(data.getString(0)));
+			setEditText(R.id.edit_text_username, data.getString(1));
+			setEditText(R.id.edit_text_password, data.getString(2));
+		} else {
+			Log.i(TAG, "no data to update on id: " + id_account);
+			finish();
+		}*/
+	}
+
+	private void toNotes() {
+		startActivity(new Intent(this, ListNotesActivity.class));
 		finish();
 	}
 
