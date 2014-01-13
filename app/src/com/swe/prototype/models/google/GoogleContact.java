@@ -15,9 +15,9 @@ public class GoogleContact extends Contact {
 	private String phoneumber;
 	private String email;
 	
-	public GoogleContact()
+	public GoogleContact(AccountBase account)
 	{
-		super();
+		super(account);
 	}
 	
 	public void setLastname(String lastname) {
