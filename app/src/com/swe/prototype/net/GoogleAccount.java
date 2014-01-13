@@ -1,35 +1,34 @@
 package com.swe.prototype.net;
 
 import java.net.URL;
+import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-/*
-import com.google.gdata.client.contacts.ContactsService;
-import com.google.gdata.data.PlainTextConstruct;
-import com.google.gdata.data.contacts.ContactEntry;
-import com.google.gdata.data.extensions.City;
-import com.google.gdata.data.extensions.Country;
-import com.google.gdata.data.extensions.Email;
-import com.google.gdata.data.extensions.FamilyName;
-import com.google.gdata.data.extensions.FormattedAddress;
-import com.google.gdata.data.extensions.FullName;
-import com.google.gdata.data.extensions.GivenName;
-import com.google.gdata.data.extensions.Im;
-import com.google.gdata.data.extensions.Name;
-import com.google.gdata.data.extensions.PhoneNumber;
-import com.google.gdata.data.extensions.PostCode;
-import com.google.gdata.data.extensions.Region;
-import com.google.gdata.data.extensions.Street;
-import com.google.gdata.data.extensions.StructuredPostalAddress;
 
-*/
+import com.google.gdata.client.*;
+import com.google.gdata.client.calendar.*;
+import com.google.gdata.client.contacts.ContactsService;
+import com.google.gdata.client.http.AuthSubUtil;
+import com.google.gdata.data.*;
+import com.google.gdata.data.acl.*;
+import com.google.gdata.data.calendar.*;
+import com.google.gdata.data.contacts.ContactEntry;
+import com.google.gdata.data.contacts.ContactFeed;
+import com.google.gdata.data.contacts.GroupMembershipInfo;
+//import com.google.gdata.data.contacts.Event;
+import com.google.gdata.data.extensions.*;
+import com.google.gdata.util.*;
+import com.google.gdata.client.contacts.*;
+import com.google.gdata.data.contacts.*;
+
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.Note;
+import com.swe.prototype.models.google.GoogleContact;
 public class GoogleAccount extends AccountBase {
 	private final static String TAG = "GoogleKalender";
 
@@ -66,7 +65,7 @@ public class GoogleAccount extends AccountBase {
 
 		Log.i(TAG, "CreateContact!!!!!!!!!!!!!!");
 		System.out.println("CreateContact!!!!!!!!!!!!");
-		/*try
+		try
     	{
     		ContactsService myService = new ContactsService("<var>YOUR_APPLICATION_NAME</var>");
     		myService.setUserCredentials(this.username, this.password);
@@ -78,7 +77,7 @@ public class GoogleAccount extends AccountBase {
 	    	final String NO_YOMI = null;
 	    	name.setFullName(new FullName(lastname +" "+ firstname, NO_YOMI));
 	    	name.setGivenName(new GivenName(firstname, NO_YOMI));
-	    	name.setFamilyName(new FamilyName(lstname, NO_YOMI));
+	    	name.setFamilyName(new FamilyName(lastname, NO_YOMI));
 	    	contact.setName(name);
 	    	//contact.setContent(new PlainTextConstruct("Notes"));
 	    	// Set contact's e-mail addresses.
@@ -95,7 +94,7 @@ public class GoogleAccount extends AccountBase {
 	    	primaryPhoneNumber.setPrimary(true);
 	    	contact.addPhoneNumber(primaryPhoneNumber);
 	    	// Set contact's postal address.
-	    	/*StructuredPostalAddress postalAddress = new StructuredPostalAddress();
+	    	StructuredPostalAddress postalAddress = new StructuredPostalAddress();
 	    	postalAddress.setStreet(new Street("1600 Amphitheatre Pkwy"));
 	    	postalAddress.setCity(new City("Mountain View"));
 	    	postalAddress.setRegion(new Region("CA"));
@@ -114,7 +113,7 @@ public class GoogleAccount extends AccountBase {
     	{
     		System.out.println(e);
     	}
-    	*/
+    	
 	}
 
 	@Override
@@ -155,6 +154,31 @@ public class GoogleAccount extends AccountBase {
 	@Override
 	public void deleteContact(Contact c) {
 		// TODO Auto-generated method stub
+		
+		GoogleContact gc = (GoogleContact)c;
+		try
+    	{
+	    	ContactsService myService = new ContactsService("<var>YOUR_APPLICATION_NAME</var>");
+			myService.setUserCredentials(this.username, this.password);
+			// Request the feed
+			URL feedUrl = new URL("https://www.google.com/m8/feeds/contacts/default/full");
+			ContactFeed resultFeed = myService.getFeed(feedUrl, ContactFeed.class);
+			
+			List<ContactEntry> list = resultFeed.getEntries();
+			for(int i = 0;i< list.size();i++)
+			{
+				System.out.println(list.get(i).getExtensionLocalName());
+				if(list.get(i).getEtag().contains(gc.getID()))
+				{
+					list.get(i).delete();
+				}
+			}
+    	}
+    	catch(Exception e)
+    	{
+    		
+    	}
+		
     }		
 
 	@Override

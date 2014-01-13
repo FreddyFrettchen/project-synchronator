@@ -14,6 +14,11 @@ public class ServerContact extends Contact {
 	private String phonenumber = null;
 	private String email = null;
 
+	public String getID()
+	{
+		return null;
+	}
+	
 	public ServerContact(AccountBase account, int id, String lastname, String firstname, String phonenumber,
 			String email) {
 		super(account);
