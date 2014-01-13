@@ -102,10 +102,10 @@ public class ExchangeAccount extends AccountBase {
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,
 				layout_id);
 		// adapter.addAll(Contact);
-		try {
+		/*try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
+					"bd8299s@ad.fh-aachen.de", "JA346tcxo");
 
 			FindItemResponse response = service
 					.findItem(StandardFolder.CONTACTS);
@@ -119,7 +119,7 @@ public class ExchangeAccount extends AccountBase {
 			System.out.println(e.getXmlMessage());
 
 			e.printStackTrace();
-		}
+		}*/
 		return adapter;
 	}
 
