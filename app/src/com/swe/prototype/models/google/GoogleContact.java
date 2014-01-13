@@ -15,6 +15,10 @@ public class GoogleContact extends Contact {
 	private String phoneumber;
 	private String email;
 	
+	public GoogleContact()
+	{
+		super();
+	}
 	
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
