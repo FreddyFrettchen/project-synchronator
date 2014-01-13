@@ -11,8 +11,6 @@ public abstract class Contact extends BaseData {
 		super(account);
 	}
 	
-	public abstract String getID();
-	
 	public abstract String getLastName();
 
 	public abstract String getFirstName();
