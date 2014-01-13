@@ -1,13 +1,30 @@
 package com.swe.prototype.net;
 
-import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import com.swe.prototype.models.AccountBase;
+import com.swe.prototype.models.CalendarEntry;
+import com.swe.prototype.models.Contact;
+import com.swe.prototype.models.Note;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.swe.prototype.models.AccountBase;
+import com.swe.prototype.models.CalendarEntry;
+import com.swe.prototype.models.Contact;
+import com.swe.prototype.models.google.GoogleContact;
+
 
 import com.google.gdata.client.*;
 import com.google.gdata.client.calendar.*;
@@ -22,14 +39,19 @@ import com.google.gdata.data.contacts.GroupMembershipInfo;
 //import com.google.gdata.data.contacts.Event;
 import com.google.gdata.data.extensions.*;
 import com.google.gdata.util.*;
+
+import java.net.*;
+import java.util.List;
+import java.io.*;
+
 import com.google.gdata.client.contacts.*;
 import com.google.gdata.data.contacts.*;
 
-import com.swe.prototype.models.AccountBase;
-import com.swe.prototype.models.CalendarEntry;
-import com.swe.prototype.models.Contact;
-import com.swe.prototype.models.Note;
-import com.swe.prototype.models.google.GoogleContact;
+import java.io.IOException;
+import java.net.URL;
+
+
+
 public class GoogleAccount extends AccountBase {
 	private final static String TAG = "GoogleKalender";
 
@@ -118,20 +140,33 @@ public class GoogleAccount extends AccountBase {
     	
 	}
 
+	
 	private ArrayList<GoogleContact> getContacts()
 	{
 	   	try
 	   	{
-	   		ContactsService myService = new ContactsService("<var>YOUR_APPLICATION_NAME</var>");
-	   		myService.setUserCredentials(this.username, this.password);
+	   		TestGoogle tg = new TestGoogle();
+	   		tg.googletest();
+	   		//ContactsService myService = new ContactsService("<var>YOUR_APPLICATION_NAME</var>");
+	   		/*myService.setUserCredentials(this.username, this.password);
 	   		// Request the feed
 	   		URL feedUrl = new URL("https://www.google.com/m8/feeds/contacts/default/full");
 	   		ContactFeed resultFeed = myService.getFeed(feedUrl, ContactFeed.class);
 	   		// Print the results
+	   		*/
 	   		ArrayList<GoogleContact> liste = new ArrayList<GoogleContact>();
+	   		/*
 	   		for (ContactEntry entry : resultFeed.getEntries()) 
 	   		{
 	   			GoogleContact GC = new GoogleContact(this);
+	   			GC.setEmail("Mail.mail@mail.de");
+				GC.setFirstname("Vorname");
+				GC.setLastname("Lastname");
+				GC.setId("id");
+				GC.setPhoneumber("1235");
+			   	Log.i(TAG, "element geaddet!");
+				
+				
 	   			if (entry.hasName()) 
 	   			{
 	   				Name name = entry.getName();
@@ -154,22 +189,53 @@ public class GoogleAccount extends AccountBase {
 	   			}
 	   			GC.setId(entry.getEtag());
 	   			liste.add(GC);
-	   		}
+	   		}*/
+	   		GoogleContact GC = new GoogleContact(this);
+   			GC.setEmail("Mail.mail@mail.de");
+			GC.setFirstname("Vorname");
+			GC.setLastname("Lastname");
+			GC.setId("id");
+			GC.setPhoneumber("1235");
+		   	Log.i(TAG, "element geaddet!");
+			
+	   		liste.add(GC);
 	   		return liste;
 	   	}
 	   	catch(Exception e)
 	   	{
 	   		System.out.println(e);
 	 	}
+	   	Log.i(TAG, "Keine Kontakte gefunden!");
+		
 	   	return null;
 	}
 	
+	private ArrayList<GoogleContact> getContactsTEST()
+	{
+		ArrayList<GoogleContact> liste = new ArrayList<GoogleContact>();
+		
+		for(int i = 0;i<10;i++)
+		{
+			GoogleContact gc = new GoogleContact(this);
+			gc.setEmail(i+"Mail.mail@mail.de");
+			gc.setFirstname(i+"Vorname");
+			gc.setLastname(i+"Lastname");
+			gc.setId(i+" id");
+			gc.setPhoneumber(i+"");
+			liste.add(gc);
+		}
+		
+		return liste;
+	}
 	
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
 		Log.i(TAG, "GoogleAdapterContact!");
 		System.out.println("ContactAdapterGoogle!");
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,layout_id);
+		
+		//Log.i(TAG, "AdapterSize"+this.getContactsTEST().size());
+		
 		adapter.addAll(this.getContacts());
 		return adapter;
 	}

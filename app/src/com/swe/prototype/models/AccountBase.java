@@ -1,5 +1,6 @@
 package com.swe.prototype.models;
 
+
 import android.content.Context;
 import android.util.Log;
 import android.widget.BaseAdapter;
@@ -93,4 +94,7 @@ public abstract class AccountBase extends Thread {
 	public abstract void deleteCalendarEntry(CalendarEntry ce);
 
 	public abstract String toString();
+
+	
+
 }
