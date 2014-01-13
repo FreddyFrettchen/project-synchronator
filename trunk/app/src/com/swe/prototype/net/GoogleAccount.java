@@ -131,7 +131,7 @@ public class GoogleAccount extends AccountBase {
 	   		ArrayList<GoogleContact> liste = new ArrayList<GoogleContact>();
 	   		for (ContactEntry entry : resultFeed.getEntries()) 
 	   		{
-	   			GoogleContact GC = new GoogleContact();
+	   			GoogleContact GC = new GoogleContact(this);
 	   			if (entry.hasName()) 
 	   			{
 	   				Name name = entry.getName();
