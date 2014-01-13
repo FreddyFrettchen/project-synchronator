@@ -78,7 +78,7 @@ public class GoogleAccount extends AccountBase {
 	    	final String NO_YOMI = null;
 	    	name.setFullName(new FullName(lastname +" "+ firstname, NO_YOMI));
 	    	name.setGivenName(new GivenName(firstname, NO_YOMI));
-	    	name.setFamilyName(new FamilyName(lastname, NO_YOMI));
+	    	name.setFamilyName(new FamilyName(lstname, NO_YOMI));
 	    	contact.setName(name);
 	    	//contact.setContent(new PlainTextConstruct("Notes"));
 	    	// Set contact's e-mail addresses.
@@ -172,8 +172,7 @@ public class GoogleAccount extends AccountBase {
 	@Override
 	public void createNote(String title, String text) {
 		// TODO Auto-generated method stub
-		
-	}
+	} 
 
 	/* (non-Javadoc)
 	 * @see com.swe.prototype.models.AccountBase#createCalendarEntry(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int)
