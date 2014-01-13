@@ -19,6 +19,8 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.swe.prototype.activities.CalendarAddEventActivity;
+import com.swe.prototype.activities.ChangeNoteActivity;
 import com.swe.prototype.activities.CreateContactActivity;
 import com.swe.prototype.activities.ListContactsActivity;
 import com.swe.prototype.database.DBTools;
@@ -475,12 +477,24 @@ public class ServerAccount extends AccountBase {
 
 	@Override
 	public void editNote(Context context, Note n) {
-
+		ServerNote note = (ServerNote) n;
+		Log.i(TAG, "edit:" + note.toString());
+		Intent in = new Intent(context, ChangeNoteActivity.class);
+		in.putExtra("edit_mode", true);
+		in.putExtra("data_id", note.getId());
+		in.putExtra("account_id", note.getAccount().getAccountId());
+		context.startActivity(in);
 	}
 
 	@Override
 	public void editCalendarEntry(Context context, CalendarEntry ce) {
-
+		ServerCalendarEntry entry = (ServerCalendarEntry) ce;
+		Log.i(TAG, "edit:" + entry.toString());
+		Intent in = new Intent(context,CalendarAddEventActivity.class);
+		in.putExtra("edit_mode", true);
+		in.putExtra("data_id", entry.getId());
+		in.putExtra("account_id", entry.getAccount().getAccountId());
+		context.startActivity(in);
 	}
 
 	@Override
