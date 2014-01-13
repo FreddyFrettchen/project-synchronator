@@ -52,9 +52,35 @@ public class ChangeNoteActivity extends BaseActivity {
 		done.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				initializeDialog("Creating note...");
-				saveNote(v);
+				if(correctInputChoise()) {
+					initializeDialog("Creating note...");
+					saveNote(v);
+				}
 			}
+			
+			private boolean correctInputChoise() {
+				// TODO Auto-generated method stub
+				if(title.getText().toString().equals("") || text.getText().toString().equals("")) {
+					this.showShortToast("Alle Felder müssen ausgefüllt sein!");
+					return false;
+				}
+				int cntChoice = list_accounts.getCount();
+				SparseBooleanArray selected_accounts = list_accounts
+						.getCheckedItemPositions();
+				
+				for (int i = 0; i < cntChoice; i++) {
+					if (selected_accounts.get(i) == true) {
+						return true;
+					}
+				}
+				this.showShortToast("Mindestens ein Server muss gewählt sein!");
+				return false;
+			}
+			
+			private void showShortToast(String message) {
+				Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+			}
+			
 		});
 		
 		cancel.setText("Cancel");
