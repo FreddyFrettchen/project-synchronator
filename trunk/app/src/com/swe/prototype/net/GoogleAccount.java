@@ -118,7 +118,7 @@ public class GoogleAccount extends AccountBase {
     	
 	}
 
-	private List<GoogleContact> getContacts()
+	private ArrayList<GoogleContact> getContacts()
 	{
 	   	try
 	   	{
@@ -128,7 +128,7 @@ public class GoogleAccount extends AccountBase {
 	   		URL feedUrl = new URL("https://www.google.com/m8/feeds/contacts/default/full");
 	   		ContactFeed resultFeed = myService.getFeed(feedUrl, ContactFeed.class);
 	   		// Print the results
-	   		List<GoogleContact> liste = new ArrayList<GoogleContact>();
+	   		ArrayList<GoogleContact> liste = new ArrayList<GoogleContact>();
 	   		for (ContactEntry entry : resultFeed.getEntries()) 
 	   		{
 	   			GoogleContact GC = new GoogleContact();
@@ -170,11 +170,7 @@ public class GoogleAccount extends AccountBase {
 		Log.i(TAG, "GoogleAdapterContact!");
 		System.out.println("ContactAdapterGoogle!");
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,layout_id);
-		List<GoogleContact> liste = this.getContacts();
-		for(int i = 0;i< liste.size(); i++)
-		{
-			adapter.add((Contact)liste.get(i));
-		}
+		adapter.addAll(this.getContacts());
 		return adapter;
 	}
 
