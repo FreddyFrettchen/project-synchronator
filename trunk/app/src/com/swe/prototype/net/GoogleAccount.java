@@ -89,13 +89,13 @@ public class GoogleAccount extends AccountBase {
 	    	contact.addEmailAddress(primaryMail);
 	    	// Set contact's phone numbers.
 	    	PhoneNumber primaryPhoneNumber = new PhoneNumber();
-	    	primaryPhoneNumber.setPhoneNumber("(206)555-1212");
+	    	primaryPhoneNumber.setPhoneNumber(phonenumber);
 	    	primaryPhoneNumber.setRel("http://schemas.google.com/g/2005#work");
 	    	primaryPhoneNumber.setPrimary(true);
 	    	contact.addPhoneNumber(primaryPhoneNumber);
 	    	// Set contact's postal address.
 	    	StructuredPostalAddress postalAddress = new StructuredPostalAddress();
-	    	postalAddress.setStreet(new Street("1600 Amphitheatre Pkwy"));
+	    	/*postalAddress.setStreet(new Street("1600 Amphitheatre Pkwy"));
 	    	postalAddress.setCity(new City("Mountain View"));
 	    	postalAddress.setRegion(new Region("CA"));
 	    	postalAddress.setPostcode(new PostCode("94043"));
@@ -104,6 +104,7 @@ public class GoogleAccount extends AccountBase {
 	    	postalAddress.setRel("http://schemas.google.com/g/2005#work");
 	    	postalAddress.setPrimary(true);
 	    	contact.addStructuredPostalAddress(postalAddress);
+	    	*/
 	    	/// Ask the service to insert the new entry
 	    	URL postUrl = new URL("https://www.google.com/m8/feeds/contacts/default/full");
 	    	ContactEntry createdContact = myService.insert(postUrl, contact);
