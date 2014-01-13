@@ -12,6 +12,9 @@ public class GoogleContact extends Contact {
 	private String lastname;
 	private String firstname;
 	private String id;
+	private String phoneumber;
+	private String email;
+	
 	
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
@@ -32,10 +35,6 @@ public class GoogleContact extends Contact {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	private String phoneumber;
-	private String email;
-	
 	
 	protected GoogleContact(AccountBase account, Contact c) {
 		super(account);
