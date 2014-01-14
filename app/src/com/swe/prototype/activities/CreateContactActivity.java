@@ -63,11 +63,8 @@ public class CreateContactActivity extends BaseActivity {
 			}
 
 			private boolean correctInputChoise() {
-				if (getEditText(R.id.edit_text_last_name).isEmpty()
-						|| getEditText(R.id.edit_text_first_name).isEmpty()
-						|| getEditText(R.id.edit_text_phonenumber).isEmpty()
-						|| getEditText(R.id.edit_text_email).isEmpty()) {
-					this.showShortToast("Alle Felder m√ºssen ausgef√ºllt sein!");
+				if ((getEditText(R.id.edit_text_last_name).isEmpty() && getEditText(R.id.edit_text_first_name).isEmpty()) || (getEditText(R.id.edit_text_phonenumber).isEmpty()	&& getEditText(R.id.edit_text_email).isEmpty())) {
+					this.showShortToast("Mindestens Vorname oder Nachname und Telefonnummer oder Email Adresse m¸ssen angegeben werden!");
 					return false;
 				}
 
@@ -84,7 +81,7 @@ public class CreateContactActivity extends BaseActivity {
 							return true;
 						}
 					}
-					this.showShortToast("Mindestens ein Server muss gew√§hlt sein!");
+					this.showShortToast("Mindestens ein Server muss gew‰hlt sein!");
 				}
 				return false;
 			}
