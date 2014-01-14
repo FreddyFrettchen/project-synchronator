@@ -34,37 +34,19 @@ public class ChangeNoteActivity extends BaseActivity {
 	Button done = null;
 	ListView list_accounts = null;
 	ProgressDialog dialog = null;
-	
+
 	Note edit_note = null;
 	Boolean edit_mode = null;
-
-	private int id_account = -1;
-	private boolean edit_mode = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_changenote);
 
-		if (getIntent().hasExtra("edit_mode"))
-			edit_mode = getIntent().getExtras().getBoolean("edit_mode");
-
-		if (getIntent().hasExtra("id_account"))
-			id_account = getIntent().getExtras().getInt("id_account");
-
-		if (edit_mode && id_account != 0)
-			prefill_fields();
-
 		title = (EditText) findViewById(R.id.text_note_title);
 		text = (EditText) findViewById(R.id.text_note_note);
 		cancel = (Button) findViewById(R.id.button_note_cancel);
 		done = (Button) findViewById(R.id.button_note_done);
-
-		edit_note = getSynchronatorApplication().getCurrentNote();
-		if (edit_note != null) {
-			edit_mode = true;
-			prefill_fields();
-		}
 
 		ArrayAdapter<AccountBase> adapter = new ArrayAdapter<AccountBase>(this,
 				android.R.layout.simple_list_item_checked,
@@ -73,7 +55,15 @@ public class ChangeNoteActivity extends BaseActivity {
 		list_accounts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		list_accounts.setAdapter(adapter);
 
-		done.setText("Save");
+		edit_note = getSynchronatorApplication().getCurrentNote();
+		if (edit_note != null) {
+			edit_mode = true;
+			prefill_fields();
+			done.setText("Edit");
+		}else{
+			done.setText("Save");			
+		}
+
 		done.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -89,16 +79,21 @@ public class ChangeNoteActivity extends BaseActivity {
 					this.showShortToast("Alle Felder müssen ausgefüllt sein!");
 					return false;
 				}
-				int cntChoice = list_accounts.getCount();
-				SparseBooleanArray selected_accounts = list_accounts
-						.getCheckedItemPositions();
 
-				for (int i = 0; i < cntChoice; i++) {
-					if (selected_accounts.get(i) == true) {
-						return true;
+				if (edit_mode) {
+					return true;
+				} else {
+					int cntChoice = list_accounts.getCount();
+					SparseBooleanArray selected_accounts = list_accounts
+							.getCheckedItemPositions();
+
+					for (int i = 0; i < cntChoice; i++) {
+						if (selected_accounts.get(i) == true) {
+							return true;
+						}
 					}
+					this.showShortToast("Mindestens ein Server muss gewählt sein!");
 				}
-				this.showShortToast("Mindestens ein Server muss gewählt sein!");
 				return false;
 			}
 
@@ -118,32 +113,15 @@ public class ChangeNoteActivity extends BaseActivity {
 		});
 	}
 
-	// load account from db
-	protected void prefill_fields() {
-		/*String[] projection = { AccountTable.COLUMN_PROVIDER,
-				AccountTable.COLUMN_USERNAME, AccountTable.COLUMN_PASSWORD };
-		Cursor data = getContentResolver().query(CONTENT_URI, projection,
-				"_id = ?", new String[] { id_account + "" }, null);
-
-		if (data.moveToFirst()) {
-			setSpinner(R.id.spinner_account, getAccountPos(data.getString(0)));
-			setEditText(R.id.edit_text_username, data.getString(1));
-			setEditText(R.id.edit_text_password, data.getString(2));
-		} else {
-			Log.i(TAG, "no data to update on id: " + id_account);
-			finish();
-		}*/
-	}
-
 	private void toNotes() {
 		startActivity(new Intent(this, ListNotesActivity.class));
 		finish();
 	}
-	
-	public void prefill_fields(){
+
+	public void prefill_fields() {
 		setEditText(R.id.text_note_title, edit_note.getTitle());
 		setEditText(R.id.text_note_note, edit_note.getNote());
-		((TextView)findViewById(R.id.text_save_to)).setVisibility(4);
+		((TextView) findViewById(R.id.text_save_to)).setVisibility(4);
 		list_accounts.setVisibility(4);
 	}
 
@@ -170,7 +148,7 @@ public class ChangeNoteActivity extends BaseActivity {
 		dialog.dismiss();
 		finish();
 	}
-	
+
 	private String getEditText(int id) {
 		return ((EditText) findViewById(id)).getText().toString();
 	}

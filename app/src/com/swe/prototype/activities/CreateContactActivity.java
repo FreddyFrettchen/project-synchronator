@@ -42,13 +42,17 @@ public class CreateContactActivity extends BaseActivity {
 		list_accounts.setAdapter(adapter);
 
 		edit_contact = getSynchronatorApplication().getCurrentContact();
+		Button save_button = (Button) findViewById(R.id.done_button);
+		
 		if (edit_contact != null) {
 			edit_mode = true;
 			prefill_fields();
+			save_button.setText("Edit");
+		}
+		else{
+			save_button.setText("Save");
 		}
 
-		Button save_button = (Button) findViewById(R.id.done_button);
-		save_button.setText("Save");
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
