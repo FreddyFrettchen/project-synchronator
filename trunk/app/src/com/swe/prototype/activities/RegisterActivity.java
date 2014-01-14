@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.swe.prototype.R;
 import com.swe.prototype.globalsettings.Settings;
@@ -32,7 +33,15 @@ public class RegisterActivity extends BaseActivity {
 		btn_register.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				doRegistration();
+				
+				if (hasInternetConnection()) {
+					doRegistration();
+				} else {
+					Log.v(TAG, "no internet");
+					Toast.makeText(getApplicationContext(),
+							R.string.no_internet, Toast.LENGTH_LONG).show();
+					// initializeDialog("no internet connection"+R.string.no_internet,true);
+				}
 			}
 		});
 	}
