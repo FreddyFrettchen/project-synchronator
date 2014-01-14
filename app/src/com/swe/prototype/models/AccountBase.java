@@ -1,6 +1,5 @@
 package com.swe.prototype.models;
 
-
 import android.content.Context;
 import android.util.Log;
 import android.widget.BaseAdapter;
@@ -38,8 +37,8 @@ public abstract class AccountBase extends Thread {
 	public int getAccountId() {
 		return this.account_id;
 	}
-	
-	public void synchronizeAll(){
+
+	public void synchronizeAll() {
 		synchronizeContacts();
 		synchronizeNotes();
 		synchronizeCalendarEntries();
@@ -81,11 +80,14 @@ public abstract class AccountBase extends Thread {
 	public abstract void createCalendarEntry(String startDate, String endDate,
 			String startTime, String endTime, String description, int repeat);
 
-	public abstract void editContact(Context context, Contact c);
+	public abstract void editContact(Contact c, String lastname,
+			String firstname, String phonenumber, String email);
 
-	public abstract void editNote(Context context, Note n);
+	public abstract void editNote(Note n, String title, String text);
 
-	public abstract void editCalendarEntry(Context context, CalendarEntry ce);
+	public abstract void editCalendarEntry(CalendarEntry ce, String startDate,
+			String endDate, String startTime, String endTime,
+			String description, int repeat);
 
 	public abstract void deleteContact(Contact c);
 
@@ -94,7 +96,5 @@ public abstract class AccountBase extends Thread {
 	public abstract void deleteCalendarEntry(CalendarEntry ce);
 
 	public abstract String toString();
-
-	
 
 }

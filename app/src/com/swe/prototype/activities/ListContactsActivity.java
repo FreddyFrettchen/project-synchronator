@@ -95,7 +95,10 @@ public class ListContactsActivity extends BaseActivity {
 	}
 
 	public void editContact(Contact c) {
-		c.edit(this);
+		getSynchronatorApplication().setCurrentContact(c);
+		//c.edit(this);
+		Intent in = new Intent(this, CreateContactActivity.class);
+		startActivity(in);
 	}
 
 	public void moveContact(Contact c) {

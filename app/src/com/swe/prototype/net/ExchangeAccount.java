@@ -51,6 +51,7 @@ public class ExchangeAccount extends AccountBase {
 			int refresh_time_sec, String username, String password) {
 		super(context, account_id, refresh_time_sec, username, password);
 	}
+
 	@Override
 	public void synchronizeNotes() {
 
@@ -102,24 +103,22 @@ public class ExchangeAccount extends AccountBase {
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,
 				layout_id);
 		// adapter.addAll(Contact);
-		/*try {
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "JA346tcxo");
-
-			FindItemResponse response = service
-					.findItem(StandardFolder.CONTACTS);
-
-			for (int i = 0; i < response.getItems().size(); i++) {
-				adapter.add((Contact) response.getItems());
-				// System.out.println(response.getItems().get(i).getSubject());
-			}
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		}*/
+		/*
+		 * try { Service service = new Service(
+		 * "https://mail.fh-aachen.de/EWS/exchange.asmx",
+		 * "bd8299s@ad.fh-aachen.de", "JA346tcxo");
+		 * 
+		 * FindItemResponse response = service
+		 * .findItem(StandardFolder.CONTACTS);
+		 * 
+		 * for (int i = 0; i < response.getItems().size(); i++) {
+		 * adapter.add((Contact) response.getItems()); //
+		 * System.out.println(response.getItems().get(i).getSubject()); } }
+		 * catch (ServiceException e) { System.out.println(e.getMessage());
+		 * System.out.println(e.getXmlMessage());
+		 * 
+		 * e.printStackTrace(); }
+		 */
 		return adapter;
 	}
 
@@ -167,86 +166,6 @@ public class ExchangeAccount extends AccountBase {
 			e.printStackTrace();
 		}
 		return adapter;
-	}
-
-	@Override
-	public void editContact(Context context, Contact c) {
-		// TODO Auto-generated method stub
-		try {
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
-
-			IsEqualTo restriction = new IsEqualTo(
-					ContactPropertyPath.EMAIL1_ADDRESS, c.getEmail());
-
-			FindItemResponse response = service.findItem(
-					StandardFolder.CONTACTS, restriction);
-
-			for (int i = 0; i < response.getItems().size(); i++) {
-				if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact) {
-					ItemId itemId = response.getItems().get(i).getItemId();
-
-					Property businessPhonePropertyFN = new Property(
-							ContactPropertyPath.GIVEN_NAME, c.getFirstName());
-					Property businessPhonePropertyLN = new Property(
-							ContactPropertyPath.SURNAME, c.getLastName());
-					Property businessPhonePropertyBP = new Property(
-							ContactPropertyPath.BUSINESS_PHONE,
-							c.getPhoneumber());
-
-					itemId = service
-							.updateItem(itemId, businessPhonePropertyFN);
-					itemId = service
-							.updateItem(itemId, businessPhonePropertyLN);
-					itemId = service
-							.updateItem(itemId, businessPhonePropertyBP);
-				}
-			}
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void editNote(Context context, com.swe.prototype.models.Note n) {
-		// TODO Auto-generated method stub
-		try {
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
-
-			IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT,
-					n.getTitle());
-
-			FindItemResponse response = service.findItem(StandardFolder.NOTES,
-					restriction);
-
-			for (int i = 0; i < response.getItems().size(); i++) {
-				if (response.getItems().get(i) instanceof com.independentsoft.exchange.Note) {
-					ItemId itemId = response.getItems().get(i).getItemId();
-
-					Property noteProperty = new Property(NotePropertyPath.BODY,
-							n.getNote());
-
-					itemId = service.updateItem(itemId, noteProperty);
-				}
-			}
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		}
-
-	}
-
-	@Override
-	public void editCalendarEntry(Context context, CalendarEntry ce) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -356,7 +275,8 @@ public class ExchangeAccount extends AccountBase {
 					this.username, this.password);// "bd8299s@ad.fh-aachen.de",
 													// "password");
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
 			Date _startTime = dateFormat.parse(startDate + " " + startTime);// "2014-02-25 16:00:00");
 			Date _endTime = dateFormat.parse(endDate + " " + endTime);// "2014-02-25 18:00:00");
 
@@ -380,6 +300,91 @@ public class ExchangeAccount extends AccountBase {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	@Override
+	public void editContact(Contact c, String lastname, String firstname,
+			String phonenumber, String email) {
+		// TODO Auto-generated method stub
+		try {
+			Service service = new Service(
+					"https://mail.fh-aachen.de/EWS/exchange.asmx",
+					"bd8299s@ad.fh-aachen.de", "password");
+
+			IsEqualTo restriction = new IsEqualTo(
+					ContactPropertyPath.EMAIL1_ADDRESS, c.getEmail());
+
+			FindItemResponse response = service.findItem(
+					StandardFolder.CONTACTS, restriction);
+
+			for (int i = 0; i < response.getItems().size(); i++) {
+				if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact) {
+					ItemId itemId = response.getItems().get(i).getItemId();
+
+					Property businessPhonePropertyFN = new Property(
+							ContactPropertyPath.GIVEN_NAME, c.getFirstName());
+					Property businessPhonePropertyLN = new Property(
+							ContactPropertyPath.SURNAME, c.getLastName());
+					Property businessPhonePropertyBP = new Property(
+							ContactPropertyPath.BUSINESS_PHONE,
+							c.getPhoneumber());
+
+					itemId = service
+							.updateItem(itemId, businessPhonePropertyFN);
+					itemId = service
+							.updateItem(itemId, businessPhonePropertyLN);
+					itemId = service
+							.updateItem(itemId, businessPhonePropertyBP);
+				}
+			}
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getXmlMessage());
+
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void editNote(com.swe.prototype.models.Note n, String title,
+			String text) {
+		// TODO Auto-generated method stub
+		try {
+			Service service = new Service(
+					"https://mail.fh-aachen.de/EWS/exchange.asmx",
+					"bd8299s@ad.fh-aachen.de", "password");
+
+			IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT,
+					n.getTitle());
+
+			FindItemResponse response = service.findItem(StandardFolder.NOTES,
+					restriction);
+
+			for (int i = 0; i < response.getItems().size(); i++) {
+				if (response.getItems().get(i) instanceof com.independentsoft.exchange.Note) {
+					ItemId itemId = response.getItems().get(i).getItemId();
+
+					Property noteProperty = new Property(NotePropertyPath.BODY,
+							n.getNote());
+
+					itemId = service.updateItem(itemId, noteProperty);
+				}
+			}
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getXmlMessage());
+
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void editCalendarEntry(CalendarEntry ce, String startDate,
+			String endDate, String startTime, String endTime,
+			String description, int repeat) {
+		// TODO Auto-generated method stub
 
 	}
 

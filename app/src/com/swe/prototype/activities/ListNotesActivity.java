@@ -89,7 +89,9 @@ public class ListNotesActivity extends BaseActivity {
 	}
 
 	public void editNote(Note c) {
-		c.edit(this);
+		getSynchronatorApplication().setCurrentNote(c);
+		Intent in = new Intent(this, ChangeNoteActivity.class);
+		startActivity(in);
 	}
 
 	public void moveNote(Note c) {

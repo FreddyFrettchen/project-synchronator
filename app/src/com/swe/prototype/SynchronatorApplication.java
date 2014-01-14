@@ -9,9 +9,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.models.AccountManager;
+import com.swe.prototype.models.CalendarEntry;
+import com.swe.prototype.models.Contact;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.util.Log;
 
 public class SynchronatorApplication extends Application {
@@ -21,6 +24,10 @@ public class SynchronatorApplication extends Application {
 	private AccountManager accountManager = null;
 	private ScheduledExecutorService scheduleTaskExecutor = null;
 	private ScheduledFuture<?> synchronizeThread = null;
+	
+	private Contact current_contact = null;
+	private com.swe.prototype.models.Note current_note = null;
+	private CalendarEntry current_calendar_entry = null;
 
 	public void onCreate() {
 		super.onCreate();
@@ -79,5 +86,29 @@ public class SynchronatorApplication extends Application {
 	public void onApplicationLogin() {
 		accountManager = new AccountManager(this);
 		startScheduler();
+	}
+	
+	public void setCurrentContact(Contact c) {
+		this.current_contact = c;
+	}
+
+	public void setCurrentNote(com.swe.prototype.models.Note c) {
+		this.current_note = c;
+	}
+
+	public void setCurrentCalendarEntry(CalendarEntry ce) {
+		this.current_calendar_entry = ce;
+	}
+	
+	public Contact getCurrentContact() {
+		return this.current_contact;
+	}
+
+	public com.swe.prototype.models.Note getCurrentNote() {
+		return this.current_note;
+	}
+
+	public CalendarEntry getCurrentCalendarEntry() {
+		return this.current_calendar_entry;
 	}
 }

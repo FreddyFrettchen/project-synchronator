@@ -79,9 +79,4 @@ public class GoogleContact extends Contact {
 		Log.i(TAG, "delete:"+this.toString());
 	}
 
-	@Override
-	public void edit(Context context) {
-		Log.i(TAG, "edit:"+this.toString());
-	}
-
 }

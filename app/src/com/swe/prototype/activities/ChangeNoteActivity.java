@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.swe.prototype.R;
 import com.swe.prototype.database.tables.AccountTable;
 import com.swe.prototype.models.AccountBase;
+import com.swe.prototype.models.Contact;
+import com.swe.prototype.models.Note;
 
 public class ChangeNoteActivity extends BaseActivity {
 
@@ -32,6 +34,9 @@ public class ChangeNoteActivity extends BaseActivity {
 	Button done = null;
 	ListView list_accounts = null;
 	ProgressDialog dialog = null;
+	
+	Note edit_note = null;
+	Boolean edit_mode = null;
 
 	private int id_account = -1;
 	private boolean edit_mode = false;
@@ -54,6 +59,12 @@ public class ChangeNoteActivity extends BaseActivity {
 		text = (EditText) findViewById(R.id.text_note_note);
 		cancel = (Button) findViewById(R.id.button_note_cancel);
 		done = (Button) findViewById(R.id.button_note_done);
+
+		edit_note = getSynchronatorApplication().getCurrentNote();
+		if (edit_note != null) {
+			edit_mode = true;
+			prefill_fields();
+		}
 
 		ArrayAdapter<AccountBase> adapter = new ArrayAdapter<AccountBase>(this,
 				android.R.layout.simple_list_item_checked,
@@ -128,6 +139,13 @@ public class ChangeNoteActivity extends BaseActivity {
 		startActivity(new Intent(this, ListNotesActivity.class));
 		finish();
 	}
+	
+	public void prefill_fields(){
+		setEditText(R.id.text_note_title, edit_note.getTitle());
+		setEditText(R.id.text_note_note, edit_note.getNote());
+		((TextView)findViewById(R.id.text_save_to)).setVisibility(4);
+		list_accounts.setVisibility(4);
+	}
 
 	private void initializeDialog(String message) {
 		dialog = ProgressDialog
@@ -151,5 +169,13 @@ public class ChangeNoteActivity extends BaseActivity {
 
 		dialog.dismiss();
 		finish();
+	}
+	
+	private String getEditText(int id) {
+		return ((EditText) findViewById(id)).getText().toString();
+	}
+
+	private void setEditText(int id, String text) {
+		((EditText) findViewById(id)).setText(text);
 	}
 }

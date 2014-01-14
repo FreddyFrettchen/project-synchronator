@@ -1,5 +1,7 @@
 package com.swe.prototype.activities;
 
+import java.util.Currency;
+
 import android.app.ProgressDialog;
 import android.location.Address;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.swe.prototype.R;
@@ -23,26 +26,13 @@ public class CreateContactActivity extends BaseActivity {
 	private static final String TAG = "CreateContactActivity";
 	ProgressDialog dialog = null;
 	ListView list_accounts = null;
-	
-	private int id_account = 0;
-	private int data_id = 0;
-	private boolean edit_mode = false;
-	
+
+	Contact edit_contact = null;
+	Boolean edit_mode = null;
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_contact);
-		
-		if (getIntent().hasExtra("id_account"))
-			id_account = getIntent().getExtras().getInt("id_account");
-		
-		if (getIntent().hasExtra("data_id"))
-			data_id = getIntent().getExtras().getInt("edit_mode");
-		
-		if (getIntent().hasExtra("edit_mode"))
-			edit_mode = getIntent().getExtras().getBoolean("edit_mode");
-
-		if (edit_mode && id_account != 0)
-			prefill_fields();
 
 		ArrayAdapter<AccountBase> adapter = new ArrayAdapter<AccountBase>(this,
 				android.R.layout.simple_list_item_checked,
@@ -51,42 +41,56 @@ public class CreateContactActivity extends BaseActivity {
 		list_accounts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		list_accounts.setAdapter(adapter);
 
+		edit_contact = getSynchronatorApplication().getCurrentContact();
+		if (edit_contact != null) {
+			edit_mode = true;
+			prefill_fields();
+		}
+
 		Button save_button = (Button) findViewById(R.id.done_button);
 		save_button.setText("Save");
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(correctInputChoise()) {
+				if (correctInputChoise()) {
 					initializeDialog("Creating contact...");
 					saveContact(v);
 				}
 			}
 
 			private boolean correctInputChoise() {
-				// TODO Auto-generated method stub
-				
-				if(getEditText(R.id.edit_text_last_name).isEmpty() || getEditText(R.id.edit_text_first_name).isEmpty() || getEditText(R.id.edit_text_phonenumber).isEmpty() || getEditText(R.id.edit_text_email).isEmpty()) {
-					this.showShortToast("Alle Felder müssen ausgefüllt sein!");
+				if (getEditText(R.id.edit_text_last_name).isEmpty()
+						|| getEditText(R.id.edit_text_first_name).isEmpty()
+						|| getEditText(R.id.edit_text_phonenumber).isEmpty()
+						|| getEditText(R.id.edit_text_email).isEmpty()) {
+					this.showShortToast("Alle Felder mÃ¼ssen ausgefÃ¼llt sein!");
 					return false;
 				}
-				int cntChoice = list_accounts.getCount();
-				SparseBooleanArray selected_accounts = list_accounts
-						.getCheckedItemPositions();
-				
-				for (int i = 0; i < cntChoice; i++) {
-					if (selected_accounts.get(i) == true) {
-						return true;
+
+				if (edit_mode) {
+					return true;
+				} else {
+
+					int cntChoice = list_accounts.getCount();
+					SparseBooleanArray selected_accounts = list_accounts
+							.getCheckedItemPositions();
+
+					for (int i = 0; i < cntChoice; i++) {
+						if (selected_accounts.get(i) == true) {
+							return true;
+						}
 					}
+					this.showShortToast("Mindestens ein Server muss gewÃ¤hlt sein!");
 				}
-				this.showShortToast("Mindestens ein Server muss gewählt sein!");
 				return false;
 			}
-			
+
 			private void showShortToast(String message) {
-				Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), message,
+						Toast.LENGTH_SHORT).show();
 			}
 		});
-		
+
 		Button cancel_button = (Button) findViewById(R.id.cancel_button);
 		cancel_button.setText("Cancel");
 		cancel_button.setOnClickListener(new OnClickListener() {
@@ -96,9 +100,14 @@ public class CreateContactActivity extends BaseActivity {
 			}
 		});
 	}
-	
-	private void prefill_fields(){
-		
+
+	private void prefill_fields() {
+		setEditText(R.id.edit_text_last_name, edit_contact.getLastName());
+		setEditText(R.id.edit_text_first_name, edit_contact.getFirstName());
+		setEditText(R.id.edit_text_phonenumber, edit_contact.getPhoneumber());
+		setEditText(R.id.edit_text_email, edit_contact.getEmail());
+		((TextView)findViewById(R.id.text_save_to)).setVisibility(4);
+		list_accounts.setVisibility(4);
 	}
 
 	private void saveContact(View v) {
@@ -111,10 +120,17 @@ public class CreateContactActivity extends BaseActivity {
 		SparseBooleanArray selected_accounts = list_accounts
 				.getCheckedItemPositions();
 
-		for (int i = 0; i < cntChoice; i++) {
-			if (selected_accounts.get(i) == true) {
-				accounts.getAccounts().get(i)
-						.createContact(lastname, firstname, phonenumber, email);
+		if (edit_mode) {
+			edit_contact.getAccount().editContact(edit_contact, lastname,
+					firstname, phonenumber, email);
+		} else {
+			for (int i = 0; i < cntChoice; i++) {
+				if (selected_accounts.get(i) == true) {
+					accounts.getAccounts()
+							.get(i)
+							.createContact(lastname, firstname, phonenumber,
+									email);
+				}
 			}
 		}
 
@@ -130,5 +146,9 @@ public class CreateContactActivity extends BaseActivity {
 
 	private String getEditText(int id) {
 		return ((EditText) findViewById(id)).getText().toString();
+	}
+
+	private void setEditText(int id, String text) {
+		((EditText) findViewById(id)).setText(text);
 	}
 }
