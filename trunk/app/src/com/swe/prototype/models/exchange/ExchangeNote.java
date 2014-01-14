@@ -19,6 +19,7 @@ import com.swe.prototype.models.AccountBase;
 
 public class ExchangeNote extends Note {
 
+	private string ID;
 	private string title = null;
 	private string text = null;
 
@@ -27,6 +28,11 @@ public class ExchangeNote extends Note {
 		// TODO Auto-generated constructor stub
 	}
 
+	public String getID()
+	{
+		return null;
+	}
+	
 	@Override
 	public String getNote() {
 		// TODO Auto-generated method stub
