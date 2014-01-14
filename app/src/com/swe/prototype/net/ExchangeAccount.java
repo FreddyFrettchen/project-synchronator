@@ -2,43 +2,28 @@ package com.swe.prototype.net;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import com.independentsoft.exchange.FindItemResponse;
-import com.independentsoft.exchange.Service;
-import com.independentsoft.exchange.ServiceException;
-import com.independentsoft.exchange.StandardFolder;
-import com.swe.prototype.models.AccountBase;
-import com.swe.prototype.models.CalendarEntry;
-import com.swe.prototype.models.Contact;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.Body;
 import com.independentsoft.exchange.ContactPropertyPath;
 import com.independentsoft.exchange.DeleteType;
 import com.independentsoft.exchange.FileAsMapping;
+import com.independentsoft.exchange.FindItemResponse;
 import com.independentsoft.exchange.IsEqualTo;
-import com.independentsoft.exchange.IsLessThan;
 import com.independentsoft.exchange.ItemId;
-import com.independentsoft.exchange.ItemShape;
-import com.independentsoft.exchange.MessagePropertyPath;
 import com.independentsoft.exchange.Note;
 import com.independentsoft.exchange.NoteColor;
 import com.independentsoft.exchange.NotePropertyPath;
 import com.independentsoft.exchange.Property;
 import com.independentsoft.exchange.Response;
-import com.independentsoft.exchange.ShapeType;
+import com.independentsoft.exchange.Service;
+import com.independentsoft.exchange.ServiceException;
+import com.independentsoft.exchange.StandardFolder;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
@@ -100,25 +85,7 @@ public class ExchangeAccount extends AccountBase {
 
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
-		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,
-				layout_id);
-		// adapter.addAll(Contact);
-		/*
-		 * try { Service service = new Service(
-		 * "https://mail.fh-aachen.de/EWS/exchange.asmx",
-		 * "bd8299s@ad.fh-aachen.de", "JA346tcxo");
-		 * 
-		 * FindItemResponse response = service
-		 * .findItem(StandardFolder.CONTACTS);
-		 * 
-		 * for (int i = 0; i < response.getItems().size(); i++) {
-		 * adapter.add((Contact) response.getItems()); //
-		 * System.out.println(response.getItems().get(i).getSubject()); } }
-		 * catch (ServiceException e) { System.out.println(e.getMessage());
-		 * System.out.println(e.getXmlMessage());
-		 * 
-		 * e.printStackTrace(); }
-		 */
+		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context, layout_id);
 		return adapter;
 	}
 
@@ -128,7 +95,7 @@ public class ExchangeAccount extends AccountBase {
 		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
+					this.username, this.password);
 			FindItemResponse response = service.findItem(StandardFolder.NOTES);
 			for (int i = 0; i < response.getItems().size(); i++) {
 				adapter.add((Note) response.getItems());
@@ -150,7 +117,7 @@ public class ExchangeAccount extends AccountBase {
 		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
+					this.username, this.password);
 
 			FindItemResponse response = service
 					.findItem(StandardFolder.CALENDAR);
@@ -174,7 +141,7 @@ public class ExchangeAccount extends AccountBase {
 			String vergleichsString = "";
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
+					this.username, this.password);
 
 			FindItemResponse contactItems = service
 					.findItem(StandardFolder.CONTACTS);
@@ -212,7 +179,7 @@ public class ExchangeAccount extends AccountBase {
 		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
+					this.username, this.password);
 
 			IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT,
 					n.getTitle());
@@ -310,7 +277,7 @@ public class ExchangeAccount extends AccountBase {
 		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
+					this.username, this.password);
 
 			IsEqualTo restriction = new IsEqualTo(
 					ContactPropertyPath.EMAIL1_ADDRESS, c.getEmail());
@@ -353,7 +320,7 @@ public class ExchangeAccount extends AccountBase {
 		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
+					this.username, this.password);
 
 			IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT,
 					n.getTitle());

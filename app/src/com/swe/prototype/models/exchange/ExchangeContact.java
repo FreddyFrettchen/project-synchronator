@@ -18,7 +18,6 @@ public class ExchangeContact extends Contact {
 	
 	public static String TAG = "ExchangeContact";
 	
-	
 	public String getID()
 	{
 		return null;
