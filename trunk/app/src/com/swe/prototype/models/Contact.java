@@ -29,8 +29,4 @@ public abstract class Contact extends BaseData {
 	public void delete(){
 		this.account.deleteContact(this);
 	}
-
-	public void edit(Context context){
-		this.account.editContact(context, this);
-	}
 }

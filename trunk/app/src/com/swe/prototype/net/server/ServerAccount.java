@@ -465,18 +465,20 @@ public class ServerAccount extends AccountBase {
 	}
 
 	@Override
-	public void editContact(Context context, Contact c) {
-		ServerContact contact = (ServerContact) c;
+	public void editContact(Contact c, String lastname, String firstname,
+			String phonenumber, String email) {
+		Log.i(TAG, "edit:" + c.toString());
+		/*ServerContact contact = (ServerContact) c;
 		Log.i(TAG, "edit:" + contact.toString());
 		Intent in = new Intent(context, CreateContactActivity.class);
 		in.putExtra("edit_mode", true);
 		in.putExtra("data_id", contact.getId());
 		in.putExtra("account_id", c.getAccount().getAccountId());
-		context.startActivity(in);
+		context.startActivity(in);*/
 	}
 
 	@Override
-	public void editNote(Context context, Note n) {
+	public void editNote(Note n, String title, String text) {
 		ServerNote note = (ServerNote) n;
 		Log.i(TAG, "edit:" + note.toString());
 		Intent in = new Intent(context, ChangeNoteActivity.class);
@@ -487,7 +489,9 @@ public class ServerAccount extends AccountBase {
 	}
 
 	@Override
-	public void editCalendarEntry(Context context, CalendarEntry ce) {
+	public void editCalendarEntry(CalendarEntry ce, String startDate,
+			String endDate, String startTime, String endTime,
+			String description, int repeat) {
 		ServerCalendarEntry entry = (ServerCalendarEntry) ce;
 		Log.i(TAG, "edit:" + entry.toString());
 		Intent in = new Intent(context,CalendarAddEventActivity.class);

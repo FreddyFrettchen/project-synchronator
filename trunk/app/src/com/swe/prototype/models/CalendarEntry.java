@@ -52,10 +52,6 @@ public abstract class CalendarEntry extends BaseData
 		this.account.deleteCalendarEntry(this);
 	}
 
-	public void edit(Context context) {
-		this.account.editCalendarEntry(context, this);
-	}
-
 	public abstract String getStartDate();
 
 	public abstract String getEndDate();

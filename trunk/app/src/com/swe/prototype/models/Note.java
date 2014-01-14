@@ -19,8 +19,4 @@ public abstract class Note extends BaseData {
 	public void delete(){
 		this.account.deleteNote(this);
 	}
-
-	public void edit(Context context){
-		this.account.editNote(context, this);
-	}
 }

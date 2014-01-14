@@ -253,23 +253,6 @@ public class GoogleAccount extends AccountBase {
 	}
 
 	@Override
-	public void editContact(Context context, Contact c) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void editNote(Context context, Note n) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void editCalendarEntry(Context context, CalendarEntry ce) {
-		// TODO Auto-generated method stub
-    }
-		
-	@Override
 	public void deleteContact(Contact c) {
 		// TODO Auto-generated method stub
 		
@@ -330,5 +313,26 @@ public class GoogleAccount extends AccountBase {
 		System.out
 				.println("Google: Add CalenderEntry: noch nicht implementiert");
 
+	}
+
+	@Override
+	public void editContact(Contact c, String lastname, String firstname,
+			String phonenumber, String email) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void editNote(Note n, String title, String text) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void editCalendarEntry(CalendarEntry ce, String startDate,
+			String endDate, String startTime, String endTime,
+			String description, int repeat) {
+		// TODO Auto-generated method stub
+		
 	}
 }
