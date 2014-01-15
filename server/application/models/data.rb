@@ -22,7 +22,8 @@
         # Returns a hash containing all fields,
         # that should be send to the client.
         def public_values
-            { 'id' => self.id, 'data' => self.data }
+            { 'id' => self.id, 'data' => self.data, 
+                'id_data' => self.id_data, 'deleted' => self.deleted }
         end
     })
 end

@@ -20,6 +20,7 @@ class ServerHandler < Sinatra::Base
     configure do
         set :base, File.dirname(__FILE__)
         set :logging, true
+        set :force_ssl, true
     end
 
     helpers do
