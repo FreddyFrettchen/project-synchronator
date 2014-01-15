@@ -77,4 +77,20 @@ public class ServerContact extends Contact {
 	public void setId(int data_server_id) {
 		this.id = data_server_id;
 	}
+	
+	public void setLastName(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public void setFirstName(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public void setPhoneumber(String phone) {
+		this.phonenumber = phone;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 }

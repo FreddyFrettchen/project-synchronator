@@ -76,5 +76,29 @@ public class ServerCalendarEntry extends CalendarEntry {
 	public int getRepeat() {
 		return repeat;
 	}
+	
+	public void setStartDate(String str) {
+		this.startDate = str;
+	}
+
+	public void setEndDate(String str) {
+		this.endDate = str;
+	}
+
+	public void setStartTime(String str) {
+		this.startTime = str;
+	}
+
+	public void setEndTime(String str) {
+		this.endTime = str;
+	}
+
+	public void setDescription(String str) {
+		this.description = str;
+	}
+
+	public void setRepeat(int repeat) {
+		this.repeat = repeat;
+	}
 
 }

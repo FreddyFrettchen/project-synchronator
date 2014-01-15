@@ -30,13 +30,14 @@ public abstract class AsyncDataTask<Result> extends
 	protected static final String TAG = "AsyncDataTask";
 
 	protected boolean add(String server, String email, String password,
-			String type, String data) throws IOException {
+			String type, String data, String id_data) throws IOException {
 		String add_url = server + "/data/add/" + type;
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("data", data));
+		params.add(new BasicNameValuePair("id_data", id_data));
 
 		HttpURLConnection request = postRequest(add_url, params);
 		request.connect();
@@ -73,12 +74,13 @@ public abstract class AsyncDataTask<Result> extends
 
 	protected Boolean update(String server, String email, String password,
 			String type, String id, String data) throws IOException {
-		String add_url = server + "/data/update/" + type + "/" + id;
+		String add_url = server + "/data/update/" + type;
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("data", data));
+		params.add(new BasicNameValuePair("id_data", id));
 
 		HttpURLConnection request = postRequest(add_url, params);
 		request.connect();
@@ -105,7 +107,6 @@ public abstract class AsyncDataTask<Result> extends
 			s = new Scanner(request.getInputStream());
 		}
 
-		String response = null;
 		try{
 			return s.next();
 		} catch (NoSuchElementException e){

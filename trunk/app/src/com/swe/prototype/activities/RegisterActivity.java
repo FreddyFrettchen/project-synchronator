@@ -68,6 +68,7 @@ public class RegisterActivity extends BaseActivity {
 		dlgAlert.setMessage("Die Passwörter stimmen leider nicht überein.");
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.setCancelable(true);
+		dialog.dismiss();
 		dlgAlert.create().show();
 	}
 

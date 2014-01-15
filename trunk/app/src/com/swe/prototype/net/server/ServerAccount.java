@@ -44,6 +44,9 @@ public class ServerAccount extends AccountBase {
 	protected Security sec = null;
 	protected Gson gson = null;
 
+	Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
+			"server_data");
+
 	public ServerAccount(Context context, int account_id, int refresh_time_sec,
 			String username, String password) {
 		super(context, account_id, refresh_time_sec, username, password);
@@ -65,6 +68,14 @@ public class ServerAccount extends AccountBase {
 		}.execute();
 	}
 
+	/**
+	 * checks if an entry for this data is already in the database.
+	 * 
+	 * @param contentUri
+	 * @param where
+	 * @param args
+	 * @return
+	 */
 	private boolean entryExists(Uri contentUri, String where, String[] args) {
 		final ContentResolver resolver = this.context.getContentResolver();
 		final String[] projection = { ServerDataTable.COLUMN_ID,
@@ -77,6 +88,68 @@ public class ServerAccount extends AccountBase {
 
 	private void synchronizeDatabase(String data_type,
 			ArrayList<EncryptedData> data) {
+		checkForNewlyCreated(data_type, data);
+		checkForDeletions(data_type, data);
+		checkForUpdates(data_type, data);
+	}
+
+	/*
+	 * make links for all new data that is already locally stored because it was
+	 * created on the device.
+	 */
+	private void checkForNewlyCreated(String data_type,
+			ArrayList<EncryptedData> data) {
+		String where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
+				+ ServerDataTable.COLUMN_TAG + " = ? AND "
+				+ ServerDataTable.COLUMN_STATUS + " = ? AND "
+				+ ServerDataTable.COLUMN_ID + " = ?";
+		String[] args;
+		ContentValues values = new ContentValues();
+
+		for (EncryptedData encryptedData : data) {
+			args = new String[] { "-1", data_type, "CREATE",
+					encryptedData.getIdData() + "" };
+			values.put("data_id", encryptedData.getId());
+			values.put("status", "INSYNC");
+			// check if entry exists and update the data_id of server and set
+			// status to INSYC
+			if (entryExists(contentUri, where, args)) {
+				// update entry
+				this.context.getContentResolver().update(contentUri, values,
+						where, args);
+			}
+		}
+	}
+
+	/**
+	 * delete all entries that are marked as deleted
+	 */
+	private void checkForDeletions(String data_type,
+			ArrayList<EncryptedData> data) {
+		String where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
+				+ ServerDataTable.COLUMN_TAG + " = ? AND "
+				+ ServerDataTable.COLUMN_STATUS + " = ?";
+		String[] args;
+		ContentValues values = new ContentValues();
+
+		for (EncryptedData encryptedData : data) {
+			args = new String[] { encryptedData.getId() + "", data_type,
+					"DELETE" };
+			// check if entry exists and update the data_id of server and set
+			// status to INSYC
+			if (entryExists(contentUri, where, args)) {
+				// delete entry
+				this.context.getContentResolver().delete(contentUri, where,
+						args);
+			}
+		}
+	}
+
+	/**
+	 * checks for data that has changed and replaces it
+	 */
+	private void checkForUpdates(String data_type, ArrayList<EncryptedData> data) {
+
 		String where;
 		String[] args;
 		ContentValues values = new ContentValues();
@@ -85,46 +158,22 @@ public class ServerAccount extends AccountBase {
 
 		// first try to find entry and update it, or save if new
 		for (EncryptedData encryptedData : data) {
+			if(encryptedData.deleted) continue;
 			where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
 					+ ServerDataTable.COLUMN_TAG + " = ?";
 			args = new String[] { encryptedData.getId() + "", data_type };
-			values.put("data_id", encryptedData.getId());
 			values.put("data", encryptedData.getData());
 			values.put("tag", data_type);
-			// check if entry exists
-			if (entryExists(contentUri, where, args)) {
-				// update entry
+			values.put("STATUS", "INSYNC");
+			values.put("resend", "false");
+			
+			if (entryExists(contentUri, where, args)) { // update entry
 				this.context.getContentResolver().update(contentUri, values,
 						where, args);
-			} else {
-				// create new entry
+			} else { // create new entry
 				this.context.getContentResolver().insert(contentUri, values);
 			}
 		}
-
-	}
-
-	private void synchronizeDatabaseIds(String data_type,
-			ArrayList<Integer> data) {
-		String where;
-		String[] args;
-		ContentValues values = new ContentValues();
-		Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
-				"server_data");
-
-		// delete entries that are not in the id list
-		/*
-		 * for (EncryptedData encryptedData : data) { where =
-		 * ServerDataTable.COLUMN_ID_DATA + " = ? AND " +
-		 * ServerDataTable.COLUMN_TAG + " = ?"; args = new String[] {
-		 * encryptedData.getId() + "", data_type }; values.put("data_id",
-		 * encryptedData.getId()); values.put("data", encryptedData.getData());
-		 * values.put("tag", data_type); // check if entry exists if
-		 * (entryExists(contentUri, where, args)) { // update entry
-		 * this.context.getContentResolver().update(contentUri, values, where,
-		 * args); } else { // create new entry
-		 * this.context.getContentResolver().insert(contentUri, values); } }
-		 */
 
 	}
 
@@ -139,7 +188,7 @@ public class ServerAccount extends AccountBase {
 	/**
 	 * get data from useraccount on the server to the app. Task returns a list
 	 * of entries of specified Type given in param[2] the entries are still
-	 * encrypted and json encoded seperatly and have to be processed further.
+	 * encrypted and json encoded separately and have to be processed further.
 	 */
 	private class SyncDataTask extends AsyncDataTask<ArrayList<EncryptedData>> {
 		private String data_type = null;
@@ -157,7 +206,7 @@ public class ServerAccount extends AccountBase {
 			try {
 				response_sync = sync(server_url, username, password,
 						this.data_type, timestamp);
-				
+
 				ArrayList<EncryptedData> list = (ArrayList<EncryptedData>) gson
 						.fromJson(response_sync, listType);
 				Log.i(TAG, list.size() + " datasets for sync.");
@@ -165,42 +214,14 @@ public class ServerAccount extends AccountBase {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return null;
+			Log.i(TAG, "Error occured while syncing. Returning empty resultset");
+			return new ArrayList<EncryptedData>();
 		}
 	}
 
-	private class SyncIdsTask extends AsyncDataTask<ArrayList<Integer>> {
-		private String data_type = null;
-
-		public SyncIdsTask(String data_type) {
-			this.data_type = data_type;
-		}
-
-		protected ArrayList<Integer> doInBackground(String... params) {
-			String response_ids = null;
-			Type listType_ids = new TypeToken<ArrayList<Integer>>() {
-			}.getType();
-
-			try {
-				response_ids = ids(server_url, username, password,
-						this.data_type);
-				ArrayList<Integer> ids_list = (ArrayList<Integer>) gson
-						.fromJson(response_ids, listType_ids);
-				return ids_list;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		protected void onPostExecute(ArrayList<Integer> list) {
-			super.onPostExecute(list);
-			if (list == null)
-				return;
-			synchronizeDatabaseIds(this.data_type, list);
-		}
-	}
-
+	/**
+	 * deletes user from the server. cant be undone when called!!!
+	 */
 	private class DeleteDataTask extends
 			AsyncDataTask<ArrayList<EncryptedData>> {
 		private String data_type = null;
@@ -211,9 +232,7 @@ public class ServerAccount extends AccountBase {
 			this.data_id = data_id;
 		}
 
-		/**
-		 * param[0] data id
-		 */
+		// TODO wrong type
 		protected ArrayList<EncryptedData> doInBackground(String... params) {
 			Boolean response = null;
 			int timestamp = getLastSynchronisationTimestamp();
@@ -229,7 +248,8 @@ public class ServerAccount extends AccountBase {
 				e.printStackTrace();
 			}
 
-			return null;
+			Log.i(TAG, "Error occured while syncing. Returning empty resultset");
+			return new ArrayList<EncryptedData>();
 		}
 
 		protected void onPostExecute(ArrayList<EncryptedData> list) {
@@ -283,7 +303,8 @@ public class ServerAccount extends AccountBase {
 	}
 
 	/**
-	 * read data from database, decrypt it and return a list of contact objects.
+	 * read data from database, decrypt it and return a list of objects that can
+	 * be castet to contact/calendarEntry/note
 	 * 
 	 * @return
 	 */
@@ -302,37 +323,81 @@ public class ServerAccount extends AccountBase {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "Server (" + this.username + ")";
 	}
 
 	@Override
 	public void createContact(String lastname, String firstname,
 			String phonenumber, String email) {
-		Log.i(TAG, "Creating Contact.");
 
-		// send data to server
 		ServerContact contact = new ServerContact(this, -1, lastname,
 				firstname, phonenumber, email);
+
+		// create pending add in database
+		ContentValues values = new ContentValues();
+		Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
+				"server_data");
+
+		values.put("data_id", -1);
+		values.put("data", (new EncryptedData(-1, contact.toJson()))
+				.encryptData(this.password));
+		values.put("tag", "contacts");
+		values.put("status", "CREATE");
+		values.put("resend", "false");
+		Uri result = this.context.getContentResolver().insert(contentUri,
+				values);
+
+		// send data to server
 		new AddDataTask() {
-			protected void onPostExecute(Boolean result) {
-				// sync data
-				synchronizeContacts();
-			}
-		}.execute("contact", contact.toJson());
+		}.execute("contact", contact.toJson(), result.getLastPathSegment());
 	}
 
 	@Override
 	public void createNote(String title, String text) {
-		Log.i(TAG, "ich erstelle den note:" + title);
+		// create pending add in database
+		ContentValues values = new ContentValues();
+		Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
+				"server_data");
 
-		// send data to server
 		ServerNote note = new ServerNote(this, -1, title, text);
 
+		values.put("data_id", -1);
+		values.put("data", (new EncryptedData(-1, note.toJson()))
+				.encryptData(this.password));
+		values.put("tag", "notes");
+		values.put("status", "CREATE");
+		values.put("resend", "false");
+		Uri result = this.context.getContentResolver().insert(contentUri,
+				values);
+
+		// send data to server
 		new AddDataTask() {
-		}.execute("note", note.toJson());
+		}.execute("note", note.toJson(), result.getLastPathSegment());
 
 		Log.i(TAG, "erstellte note: " + note.toJson());
+	}
+
+	@Override
+	public void createCalendarEntry(String startDate, String endDate,
+			String startTime, String endTime, String description, int repeat) {
+
+		// send data to server
+		ServerCalendarEntry centry = new ServerCalendarEntry(this, -1,
+				startDate, endDate, startTime, endTime, description, repeat);
+		ContentValues values = new ContentValues();
+		Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
+				"server_data");
+
+		values.put("data_id", -1);
+		values.put("data", (new EncryptedData(-1, centry.toJson()))
+				.encryptData(this.password));
+		values.put("tag", "notes");
+		values.put("status", "CREATE");
+		values.put("resend", "false");
+		Uri result = this.context.getContentResolver().insert(contentUri,
+				values);
+		new AddDataTask() {
+		}.execute("calendar", centry.toJson(), result.getLastPathSegment());
 	}
 
 	public void deleteAccount() {
@@ -393,14 +458,38 @@ public class ServerAccount extends AccountBase {
 	 */
 	public class AddDataTask extends AsyncDataTask<Boolean> {
 		/**
-		 * @params[2] -> possible values: calendar, contact, note
+		 * @params[1] -> possible values: calendar, contact, note
 		 */
 		protected Boolean doInBackground(String... params) {
 			String type = params[0];
 			String data = sec.encrypt(params[1]);
+			String id_data = params[2];
 
 			try {
-				return add(server_url, username, password, type, data);
+				return add(server_url, username, password, type, data, id_data);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * update data from the useraccount on the server. Task returns true if
+	 * entry was updated on the server.
+	 */
+	public class UpdateDataTask extends AsyncDataTask<Boolean> {
+		/**
+		 * @params[1] -> possible values: calendar, contact, note
+		 */
+		protected Boolean doInBackground(String... params) {
+			String type = params[0];
+			String data = sec.encrypt(params[1]);
+			String id_data = params[2];
+
+			try {
+				return update(server_url, username, password, type, id_data,
+						data);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -467,25 +556,66 @@ public class ServerAccount extends AccountBase {
 	@Override
 	public void editContact(Contact c, String lastname, String firstname,
 			String phonenumber, String email) {
-		Log.i(TAG, "edit:" + c.toString());
-		/*ServerContact contact = (ServerContact) c;
-		Log.i(TAG, "edit:" + contact.toString());
-		Intent in = new Intent(context, CreateContactActivity.class);
-		in.putExtra("edit_mode", true);
-		in.putExtra("data_id", contact.getId());
-		in.putExtra("account_id", c.getAccount().getAccountId());
-		context.startActivity(in);*/
+		ServerContact contact = (ServerContact) c;
+
+		Log.i(TAG, "Edit contact id:" + contact.getId());
+
+		String where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
+				+ ServerDataTable.COLUMN_TAG + " = ? AND "
+				+ ServerDataTable.COLUMN_STATUS + " = ?";
+		String[] args = new String[] { contact.getId() + "", "contacts", "INSYNC" };
+		ContentValues values = new ContentValues();
+
+		contact.setLastName(lastname);
+		contact.setFirstName(firstname);
+		contact.setPhoneumber(phonenumber);
+		contact.setEmail(email);
+
+		values.put("data", sec.encrypt(contact.toJson()));
+		values.put("status", "UPDATE");
+		if (entryExists(contentUri, where, args)) {
+			// update entry
+			this.context.getContentResolver().update(contentUri, values, where,
+					args);
+		} else {
+			Log.i(TAG, "The Contact with id " + contact.getId()
+					+ " was not found in the db and cant be edited.");
+		}
+
+		// send update to server
+		new UpdateDataTask() {
+		}.execute("contacts", contact.toJson(), contact.getId() + "");
 	}
 
 	@Override
 	public void editNote(Note n, String title, String text) {
-		ServerNote note = (ServerNote) n;
-		Log.i(TAG, "edit:" + note.toString());
-		Intent in = new Intent(context, ChangeNoteActivity.class);
-		in.putExtra("edit_mode", true);
-		in.putExtra("data_id", note.getId());
-		in.putExtra("account_id", note.getAccount().getAccountId());
-		context.startActivity(in);
+		ServerNote sn = (ServerNote) n;
+
+		Log.i(TAG, "Edit servernote id:" + sn.getId());
+
+		String where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
+				+ ServerDataTable.COLUMN_TAG + " = ? AND "
+				+ ServerDataTable.COLUMN_STATUS + " = ?";
+		String[] args = new String[] { sn.getId() + "", "notes", "INSYNC" };
+		ContentValues values = new ContentValues();
+
+		sn.setTitle(title);
+		sn.setText(text);
+
+		values.put("data", sec.encrypt(sn.toJson()));
+		values.put("status", "UPDATE");
+		if (entryExists(contentUri, where, args)) {
+			// update entry
+			this.context.getContentResolver().update(contentUri, values, where,
+					args);
+		} else {
+			Log.i(TAG, "The NBote with id " + sn.getId()
+					+ " was not found in the db and cant be edited.");
+		}
+
+		// send update to server
+		new UpdateDataTask() {
+		}.execute("notes", sn.toJson(), sn.getId() + "");
 	}
 
 	@Override
@@ -493,12 +623,35 @@ public class ServerAccount extends AccountBase {
 			String endDate, String startTime, String endTime,
 			String description, int repeat) {
 		ServerCalendarEntry entry = (ServerCalendarEntry) ce;
-		Log.i(TAG, "edit:" + entry.toString());
-		Intent in = new Intent(context,CalendarAddEventActivity.class);
-		in.putExtra("edit_mode", true);
-		in.putExtra("data_id", entry.getId());
-		in.putExtra("account_id", entry.getAccount().getAccountId());
-		context.startActivity(in);
+		Log.i(TAG, "Edit servercalendar id:" + entry.getId());
+
+		String where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
+				+ ServerDataTable.COLUMN_TAG + " = ? AND "
+				+ ServerDataTable.COLUMN_STATUS + " = ?";
+		String[] args = new String[] { entry.getId() + "", "calendar", "INSYNC" };
+		ContentValues values = new ContentValues();
+
+		entry.setStartDate(startDate);
+		entry.setEndDate(endDate);
+		entry.setStartTime(startTime);
+		entry.setEndTime(endTime);
+		entry.setDescription(description);
+		entry.setRepeat(repeat);
+
+		values.put("data", sec.encrypt(entry.toJson()));
+		values.put("status", "UPDATE");
+		if (entryExists(contentUri, where, args)) {
+			// update entry
+			this.context.getContentResolver().update(contentUri, values, where,
+					args);
+		} else {
+			Log.i(TAG, "The CalendarEntry with id " + entry.getId()
+					+ " was not found in the db and cant be edited.");
+		}
+
+		// send update to server
+		new UpdateDataTask() {
+		}.execute("calendar", entry.toJson(), entry.getId() + "");
 	}
 
 	@Override
@@ -506,38 +659,79 @@ public class ServerAccount extends AccountBase {
 		ServerContact contact = (ServerContact) c;
 		Log.i(TAG, "ich lösche den contact mit server_id:" + contact.getId());
 
-		new DeleteDataTask("contacts", ((ServerContact) c).getId()) {
+		String where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
+				+ ServerDataTable.COLUMN_TAG + " = ? AND "
+				+ ServerDataTable.COLUMN_STATUS + " = ?";
+		String[] args = new String[] { contact.getId() + "", "contacts",
+				"INSYNC" };
+		ContentValues values = new ContentValues();
+
+		values.put("status", "DELETE");
+		if (entryExists(contentUri, where, args)) {
+			// update entry
+			this.context.getContentResolver().update(contentUri, values, where,
+					args);
+		} else {
+			Log.i(TAG, "The Contact with id " + contact.getId()
+					+ " was not found in the db and cant be deleted.");
+		}
+
+		// send delete to server
+		new DeleteDataTask("contacts", contact.getId()) {
 		}.execute();
 	}
 
 	@Override
 	public void deleteNote(Note n) {
-		ServerNote contact = (ServerNote) n;
-		Log.i(TAG, "ich lösche den contact mit server_id:" + contact.getId());
+		ServerNote note = (ServerNote) n;
+		Log.i(TAG, "ich lösche den note mit server_id:" + note.getId());
 
-		new DeleteDataTask("notes", contact.getId()) {
+		String where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
+				+ ServerDataTable.COLUMN_TAG + " = ? AND "
+				+ ServerDataTable.COLUMN_STATUS + " = ?";
+		String[] args = new String[] { note.getId() + "", "notes", "INSYNC" };
+		ContentValues values = new ContentValues();
+
+		values.put("status", "DELETE");
+		if (entryExists(contentUri, where, args)) {
+			// update entry
+			this.context.getContentResolver().update(contentUri, values, where,
+					args);
+		} else {
+			Log.i(TAG, "The Note with id " + note.getId()
+					+ " was not found in the db and cant be deleted.");
+		}
+
+		// send delete to server
+		new DeleteDataTask("notes", note.getId()) {
 		}.execute();
 	}
 
 	@Override
 	public void deleteCalendarEntry(CalendarEntry ce) {
+		ServerCalendarEntry centry = (ServerCalendarEntry) ce;
+		Log.i(TAG, "Deleting Calendarentry with server_id:" + centry.getId());
 
-	}
+		String where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
+				+ ServerDataTable.COLUMN_TAG + " = ? AND "
+				+ ServerDataTable.COLUMN_STATUS + " = ?";
+		String[] args = new String[] { centry.getId() + "", "calendar",
+				"INSYNC" };
+		ContentValues values = new ContentValues();
 
-	@Override
-	public void createCalendarEntry(String startDate, String endDate,
-			String startTime, String endTime, String description, int repeat) {
-		Log.i(TAG, "Creating Contact.");
+		values.put("status", "DELETE");
+		if (entryExists(contentUri, where, args)) {
+			// update entry
+			this.context.getContentResolver().update(contentUri, values, where,
+					args);
+		} else {
+			Log.i(TAG, "The Calendarentry with id " + centry.getId()
+					+ " was not found in the db and cant be deleted.");
+		}
 
-		// send data to server
-		ServerCalendarEntry centry = new ServerCalendarEntry(this, -1,
-				startDate, endDate, startTime, endTime, description, repeat);
-		new AddDataTask() {
-			protected void onPostExecute(Boolean result) {
-				// sync data
-				synchronizeCalendarEntries();
-			}
-		}.execute("calendar", centry.toJson());
+		// send delete to server
+		new DeleteDataTask("calendar", centry.getId()) {
+		}.execute();
 	}
 
 	@Override
