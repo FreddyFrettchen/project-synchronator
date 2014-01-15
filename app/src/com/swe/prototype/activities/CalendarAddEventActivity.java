@@ -163,27 +163,31 @@ public class CalendarAddEventActivity extends BaseActivity {
 
 	private String convertTime(int hours, int mins) {
 
-		String timeSet = "";
-		if (hours > 12) {
-			hours -= 12;
-			timeSet = "PM";
-		} else if (hours == 0) {
-			hours += 12;
-			timeSet = "AM";
-		} else if (hours == 12)
-			timeSet = "PM";
-		else
-			timeSet = "AM";
+		String timeResult = "";
+		if(hours<10){
+			timeResult+="0";
+		}
+		timeResult+=hours+":";
+		if(mins<10){
+			timeResult+="0";
+		}
+		timeResult+=mins;
+		return timeResult;
+	}
+	
+	private String convertDate(int year, int month,int day) {
 
-		String minutes = "";
-		if (mins < 10)
-			minutes = "0" + mins;
-		else
-			minutes = String.valueOf(mins);
-
-		// Append in a StringBuilder
-		return new StringBuilder().append(hours).append(':').append(minutes)
-				.append(" ").append(timeSet).toString();
+		String dateResult = ""+year+"-";
+		//hier wird halt das datum januar = 01 maessig gebaut
+		if((month+1)<10){
+			dateResult+="0";
+		}
+		dateResult+=(month+1)+"-";
+		if(day<10){
+			dateResult+="0";
+		}
+		dateResult+=day;
+		return dateResult;
 	}
 
 	@Override
@@ -197,10 +201,10 @@ public class CalendarAddEventActivity extends BaseActivity {
 					monthTo, dayTo);
 		case TIME_DIALOG_FROM:
 			return new TimePickerDialog(this, TimePickerListenerFrom, hourFrom,
-					minuteFrom, false);
+					minuteFrom, true);
 		case TIME_DIALOG_TO:
 			return new TimePickerDialog(this, TimePickerListenerTo, hourTo,
-					minuteTo, false);
+					minuteTo, true);
 		default:
 			System.out.println("Dialog mit falscher ID!");
 
@@ -254,12 +258,10 @@ public class CalendarAddEventActivity extends BaseActivity {
 		// falls inkonsistenz gibt correctInputChoise() ein Toast mit
 		// Fehlermeldung aus!
 		if (correctInputChoise()) {
-			String startDate = dateDisplayFrom.getText().toString();
-			String endDate = dateDisplayTo.getText().toString();
-			String startTime = timeDisplayFrom.getText().toString();
-			String endTime = timeDisplayTo.getText().toString();
-			// die dates und times kann ich auch einzeln aus den attributen
-			// lesen, falls ich die dinger anders zusammen bauen will.
+			String startDate = this.convertDate(yearFrom, monthFrom, dayFrom);//format= yyyy-mm-dd wobei january=01
+			String endDate = this.convertDate(yearTo, monthTo, dayTo);
+			String startTime = this.convertTime(hourFrom, minuteFrom);//format= hh:mm
+			String endTime = this.convertTime(hourTo, minuteTo);
 			String descr = description.getText().toString();
 			int every = 0;
 			// radio button: every==0 keine wiederholung,every=1:
@@ -268,39 +270,45 @@ public class CalendarAddEventActivity extends BaseActivity {
 			switch (i) {
 			case R.id.radioButton_everyday:
 				every = 1;
-				System.out.println("every day");
+				//System.out.println("every day");
 				break;
 			case R.id.radioButton_everymonth:
 				every = 2;
-				System.out.println("every month");
+				//System.out.println("every month");
 				break;
 			case R.id.radioButton_everyyear:
 				every = 3;
-				System.out.println("every year");
+				//System.out.println("every year");
 				break;
 			default:
-				System.out.println("Fehler bei RadioButtonGroup; id i=" + i);
-
 			}
 
 			// jetzt auf allen hinzugefï¿½gten Accounts speichern.
 			int cntChoice = list_accounts.getCount();
 			SparseBooleanArray selected_accounts = list_accounts
 					.getCheckedItemPositions();
-
+			boolean saveLocationChecked=false;
 			for (int k = 0; k < cntChoice; k++) {
 				if (selected_accounts.get(k) == true) {
+					saveLocationChecked=true;
 					accounts.getAccounts()
 							.get(k)
-							.createCalendarEntry(startDate, endDate, startTime,
-									endTime, descr, every);
+							.createCalendarEntry(startDate, endDate, startTime+":00",
+									endTime+":00", descr, every); // +":00" ist weil bahos da i.wie noch die sekunden dran haben wollte
 				}
 			}
+			
+			// der user muss mindestens einen account als speicherlocation auswählen
+			if(saveLocationChecked){
+				Intent intent = new Intent(CalendarAddEventActivity.this,
+						CalendarMonthViewActivity.class);
+				startActivity(intent);
+				finish();
+			}
+			else{
+				showShortToast("Please select a save location!");
+			}
 
-			Intent intent = new Intent(CalendarAddEventActivity.this,
-					CalendarMonthViewActivity.class);
-			startActivity(intent);
-			finish();
 		}
 
 	}
