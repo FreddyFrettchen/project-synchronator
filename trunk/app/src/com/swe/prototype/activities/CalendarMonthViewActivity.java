@@ -6,19 +6,23 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import com.commonsware.cwac.merge.MergeAdapter;
 import com.swe.prototype.R;
 import com.swe.prototype.adapter.CalendarAdapter;
 import com.swe.prototype.adapter.ContactAdapter;
 import com.swe.prototype.globalsettings.DateOnSaveLocation;
+import com.swe.prototype.models.CalendarEntry;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +30,7 @@ import android.widget.Toast;
 
 public class CalendarMonthViewActivity extends BaseActivity {
 
+	protected static final String TAG = "CalendarMonthViewActivity";
 	public GregorianCalendar month, itemmonth;// calendar instances.
 
 	public CalendarAdapter adapter;// adapter instance
@@ -43,21 +48,26 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		month = (GregorianCalendar) GregorianCalendar.getInstance();
 		itemmonth = (GregorianCalendar) month.clone();
 
-		//items = new ArrayList<DateOnSaveLocation>();
+		items = new ArrayList<DateOnSaveLocation>();
 		adapter = new CalendarAdapter(this, month);
+
 		for (int i = 0; i < this.accounts.getAccounts().size(); i++) {
-			adapter.addAdapter(this.accounts
-					.getAccounts()
-					.get(i)
-					.getCalendarAdapter(this,
-							R.layout.item_calendar_month_view));
+			BaseAdapter x = this.accounts.getAccounts().get(i).getCalendarAdapter(this, R.layout.item_calendar_month_view);
+			Log.i(TAG, "der CalenderAdapter des "+i+". Accounts hat "+x.getCount()+" Einträge");
+			for (int j = 0; j < x.getCount(); j++) {
+				CalendarEntry e = (CalendarEntry)adapter.getItem(j);
+				Log.i(TAG, "CalenderAdapter: Account ("+i+") CalenderEvent:"+e+"\nDate:"+e.getStartDate());
+				
+				System.out.println(e);
+				System.out.println(e.getStartDate());
+			}
 		}
 
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(adapter);
 
-		//handler = new Handler();
-		//handler.post(calendarUpdater);
+		handler = new Handler();
+		handler.post(calendarUpdater);
 
 		TextView title = (TextView) findViewById(R.id.title);
 		title.setText(android.text.format.DateFormat.format("MMMM yyyy", month));

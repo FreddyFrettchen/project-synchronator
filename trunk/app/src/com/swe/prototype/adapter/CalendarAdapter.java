@@ -20,13 +20,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CalendarAdapter extends MergeAdapter {
-	
-	private static class ViewHolder {
-		protected TextView name;
-		protected TextView number;
-		protected TextView account_tag;
-	}
+public class CalendarAdapter extends BaseAdapter {
+	//hab die änderungen von mark rückgängig gemacht, weil das denn onclickItem der grid view aus i.einem grund zerstört hat.
+	// CalendarAdapter extends BaseAdapter zu extends MergeAdapter ändern 
+//	private static class ViewHolder {
+//		protected TextView name;
+//		protected TextView number;
+//		protected TextView account_tag;
+//	}
 	
 	private Context mContext;
 
