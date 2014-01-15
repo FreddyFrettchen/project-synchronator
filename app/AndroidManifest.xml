@@ -48,11 +48,11 @@
         </activity>
         <activity
             android:name="com.swe.prototype.activities.CalendarMonthViewActivity"
-            android:label="Calendar Month View">
+            android:label="Calendar Month View" android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.swe.prototype.activities.CalendarDayViewActivity"
-            android:label="Calendar Day View" >
+            android:label="Calendar Day View" android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.swe.prototype.activities.CalendarActivity"
