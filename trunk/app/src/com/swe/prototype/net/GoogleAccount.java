@@ -249,7 +249,9 @@ public class GoogleAccount extends AccountBase {
 	@Override
 	public BaseAdapter getCalendarAdapter(Context context, int layout_id) {
 		// TODO Auto-generated method stub
-		return null;
+		ArrayAdapter<CalendarEntry> adapter = new ArrayAdapter<CalendarEntry>(
+				context, layout_id);
+		return adapter;
 	}
 
 	@Override
