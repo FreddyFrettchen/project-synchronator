@@ -29,7 +29,9 @@ class ServerHandler < Sinatra::Base
                 post "/#{route}" do
                     begin
                         @user.send("add_#{route}", 
-                                   :data => @params['data']) 
+                                   :data => @params['data'],
+                                   :id_data => @params['id_data'],
+                                   :deleted => false) 
                     rescue Sequel::ValidationFailed => error
                         halt 304
                     end
@@ -50,18 +52,18 @@ class ServerHandler < Sinatra::Base
             namespace '/update' do
                 post "/#{route}" do
                     changed = @user.send("#{route}_dataset")
-                    .where(:id => @params['data_id'])
+                    .where(:id => @params['id_data'])
                     .update(:data => @params['data'])
-                    halt( changed.eql(1) ? 200 : 404 )
+                    halt( changed == 1 ? 200 : 404 )
                 end
             end
-            
+
             namespace '/delete' do
                 post "/#{route}" do
                     changed = @user.send("#{route}_dataset")
                     .where(:id => @params['data_id'])
-                    .destroy
-                    halt( (changed == 1) ? 200 : 404 )
+                    .update(:data => "", :deleted => true)
+                    halt( changed == 1 ? 200 : 404 )
                 end
             end
 
