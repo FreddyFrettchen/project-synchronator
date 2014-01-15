@@ -11,7 +11,7 @@ public class Settings {
 	private static String server = "http://tranquil-ravine-8657.herokuapp.com";
 	private static String ip = "http://tranquil-ravine-8657.herokuapp.com";
 	private static String port = "80";
-
+	
 	// edit mark
 	// auf sekunden umgestellt
 	private static int refreshTime = 6 * 60 * 60; // default 6 Stunden
@@ -25,6 +25,7 @@ public class Settings {
 	}
 
 	public static String getServer() {
+	//	return "http://10.0.2.2:45678";
 		return getIp() + ":" + getPort();
 	}
 

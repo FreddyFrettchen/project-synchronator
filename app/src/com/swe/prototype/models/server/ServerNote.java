@@ -51,4 +51,12 @@ public class ServerNote extends Note {
 	public void setId(int data_server_id) {
 		this.id = data_server_id;
 	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public void setText(String text) {
+		this.text = text;
+	}
 }

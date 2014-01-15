@@ -36,7 +36,7 @@ public class ChangeNoteActivity extends BaseActivity {
 	ProgressDialog dialog = null;
 
 	Note edit_note = null;
-	Boolean edit_mode = null;
+	Boolean edit_mode = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +60,21 @@ public class ChangeNoteActivity extends BaseActivity {
 			edit_mode = true;
 			prefill_fields();
 			done.setText("Edit");
-		}else{
-			done.setText("Save");			
+		} else {
+			done.setText("Save");
 		}
 
 		done.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (correctInputChoise()) {
-					initializeDialog("Creating note...");
-					saveNote(v);
+					if (edit_mode) {
+						initializeDialog("Editing note...");
+						editNote(v);
+					} else {
+						initializeDialog("Creating note...");
+						saveNote(v);
+					}
 				}
 			}
 
@@ -108,6 +113,8 @@ public class ChangeNoteActivity extends BaseActivity {
 		cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				setResult(RESULT_CANCELED);
+				getSynchronatorApplication().setCurrentNote(null);
 				toNotes();
 			}
 		});
@@ -130,7 +137,7 @@ public class ChangeNoteActivity extends BaseActivity {
 				.show(ChangeNoteActivity.this, "", message, true);
 		dialog.show();
 	}
-
+	
 	private void saveNote(View v) {
 		String title = this.title.getText().toString();
 		String text = this.text.getText().toString();
@@ -146,7 +153,26 @@ public class ChangeNoteActivity extends BaseActivity {
 		}
 
 		dialog.dismiss();
-		finish();
+		setResult(RESULT_OK);
+		getSynchronatorApplication().setCurrentNote(null);
+		showAndFinish(ListNotesActivity.class);
+	}
+
+	private void editNote(View v) {
+		String title = this.title.getText().toString();
+		String text = this.text.getText().toString();
+
+		int cntChoice = list_accounts.getCount();
+		SparseBooleanArray selected_accounts = list_accounts
+				.getCheckedItemPositions();
+
+		
+		edit_note.getAccount().editNote(edit_note, title, text);
+
+		dialog.dismiss();
+		setResult(RESULT_OK);
+		getSynchronatorApplication().setCurrentNote(null);
+		showAndFinish(ListNotesActivity.class);
 	}
 
 	private String getEditText(int id) {

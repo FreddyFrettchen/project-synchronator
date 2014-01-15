@@ -28,7 +28,7 @@ public class CreateContactActivity extends BaseActivity {
 	ListView list_accounts = null;
 
 	Contact edit_contact = null;
-	Boolean edit_mode = null;
+	Boolean edit_mode = false;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,13 +43,12 @@ public class CreateContactActivity extends BaseActivity {
 
 		edit_contact = getSynchronatorApplication().getCurrentContact();
 		Button save_button = (Button) findViewById(R.id.done_button);
-		
+
 		if (edit_contact != null) {
 			edit_mode = true;
 			prefill_fields();
 			save_button.setText("Edit");
-		}
-		else{
+		} else {
 			save_button.setText("Save");
 		}
 
@@ -57,8 +56,13 @@ public class CreateContactActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				if (correctInputChoise()) {
-					initializeDialog("Creating contact...");
-					saveContact(v);
+					if (edit_mode) {
+						initializeDialog("Editing contact...");
+						editContact(v);
+					} else {
+						initializeDialog("Creating contact...");
+						saveContact(v);
+					}
 				}
 			}
 
@@ -107,7 +111,7 @@ public class CreateContactActivity extends BaseActivity {
 		setEditText(R.id.edit_text_first_name, edit_contact.getFirstName());
 		setEditText(R.id.edit_text_phonenumber, edit_contact.getPhoneumber());
 		setEditText(R.id.edit_text_email, edit_contact.getEmail());
-		((TextView)findViewById(R.id.text_save_to)).setVisibility(4);
+		((TextView) findViewById(R.id.text_save_to)).setVisibility(4);
 		list_accounts.setVisibility(4);
 	}
 
@@ -121,19 +125,25 @@ public class CreateContactActivity extends BaseActivity {
 		SparseBooleanArray selected_accounts = list_accounts
 				.getCheckedItemPositions();
 
-		if (edit_mode) {
-			edit_contact.getAccount().editContact(edit_contact, lastname,
-					firstname, phonenumber, email);
-		} else {
-			for (int i = 0; i < cntChoice; i++) {
-				if (selected_accounts.get(i) == true) {
-					accounts.getAccounts()
-							.get(i)
-							.createContact(lastname, firstname, phonenumber,
-									email);
-				}
+		for (int i = 0; i < cntChoice; i++) {
+			if (selected_accounts.get(i) == true) {
+				accounts.getAccounts().get(i)
+						.createContact(lastname, firstname, phonenumber, email);
 			}
 		}
+
+		dialog.dismiss();
+		showAndFinish(ListContactsActivity.class);
+	}
+
+	private void editContact(View v) {
+		String lastname = getEditText(R.id.edit_text_last_name);
+		String firstname = getEditText(R.id.edit_text_first_name);
+		String phonenumber = getEditText(R.id.edit_text_phonenumber);
+		String email = getEditText(R.id.edit_text_email);
+
+		edit_contact.getAccount().editContact(edit_contact, lastname,
+				firstname, phonenumber, email);
 
 		dialog.dismiss();
 		showAndFinish(ListContactsActivity.class);

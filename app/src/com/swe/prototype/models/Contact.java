@@ -10,11 +10,6 @@ public abstract class Contact extends BaseData {
 	public Contact(AccountBase account) {
 		super(account);
 	}
-
-	public Contact()
-	{
-		super(null);
-	}
 	
 	public abstract String getLastName();
 

@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.swe.prototype.R;
 import com.swe.prototype.SynchronatorApplication;
 import com.swe.prototype.models.AccountManager;
+import com.swe.prototype.database.DBTools;
 import com.swe.prototype.globalsettings.Settings;
 
 import android.app.Activity;
@@ -31,7 +32,7 @@ public abstract class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		scheduleTaskExecutor = Executors.newScheduledThreadPool(2);
-
+//new DBTools(this).purgeDatabase();
 		if (isLoggedIn()) {
 			accounts = new AccountManager(this);
 		}
@@ -62,6 +63,9 @@ public abstract class BaseActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.purge_db_btn:
+			new DBTools(this).purgeDatabase();
+			return true;
 		case R.id.action_accounts:
 			if (!(this instanceof AccountsActivity)) {
 				show(AccountsActivity.class);

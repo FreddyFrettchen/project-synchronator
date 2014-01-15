@@ -11,10 +11,19 @@ public class EncryptedData {
 	
 	public int id;
 	public String data;
+	public int id_data;
+	public boolean deleted;
 
 	public EncryptedData(int id, String data) {
 		this.id = id;
 		this.data = data;
+	}
+	
+	public EncryptedData(int id, String data, int id_data, boolean deleted) {
+		this.id = id;
+		this.data = data;
+		this.id_data = id_data;
+		this.deleted = deleted;
 	}
 
 	public String toJson() {
@@ -29,15 +38,27 @@ public class EncryptedData {
 	public int getId() {
 		return this.id;
 	}
+	
+	public int getIdData() {
+		return this.id_data;
+	}
+	
+	public boolean isDeleted() {
+		return this.deleted;
+	}
+	
+	
+	public String encryptData(String key) {
+		Security sec = new Security(key);
+		return sec.encrypt(this.data);
+	}
 
-	private String decryptData(String key) {
-		// TODO pw ersetzen
+	public String decryptData(String key) {
 		Security sec = new Security(key);
 		return sec.decrypt(this.data);
 	}
 	
 	public ServerContact toContact(String key, int data_server_id, AccountBase account){
-		Log.i(TAG,"Decrypting Contact id:" + data_server_id);
 		ServerContact c = ServerContact.fromJson(decryptData(key));
 		c.setId(data_server_id);
 		c.setAccount(account);
@@ -49,18 +70,14 @@ public class EncryptedData {
 	}
 	
 	public ServerNote toNote(String key, int data_server_id, AccountBase account){
-		Log.i(TAG,"Decrypting Note id:" + data_server_id);
 		ServerNote n = ServerNote.fromJson(decryptData(key));
-		Log.i(TAG,"text is : " + n.getNote());
 		n.setId(data_server_id);
 		n.setAccount(account);
 		return n;
 	}
 	
 	public ServerCalendarEntry toCalendarEntry(String key, int data_server_id, AccountBase account){
-		Log.i(TAG,"Decrypting CalendarEntry id:" + data_server_id);
 		ServerCalendarEntry e = ServerCalendarEntry.fromJson(decryptData(key));
-		Log.i(TAG,"end time is : " + e.getEndTime());
 		e.setId(data_server_id);
 		e.setAccount(account);
 		return e;

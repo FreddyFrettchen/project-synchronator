@@ -18,6 +18,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 
 public class AccountManager {
 	private String TAG = "AccountManager";
@@ -87,19 +89,19 @@ public class AccountManager {
 			this.accounts.get(i).synchronizeAll();
 		}
 	}
-	
+
 	public void synchronizeContacts() {
 		for (int i = 0; i < this.accounts.size(); i++) {
 			this.accounts.get(i).synchronizeContacts();
 		}
 	}
-	
+
 	public void synchronizeNotes() {
 		for (int i = 0; i < this.accounts.size(); i++) {
 			this.accounts.get(i).synchronizeNotes();
 		}
 	}
-	
+
 	public void synchronizeCalendarEntries() {
 		for (int i = 0; i < this.accounts.size(); i++) {
 			this.accounts.get(i).synchronizeCalendarEntries();
@@ -112,5 +114,10 @@ public class AccountManager {
 
 	public AccountBase getServerAccount() {
 		return this.server_account;
+	}
+
+	public ArrayAdapter<AccountBase> getAccountsAdapter(int resource) {
+		return new ArrayAdapter<AccountBase>(this.context,
+				android.R.layout.simple_list_item_checked, this.accounts);
 	}
 }
