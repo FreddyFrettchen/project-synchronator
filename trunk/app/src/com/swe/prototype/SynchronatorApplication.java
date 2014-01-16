@@ -1,5 +1,6 @@
 package com.swe.prototype;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -28,6 +29,9 @@ public class SynchronatorApplication extends Application {
 	private Contact current_contact = null;
 	private com.swe.prototype.models.Note current_note = null;
 	private CalendarEntry current_calendar_entry = null;
+	private ArrayList<CalendarEntry> current_calendar_entry_list = null;
+
+
 
 	public void onCreate() {
 		super.onCreate();
@@ -99,6 +103,16 @@ public class SynchronatorApplication extends Application {
 	public void setCurrentCalendarEntry(CalendarEntry ce) {
 		this.current_calendar_entry = ce;
 	}
+	
+	public ArrayList<CalendarEntry> getCurrentCalendarEntryList() {
+		return current_calendar_entry_list;
+	}
+
+	public void setCurrentCalendarEntryList(
+			ArrayList<CalendarEntry> ccel) {
+		this.current_calendar_entry_list = ccel;
+	}
+	
 	
 	public Contact getCurrentContact() {
 		return this.current_contact;

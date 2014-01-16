@@ -154,6 +154,8 @@ public class CalendarAdapter extends BaseAdapter {
 			;
 		}
 		if (date.length() > 0 && items != null && itemsContainsDate) {
+			v.setBackgroundResource(R.drawable.calendar_cel_event);// daten die ein event haben bekommen ne blaue umrandung!
+			
 			if (dateEvent.showS()) {
 				dot_synchro.setVisibility(View.VISIBLE);
 			}
@@ -163,8 +165,6 @@ public class CalendarAdapter extends BaseAdapter {
 			if (dateEvent.showG()) {
 				dot_google.setVisibility(View.VISIBLE);
 			}
-			// TODO RESOURCE FEHLT?
-			//convertView.setBackgroundResource(R.drawable.calendar_cel_event);
 		} else {
 			dot_synchro.setVisibility(View.INVISIBLE);
 			dot_exchange.setVisibility(View.INVISIBLE);
