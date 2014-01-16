@@ -28,6 +28,17 @@ public class CalendarDayViewActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		RelativeLayout layout = new RelativeLayout(this);
+		TextView nachricht = new TextView(this);
+		nachricht.setTextSize(15);
+		nachricht.setX(50);
+		nachricht.setY(50);
+		if(getSynchronatorApplication().getCurrentCalendarEntryList()==null){
+			nachricht.setText("Nachricht !!: CalendarEntryList vorhanden!!!");
+		}
+		else{
+			nachricht.setText("Nachricht !!: leer");
+		}
+		
 		TextView t = new TextView(this);
 		t.setTextSize(8);
 		t.setX(104);
@@ -37,6 +48,7 @@ public class CalendarDayViewActivity extends BaseActivity {
         drawView.setBackground(getResources().getDrawable(R.drawable.dayview_background));
         layout.addView(drawView);
 		layout.addView(t);
+		layout.addView(nachricht);// die textviews erst nach dem background setzen
 		setContentView(layout);
 //		dateTextView = (TextView) findViewById(R.id.textview_date);
 //		String date = getIntent().getStringExtra("date");

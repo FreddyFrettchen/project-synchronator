@@ -43,6 +43,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 												// items which
 
 	public HashMap<String, DateOnSaveLocation> itemHashMap = null;
+	public HashMap<String, ArrayList<CalendarEntry>> eventsOnDate = null;
 
 	// needs showing the event marker
 
@@ -56,8 +57,10 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		items = new ArrayList<DateOnSaveLocation>();
 		adapter = new CalendarAdapter(this, month);
 
+		getSynchronatorApplication().setCurrentCalendarEntryList(null);
 		// Methode zieht die daten aus dem Adapter jedes Accounts heraus
 		initCalendarEvents();
+		// itemHashMap +eventsOnDate initialisiert
 
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(adapter);
@@ -97,7 +100,6 @@ public class CalendarMonthViewActivity extends BaseActivity {
 				((CalendarAdapter) parent.getAdapter()).setSelected(v);
 				String selectedGridDate = CalendarAdapter.dayString
 						.get(position);
-				System.out.println(selectedGridDate);
 				String[] separatedTime = selectedGridDate.split("-");
 				String gridvalueString = separatedTime[2].replaceFirst("^0*",
 						"");// taking last part of date. ie; 2 from 2012-12-02.
@@ -115,6 +117,9 @@ public class CalendarMonthViewActivity extends BaseActivity {
 				}
 				((CalendarAdapter) parent.getAdapter()).setSelected(v);
 
+				getSynchronatorApplication().setCurrentCalendarEntryList(
+						eventsOnDate.get(selectedGridDate));
+				// System.out.println("selectedGridDate "+selectedGridDate);
 				showDayView(selectedGridDate);
 				// showToast(selectedGridDate);
 
@@ -177,24 +182,16 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		public void run() {
 			items.clear();
 
-			// Print dates of the current week
+			// Print current date
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 			String itemvalue;
-			for (int i = 0; i < 7; i++) {
-				itemvalue = df.format(itemmonth.getTime());
-				itemmonth.add(GregorianCalendar.DATE, 1);
-				items.add(new DateOnSaveLocation("2013-12-12", true, true, true));
-				items.add(new DateOnSaveLocation("2014-01-15", true, false,
-						true));
-				items.add(new DateOnSaveLocation("2014-01-20", true, true,
-						false));
-				items.add(new DateOnSaveLocation("2014-02-24", false, false,
-						false));
-				items.add(new DateOnSaveLocation("2014-02-28", false, true,
-						true));
-
+			itemvalue = df.format(itemmonth.getTime());
+			itemmonth.add(GregorianCalendar.DATE, 1);
+			
+			for (Object e : itemHashMap.values()) {
+				items.add((DateOnSaveLocation)e);
 			}
-
+			
 			adapter.setItems(items);
 			adapter.notifyDataSetChanged();
 		}
@@ -211,6 +208,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 
 	private void initCalendarEvents() {
 		itemHashMap = new HashMap<String, DateOnSaveLocation>();
+		eventsOnDate = new HashMap<String, ArrayList<CalendarEntry>>();
 		for (int i = 0; i < this.accounts.getAccounts().size(); i++) {
 			@SuppressWarnings("unchecked")
 			ArrayAdapter<CalendarEntry> adapterI = (ArrayAdapter<CalendarEntry>) this.accounts
@@ -226,29 +224,96 @@ public class CalendarMonthViewActivity extends BaseActivity {
 							"CalenderAdapter: Account (" + i
 									+ ") CalenderEvent:" + e + "\nDate:"
 									+ e.getStartDate());
-					String startDate = e.getStartDate();
-					
-					if (itemHashMap.containsKey(startDate)) {
-						char acc = e.getAccount().toString().charAt(0);
-						switch (acc) {
-						case 'G': {
-							itemHashMap.get(startDate).setG();
-							break;
-						}
-						case 'S': {
-							itemHashMap.get(startDate).setS();
-							break;
-						}
-						case 'E': {
-							itemHashMap.get(startDate).setE();
-							break;
-						}
-						}
 
-					}
+					putIntoDataStructures(e);
 
 				}
 			}
 		}
+	}
+
+	private void putIntoDataStructures(CalendarEntry e) {
+		String startDate = e.getStartDate();
+		String endDate = e.getEndDate();
+		// Log.i(TAG, "startDate:"+startDate+" endDate: "+endDate);
+		// kann später entfernt werden; Fall darf nicht auftreten
+		if (startDate == null || endDate == null) {
+			Log.i(TAG, "CalendarEntry e: startDate oder endDate == null");
+			return;
+		}
+		// erster Fall: eintagesEvent
+		if (startDate.equals(endDate)) {
+			putIntoDataStructures(e, startDate);
+		} else {
+			// 2.Fall mehrere Tage event
+		}
+
+	}
+
+	private void putIntoDataStructures(CalendarEntry e, String date) {
+
+		// erstmal bauen wir uns ne Liste von CalendarEntrys für jeden möglichen
+		// Tag, um später der dayview zu übergeben
+		if (eventsOnDate.containsKey(date)) {
+			eventsOnDate.get(date).add(e);
+		} else {
+			ArrayList<CalendarEntry> tmpList = new ArrayList<CalendarEntry>();
+			tmpList.add(e);
+			eventsOnDate.put(date, tmpList);
+		}
+
+		char acc = e.getAccount().toString().charAt(0);
+		// hier bauen wir für den Adapter ne Hashmap die Weiss, an welchem datum
+		// welcher Account nen eintrag hat
+		// diese hashmap wir dann später zu ner Liste und dem Calendar Adapter
+		// übergeben
+		if (itemHashMap.containsKey(date)) {
+
+			switch (acc) {
+			case 'G': {
+				itemHashMap.get(date).setG();
+				break;
+			}
+			case 'S': {
+				itemHashMap.get(date).setS();
+				break;
+			}
+			case 'E': {
+				itemHashMap.get(date).setE();
+				break;
+			}
+			default: {
+				Log.i(TAG,
+						"Konvention gebrochen: Account.toString() fängt an mit char: "
+								+ acc);
+			}
+			}
+
+		} else {
+			switch (acc) {
+			case 'G': {
+				itemHashMap.put(date, new DateOnSaveLocation(date, false, true,
+						false));
+				break;
+			}
+			case 'S': {
+				itemHashMap.put(date, new DateOnSaveLocation(date, true, false,
+						false));
+				break;
+			}
+			case 'E': {
+				itemHashMap.put(date, new DateOnSaveLocation(date, false,
+						false, true));
+				break;
+			}
+			default: {
+				Log.i(TAG,
+						"Konvention gebrochen: Account.toString() fängt an mit char: "
+								+ acc);
+			}
+			}
+
+		}
+
 	}
 }
