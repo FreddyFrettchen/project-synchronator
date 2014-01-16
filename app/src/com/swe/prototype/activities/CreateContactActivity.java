@@ -3,6 +3,7 @@ package com.swe.prototype.activities;
 import java.util.Currency;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
@@ -101,9 +102,16 @@ public class CreateContactActivity extends BaseActivity {
 		cancel_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				finish();
+				setResult(RESULT_CANCELED);
+				getSynchronatorApplication().setCurrentContact(null);
+				toContacts();
 			}
 		});
+	}
+	
+	private void toContacts() {
+		startActivity(new Intent(this, ListContactsActivity.class));
+		finish();
 	}
 
 	private void prefill_fields() {
