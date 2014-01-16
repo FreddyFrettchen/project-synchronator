@@ -23,9 +23,6 @@ public class DateOnSaveLocation {
 		return this.date.length();
 	}
 	
-	public void set(int i,String s){
-		
-	}
 
 	public String getDate() {
 		return this.date;
@@ -48,6 +45,14 @@ public class DateOnSaveLocation {
 	public boolean showG() {
 		return g;
 	}
-	
+	public void setS(){
+		s=true;
+	}
+	public void setG(){
+		g=true;
+	}
+	public void setE(){
+		e=true;
+	}
 
 }

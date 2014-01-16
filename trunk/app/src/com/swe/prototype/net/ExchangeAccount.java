@@ -52,6 +52,10 @@ public class ExchangeAccount extends AccountBase {
 
 	}
 
+	/* 
+	 * return: Der zurückgegebene String muss als erstes Zeichen 'E',haben!!!
+	 *  
+	 */
 	@Override
 	public String toString() {
 		return "Exchange (" + this.username + ")";

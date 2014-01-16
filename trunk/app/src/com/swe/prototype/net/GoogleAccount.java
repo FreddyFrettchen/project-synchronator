@@ -75,6 +75,11 @@ public class GoogleAccount extends AccountBase {
 		Log.i(TAG, "Synchronize wurde aufgerufen!");
 	}
 	
+	
+	/* 
+	 * return: Der zurückgegebene String muss als erstes Zeichen 'G',haben!!!
+	 *  
+	 */
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
