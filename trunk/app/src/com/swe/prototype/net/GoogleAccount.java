@@ -141,7 +141,7 @@ public class GoogleAccount extends AccountBase {
 	}
 
 	
-	private ArrayList<GoogleContact> getContacts()
+	private ArrayList<Contact> getContacts()
 	{
 	   	try
 	   	{
@@ -154,7 +154,7 @@ public class GoogleAccount extends AccountBase {
 	   		ContactFeed resultFeed = myService.getFeed(feedUrl, ContactFeed.class);
 	   		// Print the results
 	   		*/
-	   		ArrayList<GoogleContact> liste = new ArrayList<GoogleContact>();
+	   		ArrayList<Contact> liste = new ArrayList<Contact>();
 	   		/*
 	   		for (ContactEntry entry : resultFeed.getEntries()) 
 	   		{
