@@ -67,8 +67,6 @@ public class CalendarAddEventActivity extends BaseActivity {
 			hourFrom = hour;
 			minuteFrom = minute;
 			timeDisplayFrom.setText(convertTime(hour, minute));
-			// Toast.makeText(getApplicationContext(),
-			// "hour:"+hour+" min: "+minute, 1).show();
 		}
 
 	};
@@ -92,6 +90,13 @@ public class CalendarAddEventActivity extends BaseActivity {
 			yearFrom = year;
 			monthFrom = monthOfYear;
 			dayFrom = dayOfMonth;
+			//kunden feature, falls from_date kleiner als to_date, dann soll das to_date aufs from_date gesetzt werden #usability
+			if(yearFrom>yearTo||(yearFrom==yearTo&&(monthFrom>monthTo)||(yearFrom==yearTo&&monthFrom==monthTo&&dayFrom>dayTo))){
+				yearTo = yearFrom;
+				monthTo=monthFrom;
+				dayTo=dayFrom;
+				updateDisplayTo();
+			}
 			updateDisplayFrom();
 		}
 	};
@@ -126,9 +131,6 @@ public class CalendarAddEventActivity extends BaseActivity {
 		list_accounts = (ListView) findViewById(R.id.list_accounts);
 		list_accounts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		list_accounts.setAdapter(adapter);
-
-		// hier muss ich dann noch die checkboxen hiden, falls der user keinen
-		// account hinzugef�gt hat.
 
 		// find radio button group
 		radioGroupEvery = (RadioGroup) findViewById(R.id.radiogroup_every);
