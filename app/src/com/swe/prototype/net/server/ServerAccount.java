@@ -323,6 +323,11 @@ public class ServerAccount extends AccountBase {
 		return cursor;
 	}
 
+	
+	/* 
+	 * return: Der zurückgegebene String muss als erstes Zeichen 'S',havben!!!
+	 *  
+	 */
 	@Override
 	public String toString() {
 		return "Server (" + this.username + ")";

@@ -95,6 +95,11 @@ public abstract class AccountBase extends Thread {
 
 	public abstract void deleteCalendarEntry(CalendarEntry ce);
 
+	
+	/* 
+	 * return: Der zurückgegebene String muss als erstes Zeichen 'S','G' oder 'E' havben!!!
+	 *  Je nach dem was das für ein Account ist.
+	 */
 	public abstract String toString();
 
 }

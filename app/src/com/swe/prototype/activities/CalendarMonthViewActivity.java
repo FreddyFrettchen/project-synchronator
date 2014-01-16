@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -41,6 +42,8 @@ public class CalendarMonthViewActivity extends BaseActivity {
 	public ArrayList<DateOnSaveLocation> items; // container to store calendar
 												// items which
 
+	public HashMap<String, DateOnSaveLocation> itemHashMap = null;
+
 	// needs showing the event marker
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,28 +56,8 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		items = new ArrayList<DateOnSaveLocation>();
 		adapter = new CalendarAdapter(this, month);
 
-		for (int i = 0; i < this.accounts.getAccounts().size(); i++) {
-			@SuppressWarnings("unchecked")
-			ArrayAdapter<CalendarEntry> x = (ArrayAdapter<CalendarEntry>) this.accounts
-					.getAccounts()
-					.get(i)
-					.getCalendarAdapter(this, R.layout.item_calendar_month_view);
-			Log.i(TAG,
-					"der CalenderAdapter des " + i + ". Accounts hat "
-							+ x.getCount() + " Einträge");
-			for (int j = 0; j < x.getCount(); j++) {
-				CalendarEntry e = (CalendarEntry) x.getItem(j);
-				if (e != null) {
-					Log.i(TAG,
-							"CalenderAdapter: Account (" + i
-									+ ") CalenderEvent:" + e + "\nDate:"
-									+ e.getStartDate());
-
-					System.out.println(e);
-					System.out.println(e.getStartDate());
-				}
-			}
-		}
+		// Methode zieht die daten aus dem Adapter jedes Accounts heraus
+		initCalendarEvents();
 
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(adapter);
@@ -224,5 +207,48 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		startActivity(intent);
 		finish();
 
+	}
+
+	private void initCalendarEvents() {
+		itemHashMap = new HashMap<String, DateOnSaveLocation>();
+		for (int i = 0; i < this.accounts.getAccounts().size(); i++) {
+			@SuppressWarnings("unchecked")
+			ArrayAdapter<CalendarEntry> adapterI = (ArrayAdapter<CalendarEntry>) this.accounts
+					.getAccounts()
+					.get(i)
+					.getCalendarAdapter(this, R.layout.item_calendar_month_view);
+			Log.i(TAG, "der CalenderAdapter des " + i + ". Accounts hat "
+					+ adapterI.getCount() + " Einträge");
+			for (int j = 0; j < adapterI.getCount(); j++) {
+				CalendarEntry e = (CalendarEntry) adapterI.getItem(j);
+				if (e != null) {
+					Log.i(TAG,
+							"CalenderAdapter: Account (" + i
+									+ ") CalenderEvent:" + e + "\nDate:"
+									+ e.getStartDate());
+					String startDate = e.getStartDate();
+					
+					if (itemHashMap.containsKey(startDate)) {
+						char acc = e.getAccount().toString().charAt(0);
+						switch (acc) {
+						case 'G': {
+							itemHashMap.get(startDate).setG();
+							break;
+						}
+						case 'S': {
+							itemHashMap.get(startDate).setS();
+							break;
+						}
+						case 'E': {
+							itemHashMap.get(startDate).setE();
+							break;
+						}
+						}
+
+					}
+
+				}
+			}
+		}
 	}
 }
