@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.swe.prototype.R;
 import com.swe.prototype.adapter.ContactAdapter;
 import com.swe.prototype.models.AccountBase;
+import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.server.ServerContact;
 
@@ -49,7 +50,7 @@ public class ListContactsActivity extends BaseActivity {
 					.getContactAdapter(this,
 							android.R.layout.simple_list_item_1));
 		}
-
+		
 		// Attach the adapter to a ListView
 		listView = (ListView) findViewById(R.id.contacts_list_view);
 		registerForContextMenu(listView);

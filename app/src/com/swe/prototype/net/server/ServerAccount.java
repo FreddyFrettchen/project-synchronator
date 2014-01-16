@@ -111,6 +111,7 @@ public class ServerAccount extends AccountBase {
 					encryptedData.getIdData() + "" };
 			values.put("data_id", encryptedData.getId());
 			values.put("status", "INSYNC");
+			values.put("resend", "false");
 			// check if entry exists and update the data_id of server and set
 			// status to INSYC
 			if (entryExists(contentUri, where, args)) {
@@ -163,6 +164,7 @@ public class ServerAccount extends AccountBase {
 					+ ServerDataTable.COLUMN_TAG + " = ?";
 			args = new String[] { encryptedData.getId() + "", data_type };
 			values.put("data", encryptedData.getData());
+			values.put("data_id", encryptedData.getIdData());
 			values.put("tag", data_type);
 			values.put("STATUS", "INSYNC");
 			values.put("resend", "false");
@@ -389,9 +391,10 @@ public class ServerAccount extends AccountBase {
 				"server_data");
 
 		values.put("data_id", -1);
+		Log.i(TAG,centry.toJson());
 		values.put("data", (new EncryptedData(-1, centry.toJson()))
 				.encryptData(this.password));
-		values.put("tag", "notes");
+		values.put("tag", "calendar");
 		values.put("status", "CREATE");
 		values.put("resend", "false");
 		Uri result = this.context.getContentResolver().insert(contentUri,
