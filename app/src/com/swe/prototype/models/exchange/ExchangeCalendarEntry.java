@@ -21,9 +21,38 @@ import com.swe.prototype.models.AccountBase;
 
 public class ExchangeCalendarEntry extends CalendarEntry {
 
-    public ExchangeCalendarEntry(AccountBase account) {
+	public Date StartDate;
+	public Date EndDate;
+	public String Subject;
+	public String Description;
+	public int Repeat;
+	
+    public String getSubject() {
+		return Subject;
+	}
+
+	public void setStartDate(Date startDate) {
+		StartDate = startDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		EndDate = endDate;
+	}
+
+	public void setSubject(String subject) {
+		Subject = subject;
+	}
+
+	public void setDescription(String description) {
+		Description = description;
+	}
+
+	public void setRepeat(int repeat) {
+		Repeat = repeat;
+	}
+
+	public ExchangeCalendarEntry(AccountBase account) {
         super(account);
-        // TODO Auto-generated constructor stub
     }
 	
 	@Override

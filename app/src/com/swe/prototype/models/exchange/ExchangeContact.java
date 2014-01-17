@@ -17,6 +17,16 @@ import com.swe.prototype.models.Contact;
 public class ExchangeContact extends Contact {
 	
 	public static String TAG = "ExchangeContact";
+	private String lastname;
+	private String firstname;
+	private String id;
+	private String phoneumber;
+	private String email;
+	
+	
+	public ExchangeContact(AccountBase account){
+		super(account);
+	}
 	
 	public String getID()
 	{
@@ -26,35 +36,8 @@ public class ExchangeContact extends Contact {
 	public ExchangeContact(AccountBase account, Contact c) {
 		super(account);
 	}
-
-	public boolean createContact() {
-		try {
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					"bd8299s@ad.fh-aachen.de", "password");
-
-			com.independentsoft.exchange.Contact contact = new com.independentsoft.exchange.Contact();
-			contact.setGivenName("Bahos");
-			contact.setSurname("Derakie");
-			contact.setFileAsMapping(FileAsMapping.LAST_SPACE_FIRST);
-			contact.setCompanyName("FH Aachen");
-			contact.setBusinessPhone("123456789");
-			contact.setEmail1Address("bahos.derakie@alumni.fh-aachen.de");
-			contact.setEmail1DisplayName("Bahos Derakie");
-			contact.setEmail1DisplayAs("Bahos Derakie");
-			contact.setEmail1Type("SMTP");
-
-			ItemId itemId = service.createItem(contact);
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	public boolean findContact() {
+/*
+		public boolean findContact() {
 		try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
@@ -96,7 +79,27 @@ public class ExchangeContact extends Contact {
 		}
 		return false;
 	}
+*/
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
 
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setPhoneumber(String phoneumber) {
+		this.phoneumber = phoneumber;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	@Override
 	public String getLastName() {
 		// TODO Auto-generated method stub
