@@ -370,4 +370,10 @@ public class GoogleAccount extends AccountBase {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean validateAccountData() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

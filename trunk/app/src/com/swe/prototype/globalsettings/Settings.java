@@ -1,5 +1,7 @@
 package com.swe.prototype.globalsettings;
 
+import android.util.Log;
+
 /*
  * Autor: Dany
  * 
