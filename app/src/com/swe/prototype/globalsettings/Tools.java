@@ -36,4 +36,91 @@ public class Tools {
 		return false;
 	}
 
+	/**
+	 * @param date
+	 *            format: 2014-06-32
+	 * @return format: 32 July 2014
+	 */
+	public static String convertDate(String date) {
+		String res = "";
+		try {
+			if (date.charAt(8) == '0') {
+				res += date.charAt(9);
+			} else {
+				res += date.charAt(8) + "" + date.charAt(9);
+			}
+			if (date.charAt(8) != '1') {
+				switch (date.charAt(9)) {
+				case '1':
+					res += "st";
+					break;
+				case '2':
+					res += "nd";
+					break;
+				case '3':
+					res += "rd";
+					break;
+				default:
+					res += "th";
+				}
+			} else {
+				res += "th";
+			}
+			res += " ";
+			// month
+			if (date.charAt(5) == '1') {
+				switch (date.charAt(6)) {
+				case '0':
+					res += "October";
+					break;
+				case '1':
+					res += "November";
+					break;
+
+				case '2':
+					res += "December";
+				}
+			} else {
+				switch (date.charAt(6)) {
+				case '1':
+					res += "January";
+					break;
+				case '2':
+					res += "February";
+					break;
+				case '3':
+					res += "March";
+					break;
+				case '4':
+					res += "April";
+					break;
+				case '5':
+					res += "May";
+					break;
+				case '6':
+					res += "June";
+					break;
+				case '7':
+					res += "July";
+					break;
+				case '8':
+					res += "August";
+					break;
+				case '9':
+					res += "September";
+
+				}
+
+			}
+			// year
+			res += " " + date.charAt(0);
+			res += date.charAt(1);
+			res += date.charAt(2);
+			res += date.charAt(3);
+		} catch (Exception e) {
+			return date;
+		}
+		return res;
+	}
+
 }
