@@ -101,7 +101,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 
-				((CalendarAdapter) parent.getAdapter()).setSelected(v);
+				((CalendarAdapter) parent.getAdapter()).setSelectedDate(v);
 				String selectedGridDate = CalendarAdapter.dayString
 						.get(position);
 				String[] separatedTime = selectedGridDate.split("-");
@@ -119,7 +119,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 					refreshCalendar();
 					return; // hier n�chste monat laden
 				}
-				((CalendarAdapter) parent.getAdapter()).setSelected(v);
+				((CalendarAdapter) parent.getAdapter()).setSelectedDate(v);
 
 				getSynchronatorApplication().setCurrentCalendarEntryList(
 						eventsOnDate.get(selectedGridDate));

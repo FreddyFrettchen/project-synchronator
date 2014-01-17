@@ -181,6 +181,13 @@ public class CalendarAdapter extends BaseAdapter {
 		view.setBackgroundResource(R.drawable.calendar_cel_selectl);
 		return view;
 	}
+	
+	//
+	public View setSelectedDate(View view) {
+
+		
+		return view;
+	}
 
 	public void refreshDays() {
 		// clear items
@@ -232,5 +239,7 @@ public class CalendarAdapter extends BaseAdapter {
 
 		return maxP;
 	}
+
+
 
 }
