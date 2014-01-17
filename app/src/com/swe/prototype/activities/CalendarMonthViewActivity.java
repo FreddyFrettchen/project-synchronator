@@ -62,12 +62,16 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		initCalendarEvents();
 		// itemHashMap +eventsOnDate initialisiert
 
+		
+
+
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(adapter);
 
 		handler = new Handler();
 		handler.post(calendarUpdater);
 
+		
 		TextView title = (TextView) findViewById(R.id.title);
 		title.setText(android.text.format.DateFormat.format("MMMM yyyy", month));
 
@@ -215,15 +219,15 @@ public class CalendarMonthViewActivity extends BaseActivity {
 					.getAccounts()
 					.get(i)
 					.getCalendarAdapter(this, R.layout.item_calendar_month_view);
-			Log.i(TAG, "der CalenderAdapter des " + i + ". Accounts hat "
-					+ adapterI.getCount() + " Einträge");
+			//Log.i(TAG, "der CalenderAdapter des " + i + ". Accounts hat "
+			//		+ adapterI.getCount() + " Einträge");
 			for (int j = 0; j < adapterI.getCount(); j++) {
 				CalendarEntry e = (CalendarEntry) adapterI.getItem(j);
 				if (e != null) {
-					Log.i(TAG,
-							"CalenderAdapter: Account (" + i
-									+ ") CalenderEvent:" + e + "\nDate:"
-									+ e.getStartDate());
+					//Log.i(TAG,
+					//		"CalenderAdapter: Account (" + i
+					//				+ ") CalenderEvent:" + e + "\nDate:"
+					//				+ e.getStartDate());
 
 					putIntoDataStructures(e);
 

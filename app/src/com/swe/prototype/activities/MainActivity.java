@@ -197,7 +197,7 @@ public class MainActivity extends BaseActivity {
 		editor.commit();
 		getSynchronatorApplication().onApplicationLogin();
 
-		startActivity(new Intent(this, CalendarMonthViewActivity.class));
+		startActivity(new Intent(this, ContactActivity.class));
 		finish();
 	}
 }
