@@ -1,8 +1,10 @@
 package com.swe.prototype.models;
 
+import java.io.Serializable;
+
 import android.content.Context;
 
-public abstract class CalendarEntry extends BaseData 
+public abstract class CalendarEntry extends BaseData implements Serializable
 {
 	public CalendarEntry(AccountBase account) {
 		super(account);

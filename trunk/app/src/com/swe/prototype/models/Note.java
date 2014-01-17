@@ -1,9 +1,11 @@
 package com.swe.prototype.models;
 
+import java.io.Serializable;
+
 import android.R.string;
 import android.content.Context;
 
-public abstract class Note extends BaseData {
+public abstract class Note extends BaseData implements Serializable{
 	public Note(AccountBase account){
 		super(account);
 	}
