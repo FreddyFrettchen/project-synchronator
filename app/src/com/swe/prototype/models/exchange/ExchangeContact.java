@@ -102,26 +102,22 @@ public class ExchangeContact extends Contact {
 	
 	@Override
 	public String getLastName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.lastname;
 	}
 
 	@Override
 	public String getFirstName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.firstname;
 	}
 
 	@Override
 	public String getPhoneumber() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.phoneumber;
 	}
 
 	@Override
 	public String getEmail() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.email;
 	}
 
 	@Override
