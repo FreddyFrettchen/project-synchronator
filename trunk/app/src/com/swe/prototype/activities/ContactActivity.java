@@ -29,8 +29,13 @@ public class ContactActivity extends BaseActivity {
 		phonenumber = (TextView)findViewById(R.id.contact_phone);
 		email = (TextView)findViewById(R.id.contact_email);
 		
-		name.setText(getIntent().getExtras().getString("name"));
-		phonenumber.setText(getIntent().getExtras().getString("phone"));
-		email.setText(getIntent().getExtras().getString("email"));
+		if(getIntent().hasExtra("name"))
+			name.setText(getIntent().getExtras().getString("name"));
+		
+		if(getIntent().hasExtra("phone"))
+			phonenumber.setText(getIntent().getExtras().getString("phone"));
+		
+		if(getIntent().hasExtra("email"))
+			email.setText(getIntent().getExtras().getString("email"));
 	}
 }
