@@ -325,7 +325,7 @@ public class ServerAccount extends AccountBase {
 
 	
 	/* 
-	 * return: Der zurückgegebene String muss als erstes Zeichen 'S',havben!!!
+	 * return: Der zurï¿½ckgegebene String muss als erstes Zeichen 'S',havben!!!
 	 *  
 	 */
 	@Override
@@ -755,5 +755,10 @@ public class ServerAccount extends AccountBase {
 	@Override
 	public void synchronizeCalendarEntries() {
 		synchronizeByType("calendar");
+	}
+
+	@Override
+	public boolean validateAccountData() {
+		return true;
 	}
 }

@@ -63,7 +63,7 @@ public class ExchangeAccount extends AccountBase {
 	}
 
 	/* 
-	 * return: Der zurückgegebene String muss als erstes Zeichen 'E',haben!!!
+	 * return: Der zurï¿½ckgegebene String muss als erstes Zeichen 'E',haben!!!
 	 *  
 	 */
 	@Override
@@ -480,6 +480,12 @@ public class ExchangeAccount extends AccountBase {
 			String description, int repeat) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public boolean validateAccountData() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

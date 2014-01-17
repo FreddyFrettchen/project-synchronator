@@ -126,7 +126,7 @@ public class CreateAccountActivity extends BaseActivity {
 	private boolean correctInputChoise() {
 		// TODO Auto-generated method stub
 		if(getEditText(R.id.edit_text_username).isEmpty() || getEditText(R.id.edit_text_password).isEmpty()) {
-			this.showShortToast("Username und Password müssen ausgefüllt sein!");
+			this.showShortToast("Username und Password mï¿½ssen ausgefï¿½llt sein!");
 			return false;
 		}
 		return true;

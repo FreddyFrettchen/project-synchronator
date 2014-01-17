@@ -88,13 +88,6 @@ class ServerHandler < Sinatra::Base
                     .map(&:public_values).to_json
                 end
             end
-
-            namespace '/ids' do
-                post "/#{route}" do
-                    @user.send(route)
-                    .map{|e|e.id}.to_json
-                end
-            end
         end
     end
 end
