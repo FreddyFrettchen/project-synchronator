@@ -39,7 +39,7 @@ public class ExchangeAccount extends AccountBase {
 
 	private static final String TAG = "ExchangeAccount";
 
-	public static ArrayList<Contact> test = new ArrayList<Contact>();
+	//public static ArrayList<Contact> test = new ArrayList<Contact>();
 	
 	public ExchangeAccount(Context context, int account_id,
 			int refresh_time_sec, String username, String password) {
@@ -54,7 +54,7 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public void synchronizeContacts() {
 		Log.i(TAG, "Synchronize Start Contacts");
-		test = getContacts();
+		//test = getContacts();
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class ExchangeAccount extends AccountBase {
 			try
 	        {
 				ExchangeContact excon = new ExchangeContact(this);
-	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx","bd8299s@ad.fh-aachen.de", "JA346tcxo");
+	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",this.username, this.password);
 	        	Log.i(TAG, "getContacts for response.findItem");
 	            FindItemResponse response = service.findItem(StandardFolder.CONTACTS, ContactPropertyPath.getAllPropertyPaths());
 	            Log.i(TAG, "getContacts for FORSCHLEIFE");
@@ -118,7 +118,7 @@ public class ExchangeAccount extends AccountBase {
 	                    Log.i(TAG, contact.getGivenName());
 	                    excon.setFirstname(contact.getGivenName());
 	                    excon.setLastname(contact.getSurname());
-	                    Log.i(TAG, excon.getLastName());
+	                    Log.i(TAG, excon.getLastName() + "ExchangeContact");
 	                    Log.i(TAG, contact.getSurname() + "independent Contact");
 	                    excon.setPhoneumber(contact.getBusinessPhone());
 	                    excon.setEmail(contact.getEmail1Address());
@@ -145,7 +145,7 @@ public class ExchangeAccount extends AccountBase {
 		ExchangeNote exnote = new ExchangeNote(this);
 			try
 	        {
-	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx","bd8299s@ad.fh-aachen.de", "JA346tcxo");
+	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",this.username, this.password);
 
 	            FindItemResponse response = service.findItem(StandardFolder.NOTES, ContactPropertyPath.getAllPropertyPaths());
 
@@ -178,7 +178,7 @@ public class ExchangeAccount extends AccountBase {
 		ExchangeCalendarEntry excal = new ExchangeCalendarEntry(this);
 			try
 	        {
-	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx","bd8299s@ad.fh-aachen.de", "JA346tcxo");
+	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",this.username, this.password);
 
 	            FindItemResponse response = service.findItem(StandardFolder.CALENDAR, ContactPropertyPath.getAllPropertyPaths());
 
@@ -212,8 +212,8 @@ public class ExchangeAccount extends AccountBase {
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context, layout_id);
 		Log.i(TAG, "getContactADApter start");
-		Log.i(TAG, test.get(0).getLastName());
-		adapter.addAll(test);
+		//Log.i(TAG, test.get(0).getLastName());
+		adapter.addAll(getContacts());
 		return adapter;
 	}
 
