@@ -52,7 +52,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 		t.setY(136);
 		t.setText("Kochen mit gertrude");
 		drawView = new DrawView(this);
-        drawView.setBackground(getResources().getDrawable(R.drawable.dayview_background));
+        //drawView.setBackground(getResources().getDrawable(R.drawable.dayview_background));
         layout.addView(drawView);
 		layout.addView(t);
 		layout.addView(nachricht);// die textviews erst nach dem background setzen

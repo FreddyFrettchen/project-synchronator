@@ -19,6 +19,8 @@ public class DrawView extends View {
     @Override
     public void onDraw(Canvas canvas) {
 
+    	drawBackground();
+    	
         //kochen mit gertrude
         paint.setColor(Color.BLACK);
         canvas.drawRect(pLeft+2, pTop+2, pLeft+width-2, pTop+(height/(24*2)) , paint );
@@ -44,5 +46,10 @@ public class DrawView extends View {
       
         
     }
+
+	private void drawBackground() {
+		
+		
+	}
 
 }
