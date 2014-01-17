@@ -29,16 +29,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:src="@drawable/dot_google"
-            android:visibility="visible" />
+            android:src="@drawable/dot_synchronator"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/date_icon_google"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:src="@drawable/dot_synchronator"
-            android:visibility="visible" />
+            android:src="@drawable/dot_google"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/date_icon_exchange"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/dot_exchange"
             android:layout_weight="0.2"
-            android:visibility="visible" />
+            android:visibility="invisible" />
     </LinearLayout>
 
 </LinearLayout>
