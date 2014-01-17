@@ -61,7 +61,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		// Methode zieht die daten aus dem Adapter jedes Accounts heraus
 		initCalendarEvents();
 		// itemHashMap +eventsOnDate initialisiert
-
+		
 		
 
 
@@ -123,10 +123,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 
 				getSynchronatorApplication().setCurrentCalendarEntryList(
 						eventsOnDate.get(selectedGridDate));
-				// System.out.println("selectedGridDate "+selectedGridDate);
 				showDayView(selectedGridDate);
-				// showToast(selectedGridDate);
-
 			}
 		});
 	}

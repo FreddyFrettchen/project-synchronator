@@ -1,7 +1,10 @@
 package com.swe.prototype.activities;
 
+import java.util.ArrayList;
+
 import com.swe.prototype.R;
 import com.swe.prototype.globalsettings.DrawView;
+import com.swe.prototype.models.CalendarEntry;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -32,13 +35,17 @@ public class CalendarDayViewActivity extends BaseActivity {
 		nachricht.setTextSize(15);
 		nachricht.setX(50);
 		nachricht.setY(50);
-		if(getSynchronatorApplication().getCurrentCalendarEntryList()==null){
-			nachricht.setText("Nachricht !!: CalendarEntryList vorhanden!!!");
+		String dates = "Entrys: ";
+		ArrayList<CalendarEntry> calendarEntrys = getSynchronatorApplication().getCurrentCalendarEntryList();
+		if(calendarEntrys!=null){
+			for (CalendarEntry e : calendarEntrys) {
+				dates+="("+e.getStartTime()+"-"+e.getEndTime()+") ,";
+			}
 		}
 		else{
-			nachricht.setText("Nachricht !!: leer");
+			dates = "Keine Termine übergeben!";
 		}
-		
+		nachricht.setText(dates);
 		TextView t = new TextView(this);
 		t.setTextSize(8);
 		t.setX(104);
