@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 import com.swe.prototype.R;
 import com.swe.prototype.globalsettings.DrawView;
+import com.swe.prototype.globalsettings.Tools;
 import com.swe.prototype.models.CalendarEntry;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,14 +31,27 @@ public class CalendarDayViewActivity extends BaseActivity {
 
 	
 	DrawView drawView;
-	TextView dateTextView;
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		RelativeLayout layout = new RelativeLayout(this);
-		TextView nachricht = new TextView(this);
-		nachricht.setTextSize(15);
-		nachricht.setX(50);
-		nachricht.setY(50);
+		// display abmessung in pixel
+		Display display = getWindowManager().getDefaultDisplay(); 
+		int width = display.getWidth();
+		int height = display.getHeight();
+		
+		
+		// ausgewählte datum in der dayView anzeigen
+		String date = getIntent().getStringExtra("date");
+		getActionBar().setTitle(Tools.convertDate(date));
+		TextView headline = new TextView(this);
+		headline.setTextSize(30);
+		//headline.setX((width/2)-200);
+		SpannableString spanStringDate = new SpannableString(date);
+		spanStringDate.setSpan(new StyleSpan(Typeface.BOLD), 0, spanStringDate.length(), 0); // fettschrift
+		headline.setText(spanStringDate);
+		layout.addView(headline);
+		
+
 		String dates = "Entrys: ";
 		ArrayList<CalendarEntry> calendarEntrys = getSynchronatorApplication().getCurrentCalendarEntryList();
 		if(calendarEntrys!=null){
@@ -45,7 +62,6 @@ public class CalendarDayViewActivity extends BaseActivity {
 		else{
 			dates = "Keine Termine übergeben!";
 		}
-		nachricht.setText(dates);
 		TextView t = new TextView(this);
 		t.setTextSize(8);
 		t.setX(104);
@@ -55,7 +71,23 @@ public class CalendarDayViewActivity extends BaseActivity {
         //drawView.setBackground(getResources().getDrawable(R.drawable.dayview_background));
         layout.addView(drawView);
 		layout.addView(t);
-		layout.addView(nachricht);// die textviews erst nach dem background setzen
+		
+		for (int i = 0; i <= 24; i++) {
+			
+			TextView tmp = new TextView(this);
+			tmp.setTextSize(14);
+			tmp.setX(0);
+			tmp.setY(i*40);
+			String hourBack = "";
+			if(i<10){
+				hourBack = "0"+i+":00";
+			}else{
+				hourBack = ""+i+":00";
+			}
+			tmp.setText(""+hourBack);
+			layout.addView(tmp);
+		}
+		
 		setContentView(layout);
 //		dateTextView = (TextView) findViewById(R.id.textview_date);
 //		String date = getIntent().getStringExtra("date");
