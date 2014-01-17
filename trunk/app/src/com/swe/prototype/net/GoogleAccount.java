@@ -159,7 +159,7 @@ public class GoogleAccount extends AccountBase {
 	private ArrayList<Contact> getContacts()
 	{
 //<<<<<<< .mine
-		ArrayList<GoogleHelpClass> list = GoogleHelpClass.getContacts(this.username, this.password);
+	/*	ArrayList<GoogleHelpClass> list = GoogleHelpClass.getContacts(this.username, this.password);
 //=======
 	   	try
 	   	{
@@ -172,6 +172,7 @@ public class GoogleAccount extends AccountBase {
 	   		ContactFeed resultFeed = myService.getFeed(feedUrl, ContactFeed.class);
 	   		// Print the results
 	   		*/
+		/*
 	   		ArrayList<Contact> liste = new ArrayList<Contact>();
 	   		/*
 	   		for (ContactEntry entry : resultFeed.getEntries()) 
@@ -208,7 +209,7 @@ public class GoogleAccount extends AccountBase {
 	   			GC.setId(entry.getEtag());
 	   			liste.add(GC);
 	   		}*/
-	   		GoogleContact GC = new GoogleContact(this);
+	   		/*GoogleContact GC = new GoogleContact(this);
    			GC.setEmail("Mail.mail@mail.de");
 			GC.setFirstname("Vorname");
 			GC.setLastname("Lastname");
@@ -224,7 +225,7 @@ public class GoogleAccount extends AccountBase {
 	   		System.out.println(e);
 	 	}
 	   	Log.i(TAG, "Keine Kontakte gefunden!");
-		
+		*/
 	   	return null;
 	}
 	

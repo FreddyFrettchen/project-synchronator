@@ -19,13 +19,12 @@ import com.swe.prototype.models.AccountBase;
 
 public class ExchangeNote extends Note {
 
-	private string ID;
-	private string title = null;
-	private string text = null;
+	private String ID;
+	private String subject;
+	private String body;
 
 	public ExchangeNote(AccountBase account) {
 		super(account);
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getID()
@@ -33,6 +32,26 @@ public class ExchangeNote extends Note {
 		return null;
 	}
 	
+	public String getSubject() {
+		return subject;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setID(String iD) {
+		ID = iD;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
 	@Override
 	public String getNote() {
 		// TODO Auto-generated method stub
