@@ -120,4 +120,17 @@ public class AccountManager {
 		return new ArrayAdapter<AccountBase>(this.context,
 				android.R.layout.simple_list_item_checked, this.accounts);
 	}
+
+	//should throw
+	public AccountBase getAccountByTag(String tag, String username,
+			String password) {
+		if (tag.equals("Google")) {
+			return new GoogleAccount(context, -1, Settings.getRefreshTimeAsInt(),
+					username, password);
+		} else if (tag.equals("Exchange")) {
+			return new ExchangeAccount(context, -1, Settings.getRefreshTimeAsInt(),
+					username, password);
+		}
+		return null;
+	}
 }

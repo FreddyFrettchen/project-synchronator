@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.swe.prototype.R;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.AccountTable;
+import com.swe.prototype.models.AccountBase;
 
 public class CreateAccountActivity extends BaseActivity {
 
@@ -48,7 +49,13 @@ public class CreateAccountActivity extends BaseActivity {
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(correctInputChoise()) {
+
+				if (!isValidAccount()) {
+					showShortToast("Account data not valid. Please supply correct logindata.");
+					return;
+				}
+
+				if (correctInputChoise()) {
 					if (edit_mode) {
 						updateAccount(v);
 					} else {
@@ -58,15 +65,24 @@ public class CreateAccountActivity extends BaseActivity {
 				}
 			}
 		});
-		
+
 		Button cancel_button = (Button) findViewById(R.id.button_cancel);
-		//cancel_button.setText("Cancel");
+		// cancel_button.setText("Cancel");
 		cancel_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
+	}
+
+	protected boolean isValidAccount(){
+		String tag = ((Spinner) findViewById(R.id.spinner_account))
+						.getSelectedItem().toString();
+		String username = getEditText(R.id.edit_text_username);
+		String password = getEditText(R.id.edit_text_password);
+		AccountBase created_acc = accounts.getAccountByTag(tag,username,password);
+		return created_acc.validateAccountData();
 	}
 
 	// load account from db
@@ -119,21 +135,23 @@ public class CreateAccountActivity extends BaseActivity {
 				getEditText(R.id.edit_text_username));
 		values.put(AccountTable.COLUMN_PASSWORD,
 				getEditText(R.id.edit_text_password));
-		values.put("last_sync", "0");
+		values.put("last_sync", "0"); // TODO synctime
 		getContentResolver().insert(CONTENT_URI, values);
 	}
-	
+
 	private boolean correctInputChoise() {
 		// TODO Auto-generated method stub
-		if(getEditText(R.id.edit_text_username).isEmpty() || getEditText(R.id.edit_text_password).isEmpty()) {
-			this.showShortToast("Username und Password m�ssen ausgef�llt sein!");
+		if (getEditText(R.id.edit_text_username).isEmpty()
+				|| getEditText(R.id.edit_text_password).isEmpty()) {
+			this.showShortToast("Username and Password have to be given!");
 			return false;
 		}
 		return true;
 	}
-	
+
 	private void showShortToast(String message) {
-		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT)
+				.show();
 	}
 
 	private void setEditText(int id, String text) {
