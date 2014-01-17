@@ -50,6 +50,16 @@ import com.google.gdata.data.contacts.*;
 import java.io.IOException;
 import java.net.URL;
 
+import java.net.*;
+import java.util.List;
+import java.io.*;
+
+import com.google.gdata.client.contacts.*;
+import com.google.gdata.data.contacts.*;
+
+import java.io.IOException;
+import java.net.URL;
+
 
 
 public class GoogleAccount extends AccountBase {
@@ -77,7 +87,7 @@ public class GoogleAccount extends AccountBase {
 	
 	
 	/* 
-	 * return: Der zurückgegebene String muss als erstes Zeichen 'G',haben!!!
+	 * return: Der zurï¿½ckgegebene String muss als erstes Zeichen 'G',haben!!!
 	 *  
 	 */
 	@Override
@@ -148,6 +158,9 @@ public class GoogleAccount extends AccountBase {
 	
 	private ArrayList<Contact> getContacts()
 	{
+//<<<<<<< .mine
+		ArrayList<GoogleHelpClass> list = GoogleHelpClass.getContacts(this.username, this.password);
+//=======
 	   	try
 	   	{
 	   		//TestGoogle tg = new TestGoogle();
@@ -217,21 +230,35 @@ public class GoogleAccount extends AccountBase {
 	
 	private ArrayList<GoogleContact> getContactsTEST()
 	{
+//>>>>>>> .r154
 		ArrayList<GoogleContact> liste = new ArrayList<GoogleContact>();
-		
-		for(int i = 0;i<10;i++)
+	/*	
+		Log.i(TAG,"Liste.size="+list.size());
+		for(int i= 0;i< list.size();i++)
+		//for(int i = 0;i<10;i++)
 		{
-			GoogleContact gc = new GoogleContact(this);
-			gc.setEmail(i+"Mail.mail@mail.de");
-			gc.setFirstname(i+"Vorname");
-			gc.setLastname(i+"Lastname");
-			gc.setId(i+" id");
-			gc.setPhoneumber(i+"");
-			liste.add(gc);
-		}
-		
-		return liste;
+			GoogleContact GC = new GoogleContact(this);
+			GC.setEmail(list.get(i).email);
+			GC.setFirstname(list.get(i).firstname);
+			GC.setLastname(list.get(i).lastname);
+			GC.setId(list.get(i).etag);
+			GC.setPhoneumber(list.get(i).phone);
+			liste.add(GC);
+			
+			
+			/*GoogleContact GC = new GoogleContact(this);
+			GC.setEmail("mail");
+			GC.setFirstname("firstname");
+			GC.setLastname("lastname");
+			GC.setId("etag");
+			GC.setPhoneumber("phone");
+			liste.add(GC);
+			*/
+			
+		//}
+	   	return liste;
 	}
+	
 	
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
