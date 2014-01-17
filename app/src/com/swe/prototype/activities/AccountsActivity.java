@@ -139,6 +139,7 @@ public class AccountsActivity extends BaseActivity implements
 	}
 
 	public void deleteAccount(int id_account) {
+		Log.i(TAG,"Deleting account " + id_account);
 		getContentResolver().delete(CONTENT_URI, "_id = ?",
 				new String[] { id_account + "" });
 		loadermanager.restartLoader(1, null, (LoaderCallbacks<Cursor>) this);
