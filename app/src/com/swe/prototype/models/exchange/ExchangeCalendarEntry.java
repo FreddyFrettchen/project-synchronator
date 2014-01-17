@@ -57,37 +57,31 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 	
 	@Override
 	public String getStartDate() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.StartDate.toString();
 	}
 
 	@Override
 	public String getEndDate() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.EndDate.toString();
 	}
 
 	@Override
 	public String getStartTime() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getEndTime() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.Description;
 	}
 
 	@Override
 	public int getRepeat() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.Repeat;
 	}
 }
