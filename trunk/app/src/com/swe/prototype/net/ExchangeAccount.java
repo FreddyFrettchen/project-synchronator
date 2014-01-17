@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.content.Context;
-import android.provider.Contacts;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
-import com.google.gdata.client.GoogleAuthTokenFactory.OAuth2Token;
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.Body;
 import com.independentsoft.exchange.ContactPropertyPath;
@@ -39,7 +37,8 @@ public class ExchangeAccount extends AccountBase {
 
 	private static final String TAG = "ExchangeAccount";
 
-	//public static ArrayList<Contact> test = new ArrayList<Contact>();
+	public static ArrayList<Contact> test = new ArrayList<Contact>();
+	public static ArrayList<com.swe.prototype.models.Note> test2 = new ArrayList<com.swe.prototype.models.Note>();
 	
 	public ExchangeAccount(Context context, int account_id,
 			int refresh_time_sec, String username, String password) {
@@ -48,13 +47,13 @@ public class ExchangeAccount extends AccountBase {
 
 	@Override
 	public void synchronizeNotes() {
-
+		test2 = getNotes();
 	}
 
 	@Override
 	public void synchronizeContacts() {
 		Log.i(TAG, "Synchronize Start Contacts");
-		//test = getContacts();
+		test = getContacts();
 	}
 
 	@Override
@@ -139,9 +138,9 @@ public class ExchangeAccount extends AccountBase {
 		return list;
 	}
 
-	public ArrayList<Note> getNotes(){
+	public ArrayList<com.swe.prototype.models.Note> getNotes(){
 	       
-		ArrayList<Note> list = new ArrayList<Note>();
+		ArrayList<com.swe.prototype.models.Note> list = new ArrayList<com.swe.prototype.models.Note>();
 		ExchangeNote exnote = new ExchangeNote(this);
 			try
 	        {
@@ -211,16 +210,14 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context, layout_id);
-		Log.i(TAG, "getContactADApter start");
-		//Log.i(TAG, test.get(0).getLastName());
-		adapter.addAll(getContacts());
+		adapter.addAll(test);
 		return adapter;
 	}
 
 	@Override
 	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
-		ArrayAdapter<Note> adapter = new ArrayAdapter<Note>(context, layout_id);
-		adapter.addAll(getNotes());
+		ArrayAdapter<com.swe.prototype.models.Note> adapter = new ArrayAdapter<com.swe.prototype.models.Note>(context, layout_id);
+		adapter.addAll(test2);
 		/*try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
