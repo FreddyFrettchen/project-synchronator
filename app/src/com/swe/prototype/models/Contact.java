@@ -1,11 +1,13 @@
 package com.swe.prototype.models;
 
+import java.io.Serializable;
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public abstract class Contact extends BaseData {
+public abstract class Contact extends BaseData implements Serializable{
 
 	public Contact(AccountBase account) {
 		super(account);
