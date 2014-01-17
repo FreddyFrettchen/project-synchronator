@@ -17,11 +17,11 @@ import com.swe.prototype.models.Contact;
 public class ExchangeContact extends Contact {
 	
 	public static String TAG = "ExchangeContact";
-	private String lastname;
-	private String firstname;
-	private String id;
-	private String phoneumber;
-	private String email;
+	public String lastname = null;
+	public String firstname = null;
+	public String id = null;
+	public String phoneumber = null;
+	public String email = null;
 	
 	
 	public ExchangeContact(AccountBase account){
