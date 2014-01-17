@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.content.Context;
+import android.provider.Contacts;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
+import com.google.gdata.client.GoogleAuthTokenFactory.OAuth2Token;
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.Body;
 import com.independentsoft.exchange.ContactPropertyPath;
@@ -36,6 +39,8 @@ public class ExchangeAccount extends AccountBase {
 
 	private static final String TAG = "ExchangeAccount";
 
+	public static ArrayList<Contact> test = new ArrayList<Contact>();
+	
 	public ExchangeAccount(Context context, int account_id,
 			int refresh_time_sec, String username, String password) {
 		super(context, account_id, refresh_time_sec, username, password);
@@ -48,7 +53,8 @@ public class ExchangeAccount extends AccountBase {
 
 	@Override
 	public void synchronizeContacts() {
-
+		Log.i(TAG, "Synchronize Start Contacts");
+		test = getContacts();
 	}
 
 	@Override
@@ -90,29 +96,37 @@ public class ExchangeAccount extends AccountBase {
 		}
 	}
 	
+	
 	public ArrayList<Contact> getContacts(){
 	       
+		Log.i(TAG, "getContact start");
 		ArrayList<Contact> list = new ArrayList<Contact>();
-		ExchangeContact excon = new ExchangeContact(this);
+		
 			try
 	        {
+				ExchangeContact excon = new ExchangeContact(this);
 	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx","bd8299s@ad.fh-aachen.de", "JA346tcxo");
-
+	        	Log.i(TAG, "getContacts for response.findItem");
 	            FindItemResponse response = service.findItem(StandardFolder.CONTACTS, ContactPropertyPath.getAllPropertyPaths());
-
+	            Log.i(TAG, "getContacts for FORSCHLEIFE");
 	            for (int i = 0; i < response.getItems().size(); i++)
 	            {
 	                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact)
 	                {
 	                    com.independentsoft.exchange.Contact contact = (com.independentsoft.exchange.Contact) response.getItems().get(i);
 
+	                    Log.i(TAG, contact.getGivenName());
 	                    excon.setFirstname(contact.getGivenName());
 	                    excon.setLastname(contact.getSurname());
+	                    Log.i(TAG, excon.getLastName());
+	                    Log.i(TAG, contact.getSurname() + "independent Contact");
 	                    excon.setPhoneumber(contact.getBusinessPhone());
 	                    excon.setEmail(contact.getEmail1Address());
 	                    excon.setId(contact.getItemId().toString());
 	                    list.add(excon);
 	                }
+	                Log.i(TAG, list.size()+"");
+	                Log.i(TAG, list.get(0).getLastName());
 	            }
 	        }
 	        catch (ServiceException e)
@@ -197,7 +211,9 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context, layout_id);
-		adapter.addAll(getContacts());
+		Log.i(TAG, "getContactADApter start");
+		Log.i(TAG, test.get(0).getLastName());
+		adapter.addAll(test);
 		return adapter;
 	}
 
