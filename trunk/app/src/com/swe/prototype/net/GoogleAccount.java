@@ -78,6 +78,7 @@ public class GoogleAccount extends AccountBase {
 	@Override
 	public void synchronizeContacts() {
 		Log.i(TAG, "Synchronize wurde aufgerufen!");
+		GoogleHelpClass.getContacts(this.username, this.password);
 	}
 	
 	@Override
@@ -232,32 +233,43 @@ public class GoogleAccount extends AccountBase {
 	private ArrayList<GoogleContact> getContactsTEST()
 	{
 //>>>>>>> .r154
-		ArrayList<GoogleContact> liste = new ArrayList<GoogleContact>();
-	/*	
-		Log.i(TAG,"Liste.size="+list.size());
-		for(int i= 0;i< list.size();i++)
-		//for(int i = 0;i<10;i++)
+		ArrayList<GoogleContact> list = new ArrayList<GoogleContact>();
+		List<Contact>liste2 = new ArrayList<Contact>();
+		/*try
 		{
-			GoogleContact GC = new GoogleContact(this);
-			GC.setEmail(list.get(i).email);
-			GC.setFirstname(list.get(i).firstname);
-			GC.setLastname(list.get(i).lastname);
-			GC.setId(list.get(i).etag);
-			GC.setPhoneumber(list.get(i).phone);
-			liste.add(GC);
-			
-			
-			/*GoogleContact GC = new GoogleContact(this);
-			GC.setEmail("mail");
-			GC.setFirstname("firstname");
-			GC.setLastname("lastname");
-			GC.setId("etag");
-			GC.setPhoneumber("phone");
-			liste.add(GC);
-			*/
-			
-		//}
-	   	return liste;
+			liste2 = SaveEntries.loadContacts("Google");
+		
+			for(int i = 0;i<10;i++)
+			{
+				GoogleContact GC = new GoogleContact(this);
+				GC.setEmail(i+"mail@mail.mail");
+				GC.setFirstname(i+"Vorname");
+				GC.setLastname(i+"Nachname");
+				GC.setId(i+"");
+				GC.setPhoneumber(i+"");
+				list.add(GC);
+				liste2.add(GC);
+				
+				//list.add((GoogleContact)liste2.get(i));
+				/*GoogleContact GC = new GoogleContact(this);
+				GC.setEmail("mail");
+				GC.setFirstname("firstname");
+				GC.setLastname("lastname");
+				GC.setId("etag");
+				GC.setPhoneumber("phone");
+				liste.add(GC);
+				
+			}
+		
+			SaveEntries.saveContacts(liste2, "Google");
+					
+		}
+		catch(Exception e)
+		{	
+			Log.i(TAG,e.getMessage());
+		}
+		*/
+	   	return list;
 	}
 	
 	
@@ -268,8 +280,9 @@ public class GoogleAccount extends AccountBase {
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context,layout_id);
 		
 		//Log.i(TAG, "AdapterSize"+this.getContactsTEST().size());
+		//adapter.addAll(this.getContactsTEST());
 		
-		adapter.addAll(this.getContacts());
+		//adapter.addAll(this.getContacts());
 		return adapter;
 	}
 
