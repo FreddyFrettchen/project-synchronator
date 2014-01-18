@@ -42,4 +42,12 @@ public class DBTools extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		onUpgrade(db, 1, 1);
 	}
+	
+	/**
+	 * delete all contacts/notes/calendarentries
+	 */
+	public void purgeData() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ServerDataTable.onUpgrade(db, 1, 1);
+	}
 }

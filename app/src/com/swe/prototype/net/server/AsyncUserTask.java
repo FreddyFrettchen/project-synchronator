@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.swe.prototype.net.AsyncTaskBase;
@@ -20,8 +21,8 @@ public abstract class AsyncUserTask extends
 
 	protected static final String TAG = "AsyncUserTask";
 
-	protected boolean authenticate(String server, String email, String password)
-			throws IOException {
+	protected boolean authenticate(Context context, String server,
+			String email, String password) throws IOException {
 		String authentification_url = server + "/user/authenticate";
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -31,12 +32,14 @@ public abstract class AsyncUserTask extends
 		HttpURLConnection request = postRequest(authentification_url, params);
 		request.connect();
 
-		// response code of 200 is accepted and 403 is failed.
-		int response = request.getResponseCode();
-
-		return response == 200;
+		// response code of 200 is accepted and 403 is failed. int response =
+		return request.getResponseCode() == 200;
+		/*
+		 * return getPostRequestSSLReturnCode(context, authentification_url,
+		 * params) == 200;
+		 */
 	}
-	
+
 	protected boolean delete(String server, String email, String password)
 			throws IOException {
 		String authentification_url = server + "/user/delete";

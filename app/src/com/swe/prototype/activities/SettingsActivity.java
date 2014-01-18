@@ -88,6 +88,7 @@ public class SettingsActivity extends BaseActivity {
 	}
 
 	public void onClickRefresh(View v) {
+		showToast("Refreshing all accounts...");
 		accounts.refreshAllData();
 	}
 

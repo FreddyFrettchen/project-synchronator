@@ -164,7 +164,6 @@ public class CalendarMonthViewActivity extends BaseActivity {
 
 	protected void showToast(String string) {
 		Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
-
 	}
 
 	public void refreshCalendar() {
@@ -237,7 +236,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		String startDate = e.getStartDate();
 		String endDate = e.getEndDate();
 		// Log.i(TAG, "startDate:"+startDate+" endDate: "+endDate);
-		// kann später entfernt werden; Fall darf nicht auftreten
+		// kann spï¿½ter entfernt werden; Fall darf nicht auftreten
 		if (startDate == null || endDate == null) {
 			Log.i(TAG, "CalendarEntry e: startDate oder endDate == null");
 			return;
@@ -253,8 +252,8 @@ public class CalendarMonthViewActivity extends BaseActivity {
 
 	private void putIntoDataStructures(CalendarEntry e, String date) {
 
-		// erstmal bauen wir uns ne Liste von CalendarEntrys für jeden möglichen
-		// Tag, um später der dayview zu übergeben
+		// erstmal bauen wir uns ne Liste von CalendarEntrys fï¿½r jeden mï¿½glichen
+		// Tag, um spï¿½ter der dayview zu ï¿½bergeben
 		if (eventsOnDate.containsKey(date)) {
 			eventsOnDate.get(date).add(e);
 		} else {
@@ -264,10 +263,10 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		}
 
 		char acc = e.getAccount().toString().charAt(0);
-		// hier bauen wir für den Adapter ne Hashmap die Weiss, an welchem datum
+		// hier bauen wir fï¿½r den Adapter ne Hashmap die Weiss, an welchem datum
 		// welcher Account nen eintrag hat
-		// diese hashmap wir dann später zu ner Liste und dem Calendar Adapter
-		// übergeben
+		// diese hashmap wir dann spï¿½ter zu ner Liste und dem Calendar Adapter
+		// ï¿½bergeben
 		if (itemHashMap.containsKey(date)) {
 
 			switch (acc) {
@@ -285,7 +284,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 			}
 			default: {
 				Log.i(TAG,
-						"Konvention gebrochen: Account.toString() fängt an mit char: "
+						"Konvention gebrochen: Account.toString() fï¿½ngt an mit char: "
 								+ acc);
 			}
 			}
@@ -309,7 +308,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 			}
 			default: {
 				Log.i(TAG,
-						"Konvention gebrochen: Account.toString() fängt an mit char: "
+						"Konvention gebrochen: Account.toString() fï¿½ngt an mit char: "
 								+ acc);
 			}
 			}

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,7 +51,7 @@ public class ListContactsActivity extends BaseActivity {
 					.getContactAdapter(this,
 							android.R.layout.simple_list_item_1));
 		}
-		
+
 		// Attach the adapter to a ListView
 		listView = (ListView) findViewById(R.id.contacts_list_view);
 		registerForContextMenu(listView);
@@ -111,16 +112,17 @@ public class ListContactsActivity extends BaseActivity {
 		startActivity(in);
 	}
 
-	public void moveContact(Contact c) {
+	public void moveContact(final Contact c) {
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
 		dialog.setContentView(R.layout.dialog_move);
 		dialog.setTitle("Move Contact to:");
-		
+
 		ArrayAdapter<AccountBase> adapter = new ArrayAdapter<AccountBase>(this,
 				android.R.layout.simple_list_item_checked,
 				accounts.getAccounts());
-		ListView list_accounts = (ListView) dialog.findViewById(R.id.dialog_list_accounts);
+		final ListView list_accounts = (ListView) dialog
+				.findViewById(R.id.dialog_list_accounts);
 		list_accounts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		list_accounts.setAdapter(adapter);
 
@@ -132,6 +134,24 @@ public class ListContactsActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				Log.i(TAG, "moving contacts ...");
+				showToast("Moving contacts...");
+
+				int cntChoice = list_accounts.getCount();
+				SparseBooleanArray selected_accounts = list_accounts
+						.getCheckedItemPositions();
+
+				// create new accounts
+				for (int i = 0; i < cntChoice; i++) {
+					if (selected_accounts.get(i) == true) {
+						accounts.getAccounts()
+								.get(i)
+								.createContact(c.getLastName(), c.getFirstName(),
+										c.getPhoneumber(), c.getEmail());
+					}
+				}
+				
+				//delete original 
+				c.getAccount().deleteContact(c);
 			}
 		});
 

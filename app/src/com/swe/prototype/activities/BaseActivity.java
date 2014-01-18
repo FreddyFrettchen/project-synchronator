@@ -116,6 +116,7 @@ public abstract class BaseActivity extends Activity {
 										editor.putString("email", null);
 										editor.putString("password", null);
 										editor.commit();
+										new DBTools(getApplicationContext()).purgeData();
 										show(MainActivity.class);
 									}
 								})
@@ -163,6 +164,10 @@ public abstract class BaseActivity extends Activity {
 		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		return (networkInfo != null && networkInfo.isConnected());
+	}
+	
+	protected void showToast(String string) {
+		Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
 	}
 
 	/*
