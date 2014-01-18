@@ -65,10 +65,6 @@ public class ServerContact extends Contact {
 		return this.email;
 	}
 
-	public String toString() {
-		return getLastName() + ", " + getFirstName();
-	}
-
 	@Override
 	public String getAccountTag() {
 		return "Server";

@@ -43,6 +43,7 @@ public class ExchangeAccount extends AccountBase {
 	public ExchangeAccount(Context context, int account_id,
 			int refresh_time_sec, String username, String password) {
 		super(context, account_id, refresh_time_sec, username, password);
+		Log.i(TAG,"accountdata: " + username + ", "+password );
 	}
 
 	@Override
@@ -497,7 +498,6 @@ public class ExchangeAccount extends AccountBase {
          Log.i(TAG, "Benutzer Validierung nicht Erfolgreich");
          return false;
         }*/
-		
 	}
 
 }
