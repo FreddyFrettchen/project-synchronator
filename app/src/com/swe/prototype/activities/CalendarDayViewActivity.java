@@ -12,8 +12,8 @@ import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.swe.prototype.globalsettings.DrawView;
-import com.swe.prototype.globalsettings.Tools;
+import com.swe.prototype.helpers.DrawView;
+import com.swe.prototype.helpers.Tools;
 import com.swe.prototype.models.CalendarEntry;
 
 /**

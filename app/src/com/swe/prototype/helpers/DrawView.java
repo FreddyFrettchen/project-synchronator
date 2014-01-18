@@ -1,4 +1,4 @@
-package com.swe.prototype.globalsettings;
+package com.swe.prototype.helpers;
 
 import java.util.ArrayList;
 

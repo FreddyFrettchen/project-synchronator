@@ -1,4 +1,4 @@
-package com.swe.prototype.globalsettings;
+package com.swe.prototype.helpers;
 
 public class RectPos {
 	//pixel values
