@@ -15,17 +15,19 @@ public class DrawView extends View {
     float oneHour;
     ArrayList<CalendarEntry> toPaint;
     
+    final int paddingTop;
     final int PADDING_LEFT=100;
     int widht;
     int height;
 	private int abHeight;
-    public DrawView(Context context,int w,int h,float oneHour,int abHeight,ArrayList<CalendarEntry>toPaint) {
+    public DrawView(Context context,int w,int h,int pt,float oneHour,int abHeight,ArrayList<CalendarEntry>toPaint) {
         super(context);
         this.oneHour=oneHour;
         this.toPaint=toPaint;
         this.height=h;
         this.widht=w;
         this.abHeight = abHeight;
+        this.paddingTop = pt;
     }
 
     @Override
@@ -60,10 +62,10 @@ public class DrawView extends View {
 
 	private void drawBackground(Canvas canvas) {
 		paint.setColor(Color.BLACK);
-        canvas.drawRect(PADDING_LEFT-20, 0,PADDING_LEFT -18,height-abHeight, paint );
-        canvas.drawRect(widht-PADDING_LEFT+18, 0,widht-PADDING_LEFT+20,height-abHeight, paint );
-        for (int i = 0; i <= 25; i++) {
-        	canvas.drawRect(PADDING_LEFT-20, 0+i*oneHour,widht-PADDING_LEFT+20,2+i*oneHour, paint );
+        canvas.drawRect(PADDING_LEFT-20, 0+paddingTop,PADDING_LEFT -18,(oneHour*24)+paddingTop, paint );
+        canvas.drawRect(widht-PADDING_LEFT+18, 0+paddingTop,widht-PADDING_LEFT+20,(oneHour*24)+paddingTop, paint );
+        for (int i = 0; i <= 24; i++) {
+        	canvas.drawRect(PADDING_LEFT-20, 0+i*oneHour +paddingTop,widht-PADDING_LEFT+20,2+i*oneHour+paddingTop, paint );
 		}
         
 	}
