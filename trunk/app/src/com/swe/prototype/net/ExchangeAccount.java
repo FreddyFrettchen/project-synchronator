@@ -5,7 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -26,6 +30,9 @@ import com.independentsoft.exchange.Response;
 import com.independentsoft.exchange.Service;
 import com.independentsoft.exchange.ServiceException;
 import com.independentsoft.exchange.StandardFolder;
+import com.swe.prototype.database.SQLiteDataProvider;
+import com.swe.prototype.database.tables.ExchangeContactTable;
+import com.swe.prototype.database.tables.ExchangeNoteTable;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
@@ -33,13 +40,17 @@ import com.swe.prototype.models.exchange.ExchangeCalendarEntry;
 import com.swe.prototype.models.exchange.ExchangeContact;
 import com.swe.prototype.models.exchange.ExchangeNote;
 
-public class ExchangeAccount extends AccountBase {
+public class ExchangeAccount extends AccountBase{
 
+	/**
+	 * 
+	 */
 	private static final String TAG = "ExchangeAccount";
-
-	public static ArrayList<Contact> test = new ArrayList<Contact>();
-	public static ArrayList<com.swe.prototype.models.Note> test2 = new ArrayList<com.swe.prototype.models.Note>();
-	
+	  
+	// Database fields
+//	private SQLiteDatabase database;
+//	private MySQLiteHelper dbHelper;
+	  
 	public ExchangeAccount(Context context, int account_id,
 			int refresh_time_sec, String username, String password) {
 		super(context, account_id, refresh_time_sec, username, password);
@@ -48,13 +59,94 @@ public class ExchangeAccount extends AccountBase {
 
 	@Override
 	public void synchronizeNotes() {
-		test2 = getNotes();
+		Log.i(TAG, "Synchronize Note start");
+			try
+	        {
+				ContentValues values = new ContentValues();
+				Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
+						"note");
+				
+	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",this.username, this.password);
+
+	            FindItemResponse response = service.findItem(StandardFolder.NOTES, ContactPropertyPath.getAllPropertyPaths());
+	            Log.i(TAG, "Synchronize Note for FORSCHLEIFE");
+	            for (int i = 0; i < response.getItems().size(); i++)
+	            {
+	                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Note)
+	                {
+	                    com.independentsoft.exchange.Note note = (com.independentsoft.exchange.Note) response.getItems().get(i);
+	                    Log.i(TAG, note.getSubject());
+	                    Log.i(TAG, note.getBodyPlainText());
+	                 
+	                    values.put("_id", note.getItemId().toString());
+	                    values.put("title", note.getSubject());
+	                    values.put("description", note.getBodyPlainText());
+	                    /*exnote.setSubject(note.getSubject());
+	                    exnote.setBody(note.getBodyPlainText());
+	                    exnote.setID(note.getItemId().toString());
+	                    list.add(exnote);*/
+	                    this.context.getContentResolver().insert(contentUri,values);
+	                }
+	            }
+	            
+	            //SaveEntries.saveNotes(list, TAG);
+	        }
+	        catch (ServiceException e)
+	        {
+	            System.out.println(e.getMessage());
+	            System.out.println(e.getXmlMessage());
+
+	            e.printStackTrace();
+	        }
 	}
 
 	@Override
 	public void synchronizeContacts() {
 		Log.i(TAG, "Synchronize Start Contacts");
-		test = getContacts();
+		ArrayList<Contact> list = new ArrayList<Contact>();
+
+			try
+	        {
+				ContentValues values = new ContentValues();
+				Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
+						"contacts");
+				ExchangeContact excon = new ExchangeContact(this);
+	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",this.username, this.password);
+	        	Log.i(TAG, "SnchronizeContacts for response.findItem");
+	            FindItemResponse response = service.findItem(StandardFolder.CONTACTS, ContactPropertyPath.getAllPropertyPaths());
+	            Log.i(TAG, "Synchronize for FORSCHLEIFE");
+	            for (int i = 0; i < response.getItems().size(); i++)
+	            {
+	                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact)
+	                {
+	                    com.independentsoft.exchange.Contact contact = (com.independentsoft.exchange.Contact) response.getItems().get(i);
+
+	                    values.put("_id", contact.getItemId().toString());
+	                    values.put("firstname", contact.getGivenName());
+	                    values.put("lastname", contact.getSurname());
+	                    values.put("email", contact.getEmail1Address());
+	                    values.put("phonenumber", contact.getBusinessPhone());
+	                    //excon.setFirstname(contact.getGivenName());
+	                    //excon.setLastname(contact.getSurname());
+	                    Log.i(TAG, excon.getLastName() + "ExchangeContact");
+	                    Log.i(TAG, contact.getSurname() + "independent Contact");
+	                    //excon.setPhoneumber(contact.getBusinessPhone());
+	                    //excon.setEmail(contact.getEmail1Address());
+	                    //excon.setId(contact.getItemId().toString());
+	                    //list.add(excon);
+	                    
+	                    this.context.getContentResolver().insert(contentUri,values);
+	                }
+	            }
+	            //SaveEntries.saveContacts(list, TAG);
+	        }
+	        catch (ServiceException e)
+	        {
+	            System.out.println(e.getMessage());
+	            System.out.println(e.getXmlMessage());
+
+	            e.printStackTrace();
+	        }
 	}
 
 	@Override
@@ -82,10 +174,10 @@ public class ExchangeAccount extends AccountBase {
 			com.independentsoft.exchange.Contact contact = new com.independentsoft.exchange.Contact();
 			contact.setGivenName(firstname);
 			contact.setSurname(lastname);
-			contact.setFileAsMapping(FileAsMapping.LAST_SPACE_FIRST);
+			//contact.setFileAsMapping(FileAsMapping.LAST_SPACE_FIRST);
 			contact.setBusinessPhone(phonenumber);
 			contact.setEmail1Address(email);
-			contact.setEmail1Type("SMTP");
+		//	contact.setEmail1Type("SMTP");
 
 			ItemId itemId = service.createItem(contact);
 		} catch (ServiceException e) {
@@ -96,80 +188,81 @@ public class ExchangeAccount extends AccountBase {
 		}
 	}
 	
+	/**
+	 * read data from database and return a list of objects that can
+	 * be castet to contact/calendarEntry/note
+	 * 
+	 * @return
+	 */
+	public Cursor getContactData(String tag) {
+		final ContentResolver resolver = this.context.getContentResolver();
+		final Uri dataUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,ExchangeContactTable.TABLE_CONTACTS);
+		final String[] projection = { ExchangeContactTable.COLUMN_ID,ExchangeContactTable.COLUMN_GIVENNAME, 
+				ExchangeContactTable.COLUMN_SURNAME, ExchangeContactTable.COLUMN_EMAIL, ExchangeContactTable.COLUMN_PHONE};
+		String[] selectionArgs = null;
+		Cursor cursor = resolver.query(dataUri, projection, null ,selectionArgs, null);
+		return cursor;
+	}
+
+	/**
+	 * read data from database and return a list of objects that can
+	 * be castet to contact/calendarEntry/note
+	 * 
+	 * @return
+	 */
+	public Cursor getNoteData(String tag) {
+		final ContentResolver resolver = this.context.getContentResolver();
+		final Uri dataUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,ExchangeNoteTable.TABLE_NOTES);
+		final String[] projection = { ExchangeNoteTable.COLUMN_ID,ExchangeNoteTable.COLUMN_SUBJECT, 
+				ExchangeNoteTable.COLUMN_BODY};
+		String[] selectionArgs = null;
+		Cursor cursor = resolver.query(dataUri, projection, null ,selectionArgs, null);
+		return cursor;
+	}
 	
 	public ArrayList<Contact> getContacts(){
-	       
-		Log.i(TAG, "getContact start");
-		ArrayList<Contact> list = new ArrayList<Contact>();
+	    ArrayList<Contact> contactlist = new ArrayList<Contact>();
+	    ExchangeContact excon = new ExchangeContact(this);
+	    /*try{
+	    	contactlist = SaveEntries.loadContacts(TAG);
+	    }
+	    catch(Exception e){
+	    	//e.printStackTrace();
+	    	Log.i(TAG, "getContacts Exception");
+	    }
+		return contactlist;*/
+		Cursor cursor = getContactData("contacts");
+		do{
+			excon.setId(cursor.getString(0));
+			excon.setFirstname(cursor.getString(1));
+			excon.setLastname(cursor.getString(2));
+			excon.setEmail(cursor.getString(3));
+			excon.setPhoneumber(cursor.getString(4));
+			contactlist.add(excon);
+		}while (cursor.moveToNext());
 		
-			try
-	        {
-				ExchangeContact excon = new ExchangeContact(this);
-	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",this.username, this.password);
-	        	Log.i(TAG, "getContacts for response.findItem");
-	            FindItemResponse response = service.findItem(StandardFolder.CONTACTS, ContactPropertyPath.getAllPropertyPaths());
-	            Log.i(TAG, "getContacts for FORSCHLEIFE");
-	            for (int i = 0; i < response.getItems().size(); i++)
-	            {
-	                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact)
-	                {
-	                    com.independentsoft.exchange.Contact contact = (com.independentsoft.exchange.Contact) response.getItems().get(i);
-
-	                    Log.i(TAG, contact.getGivenName());
-	                    excon.setFirstname(contact.getGivenName());
-	                    excon.setLastname(contact.getSurname());
-	                    Log.i(TAG, excon.getLastName() + "ExchangeContact");
-	                    Log.i(TAG, contact.getSurname() + "independent Contact");
-	                    excon.setPhoneumber(contact.getBusinessPhone());
-	                    excon.setEmail(contact.getEmail1Address());
-	                    excon.setId(contact.getItemId().toString());
-	                    list.add(excon);
-	                }
-	                Log.i(TAG, list.size()+"");
-	                Log.i(TAG, list.get(0).getLastName());
-	            }
-	        }
-	        catch (ServiceException e)
-	        {
-	            System.out.println(e.getMessage());
-	            System.out.println(e.getXmlMessage());
-
-	            e.printStackTrace();
-	        }
-		return list;
+		
+		/*if (cursor.moveToFirst()) {
+			Log.i(TAG, "Decrypting Contacts");
+			do {
+				contacts.addAll((Collection<? extends Contact>) this);
+			} while (cursor.moveToNext());
+		}*/
+		return contactlist;
 	}
 
 	public ArrayList<com.swe.prototype.models.Note> getNotes(){
-	       
-		ArrayList<com.swe.prototype.models.Note> list = new ArrayList<com.swe.prototype.models.Note>();
+		ArrayList<com.swe.prototype.models.Note> notelist = new ArrayList<com.swe.prototype.models.Note>();
 		ExchangeNote exnote = new ExchangeNote(this);
-			try
-	        {
-	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",this.username, this.password);
-
-	            FindItemResponse response = service.findItem(StandardFolder.NOTES, ContactPropertyPath.getAllPropertyPaths());
-
-	            for (int i = 0; i < response.getItems().size(); i++)
-	            {
-	                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Note)
-	                {
-	                    com.independentsoft.exchange.Note note = (com.independentsoft.exchange.Note) response.getItems().get(i);
-
-	                    exnote.setSubject(note.getSubject());
-	                    exnote.setBody(note.getBodyPlainText());
-	                    exnote.setID(note.getItemId().toString());
-	                    list.add(exnote);
-	                }
-	            }
-	        }
-	        catch (ServiceException e)
-	        {
-	            System.out.println(e.getMessage());
-	            System.out.println(e.getXmlMessage());
-
-	            e.printStackTrace();
-	        }
-		return list;
+		Cursor cursor = getNoteData("note");
+		do{
+			exnote.setID(cursor.getString(0));
+			exnote.setTitle(cursor.getString(1));
+			exnote.setBody(cursor.getString(2));
+			notelist.add(exnote);  
+		}while (cursor.moveToNext());
+		
+		return notelist;
 	}
 
 	public ArrayList<CalendarEntry> getCalendarEntry(){
@@ -218,7 +311,7 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public BaseAdapter getNotesAdapter(Context context, int layout_id) {
 		ArrayAdapter<com.swe.prototype.models.Note> adapter = new ArrayAdapter<com.swe.prototype.models.Note>(context, layout_id);
-		adapter.addAll(test2);
+		adapter.addAll(getNotes());
 		/*try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",

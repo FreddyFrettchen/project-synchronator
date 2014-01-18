@@ -3,6 +3,8 @@ package com.swe.prototype.database;
 import java.util.ArrayList;
 
 import com.swe.prototype.database.tables.AccountTable;
+import com.swe.prototype.database.tables.ExchangeContactTable;
+import com.swe.prototype.database.tables.ExchangeNoteTable;
 import com.swe.prototype.database.tables.ServerDataTable;
 import com.swe.prototype.models.server.EncryptedData;
 
@@ -27,12 +29,16 @@ public class DBTools extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase database) {
 		ServerDataTable.onCreate(database);
 		AccountTable.onCreate(database);
+		ExchangeContactTable.onCreate(database);
+		ExchangeNoteTable.onCreate(database);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldv, int newv) {
 		ServerDataTable.onUpgrade(database, oldv, newv);
 		AccountTable.onUpgrade(database, oldv, newv);
+		ExchangeContactTable.onUpgrade(database, oldv, newv);
+		ExchangeNoteTable.onUpgrade(database, oldv, newv);
 	}
 
 	/**

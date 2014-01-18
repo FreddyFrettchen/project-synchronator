@@ -29,22 +29,18 @@ public class ExchangeNote extends Note {
 
 	public String getID()
 	{
-		return null;
-	}
-	
-	public String getSubject() {
-		return subject;
+		return this.ID;
 	}
 
 	public String getBody() {
-		return body;
+		return this.body;
 	}
 
 	public void setID(String iD) {
-		ID = iD;
+		this.ID = iD;
 	}
 
-	public void setSubject(String subject) {
+	public void setTitle(String subject) {
 		this.subject = subject;
 	}
 
@@ -55,10 +51,10 @@ public class ExchangeNote extends Note {
 	@Override
 	public String getNote() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.body;
 	}
 
-	@Override
+/*	@Override
 	public String getTitle() {
 		try {
 			Service service = new Service("https://myserver/ews/Exchange.asmx",
@@ -87,8 +83,8 @@ public class ExchangeNote extends Note {
 		}
 		return "Error";
 	}
-
-	public boolean createTask() {
+*/
+/*	public boolean createTask() {
 		try {
 			Service service = new Service("https://myserver/ews/Exchange.asmx",
 					"username", "password");
@@ -152,7 +148,7 @@ public class ExchangeNote extends Note {
 		}
 		return false;
 	}
-
+*/
 	@Override
 	public String getAccountTag() {
 		return "Exchange";
@@ -162,5 +158,11 @@ public class ExchangeNote extends Note {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getTitle() {
+		// TODO Auto-generated method stub
+		return this.subject;
 	}
 }
