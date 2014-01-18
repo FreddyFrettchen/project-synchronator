@@ -7,11 +7,14 @@ import com.swe.prototype.globalsettings.DrawView;
 import com.swe.prototype.globalsettings.Tools;
 import com.swe.prototype.models.CalendarEntry;
 
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,7 +31,10 @@ import android.widget.TextView;
  *
  */
 public class CalendarDayViewActivity extends BaseActivity {
-
+	
+	private final int TEXTVIEW_PADDING_LEFT = 2;
+	private final int TEXTVIEW_PADDING_TOP = 2;
+	private final int PADDING_TOP = 20;
 	
 	DrawView drawView;
 	public void onCreate(Bundle savedInstanceState){
@@ -39,8 +45,10 @@ public class CalendarDayViewActivity extends BaseActivity {
 		int width = display.getWidth();
 		int height = display.getHeight();
 		float oneHoure = (height-200)/24;
-		int actionbarHight = getActionBar().getHeight();
-		System.out.println("actionbarHight: "+actionbarHight);
+		final TypedArray styledAttributes = getBaseContext().getTheme().obtainStyledAttributes(new int[] { android.R.attr.actionBarSize });
+		int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
+		styledAttributes.recycle();
+		
 		// ausgewählte datum in der dayView anzeigen
 		String date = getIntent().getStringExtra("date");
 		getActionBar().setTitle(Tools.convertDate(date));
@@ -70,8 +78,9 @@ public class CalendarDayViewActivity extends BaseActivity {
 		t.setX(104);
 		t.setY(136);
 		t.setText("Kochen mit gertrude");
-		drawView = new DrawView(this,width,height,oneHoure,actionbarHight,calendarEntrys);
-        //drawView.setBackground(getResources().getDrawable(R.drawable.dayview_background));
+		drawView = new DrawView(this,width,height,PADDING_TOP,oneHoure,mActionBarSize,calendarEntrys);
+        
+		//drawView.setBackground(getResources().getDrawable(R.drawable.dayview_background));
         layout.addView(drawView);
 		layout.addView(t);
 		
@@ -79,8 +88,8 @@ public class CalendarDayViewActivity extends BaseActivity {
 			
 			TextView tmp = new TextView(this);
 			tmp.setTextSize(20);
-			tmp.setX(0);
-			tmp.setY(i*oneHoure);
+			tmp.setX(0+TEXTVIEW_PADDING_LEFT);
+			tmp.setY((i*oneHoure)+TEXTVIEW_PADDING_TOP);
 			String hourBack = "";
 			if(i<10){
 				hourBack = "0"+i+":00";
@@ -105,34 +114,68 @@ public class CalendarDayViewActivity extends BaseActivity {
 		
 	}
 	
+	public static int LONG_PRESS_TIME = 500; // Time in miliseconds 
+	boolean longClickFlag = false;
+	final Handler _handler = new Handler(); 
+	Runnable _longPressed = new Runnable() { 
+	    public void run() {
+	        Log.i("info","LongPress");
+	        longClickFlag = true;
+	    }   
+	};
+	
 	
 	public boolean onTouchEvent(MotionEvent event) {
-        int x = (int) event.getX();
-        int y = (int) event.getY();
-        System.out.println("x: "+x+" y: "+y);
-        int oben = 100;
-        if(x>102&&x<699&&y>138+oben&&y<172+oben){
-        	System.out.println("gelb gedrückt");
+       
+        switch(event.getAction()){
+        case MotionEvent.ACTION_DOWN:
+            _handler.postDelayed(_longPressed, LONG_PRESS_TIME);
+            break;
+        case MotionEvent.ACTION_MOVE:
+            _handler.removeCallbacks(_longPressed);
+            longClickFlag = false;
+            break;
+        case MotionEvent.ACTION_UP:
+            _handler.removeCallbacks(_longPressed);
+            if(!longClickFlag){
+            	int x = (int) event.getX();
+            	int y = (int) event.getY();
+            	System.out.println("x: "+x+" y: "+y);
+            }
+            longClickFlag = false;
+            break;
         }
-        //canvas.drawRect(102, 138, 699, 172, paint );
-        //Toast.makeText(getApplicationContext(), "x: "+eventX+"y: "+eventY, Toast.LENGTH_LONG).show();
+                
+        
     return super.onTouchEvent(event);
+    
+    
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	//um nen long click zu handeln, problem, der normale click ist dann nicht mehr so gut handlebar
+/*
+	public boolean onTouchEvent(MotionEvent event) {
+	       
+        switch(event.getAction()){
+        case MotionEvent.ACTION_DOWN:
+            _handler.postDelayed(_longPressed, LONG_PRESS_TIME);
+            break;
+        case MotionEvent.ACTION_MOVE:
+            _handler.removeCallbacks(_longPressed);
+            break;
+        case MotionEvent.ACTION_UP:
+            _handler.removeCallbacks(_longPressed);
+            break;
+        }
+        
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        System.out.println("x: "+x+" y: "+y);        
+        
+    return super.onTouchEvent(event);
+	}
+*/
 	
 	// mein erster versuch für die dayview, klappt nicht, weil imageview nur gleichmässig skalierbar...
 	
