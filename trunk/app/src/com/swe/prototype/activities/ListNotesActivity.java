@@ -9,6 +9,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -108,7 +109,8 @@ public class ListNotesActivity extends BaseActivity {
 
 	public void deleteNote(Note c) {
 		c.delete();
-		Toast.makeText(this, "Note marked for deletion", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Note marked for deletion", Toast.LENGTH_SHORT)
+				.show();
 	}
 
 	class ViewListItem implements OnItemClickListener {
@@ -121,17 +123,18 @@ public class ListNotesActivity extends BaseActivity {
 			startActivityForResult(in, 0);
 		}
 	}
-	
-	public void moveNote(Note c) {
+
+	public void moveNote(final Note n) {
 		// custom dialog
 		final Dialog dialog = new Dialog(this);
 		dialog.setContentView(R.layout.dialog_move);
 		dialog.setTitle("Move Note to:");
-		
+
 		ArrayAdapter<AccountBase> adapter = new ArrayAdapter<AccountBase>(this,
 				android.R.layout.simple_list_item_checked,
 				accounts.getAccounts());
-		ListView list_accounts = (ListView) dialog.findViewById(R.id.dialog_list_accounts);
+		final ListView list_accounts = (ListView) dialog
+				.findViewById(R.id.dialog_list_accounts);
 		list_accounts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		list_accounts.setAdapter(adapter);
 
@@ -142,7 +145,23 @@ public class ListNotesActivity extends BaseActivity {
 		btn_move.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i(TAG, "moving notes ...");
+				Log.i(TAG, "moving note ...");
+				showToast("Moving notes...");
+
+				int cntChoice = list_accounts.getCount();
+				SparseBooleanArray selected_accounts = list_accounts
+						.getCheckedItemPositions();
+
+				// create new notes
+				for (int i = 0; i < cntChoice; i++) {
+					if (selected_accounts.get(i) == true) {
+						accounts.getAccounts().get(i)
+								.createNote(n.getTitle(), n.getNote());
+					}
+				}
+
+				// delete original
+				n.getAccount().deleteNote(n);
 			}
 		});
 
@@ -156,22 +175,14 @@ public class ListNotesActivity extends BaseActivity {
 		dialog.show();
 	}
 
-	/*protected void onActivityResult(int requestCode, int resultCode,
-            Intent data) {
-		Log.i(TAG,"onActivityResult called");
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-            	Log.i(TAG,"setting 5 second timer to update");
-            	// refresh 5 secs from now
-    			final ScheduledExecutorService worker = Executors
-    					.newSingleThreadScheduledExecutor();
-    			Runnable task = new Runnable() {
-    				public void run() {
-    					adapter.notifyDataSetChanged();
-    				}
-    			};
-    			worker.schedule(task, 5, TimeUnit.SECONDS);
-            }
-        }
-    }*/
+	/*
+	 * protected void onActivityResult(int requestCode, int resultCode, Intent
+	 * data) { Log.i(TAG,"onActivityResult called"); if (requestCode == 0) { if
+	 * (resultCode == RESULT_OK) {
+	 * Log.i(TAG,"setting 5 second timer to update"); // refresh 5 secs from now
+	 * final ScheduledExecutorService worker = Executors
+	 * .newSingleThreadScheduledExecutor(); Runnable task = new Runnable() {
+	 * public void run() { adapter.notifyDataSetChanged(); } };
+	 * worker.schedule(task, 5, TimeUnit.SECONDS); } } }
+	 */
 }

@@ -433,7 +433,7 @@ public class ServerAccount extends AccountBase {
 	public class AuthenticateUserTask extends AsyncUserTask {
 		protected Boolean doInBackground(String... params) {
 			try {
-				return authenticate(server_url, username, password);
+				return authenticate(context, server_url, username, password);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
