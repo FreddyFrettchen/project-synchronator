@@ -28,7 +28,7 @@ import com.swe.prototype.R;
 import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.server.ServerContact;
 import com.swe.prototype.globalsettings.Settings;
-import com.swe.prototype.globalsettings.Tools;
+import com.swe.prototype.helpers.Tools;
 import com.swe.prototype.net.server.AsyncUserTask;
 import com.swe.prototype.net.server.ServerAccount;
 
