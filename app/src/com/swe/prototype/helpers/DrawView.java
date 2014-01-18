@@ -10,6 +10,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -51,8 +52,21 @@ public class DrawView extends View {
     	if(rectangles==null){
     		return;
     	}
-    	for (RectangleCalendarEntry recPos : rectangles) {
-    		drawSynchronatorRectangle(canvas, recPos);
+    	for (RectangleCalendarEntry r : rectangles) {
+    		switch(r.account){
+    		case 0:
+        		drawSynchronatorRectangle(canvas, r);
+        		break;
+    		case 1:
+    			drawGoogleRectangle(canvas, r);
+        		break;
+    		case 2:
+    			drawExchangeRectangle(canvas, r);
+    			break;
+    		default:
+    			drawSynchronatorRectangle(canvas, r);
+    			Log.i("Fehler", "Fehler: Komischer Account!");
+    		}
 		}
 
         

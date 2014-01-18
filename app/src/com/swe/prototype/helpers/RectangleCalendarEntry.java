@@ -17,6 +17,7 @@ public class RectangleCalendarEntry {
 	public int y2;
 	public int h;
 	public int w;
+	public int account=0;//0=Synchro,1=Google,2= Exchange , also standardmaessig Synchronator
 	public RectangleCalendarEntry(CalendarEntry e, int x1, int y1, int x2, int y2) {
 		this.calEntry = e;
 		this.x1 = x1;
@@ -26,4 +27,11 @@ public class RectangleCalendarEntry {
 		this.h = y2-y1;
 		this.w=x2-x1;
 	}
+	public void setGoogle(){
+		this.account =1;
+	}
+	public void setExchnage(){
+		this.account =2;
+	}
+	
 }
