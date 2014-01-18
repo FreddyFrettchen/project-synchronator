@@ -46,6 +46,7 @@ public class CreateAccountActivity extends BaseActivity {
 
 		Button save_button = (Button) findViewById(R.id.button_edit_save);
 		save_button.setText(edit_mode ? "Edit Account" : "Save Account");
+		getActionBar().setTitle(edit_mode ? "Edit Account" : "Save Account");  
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

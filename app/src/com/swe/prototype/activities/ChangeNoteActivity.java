@@ -60,8 +60,10 @@ public class ChangeNoteActivity extends BaseActivity {
 			edit_mode = true;
 			prefill_fields();
 			done.setText("Edit");
+			getActionBar().setTitle("Edit Note");  
 		} else {
 			done.setText("Save");
+			getActionBar().setTitle("Save Note");  
 		}
 
 		done.setOnClickListener(new OnClickListener() {

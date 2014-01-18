@@ -18,7 +18,7 @@ public class NoteActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_note);
-		
+		getActionBar().setTitle("View Note");  
 		title = (TextView)findViewById(R.id.note_title);
 		text = (TextView)findViewById(R.id.note_text);
 		

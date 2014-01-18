@@ -49,6 +49,7 @@ public class CreateContactActivity extends BaseActivity {
 			edit_mode = true;
 			prefill_fields();
 			save_button.setText("Edit");
+			getActionBar().setTitle("Edit Contact");  
 		} else {
 			save_button.setText("Save");
 		}
