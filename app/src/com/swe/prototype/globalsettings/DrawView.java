@@ -16,7 +16,8 @@ public class DrawView extends View {
     ArrayList<CalendarEntry> toPaint;
     
     final int paddingTop;
-    final int PADDING_LEFT=100;
+    final int PADDING_LEFT=150;
+    final int border=2;
     int widht;
     int height;
 	private int abHeight;
@@ -33,7 +34,7 @@ public class DrawView extends View {
     @Override
     public void onDraw(Canvas canvas) {
 
-    	
+    	drawBackground(canvas);
         //halbe studne
 /*        for (int i = 3; i < 12; i++) {
             paint.setColor(Color.BLACK);
@@ -47,21 +48,25 @@ public class DrawView extends View {
 		}*/
         
         paint.setColor(Color.BLACK);
-        canvas.drawRect(PADDING_LEFT, 5*oneHour,widht-PADDING_LEFT ,6*oneHour , paint );
+        canvas.drawRect(PADDING_LEFT, 5*oneHour+paddingTop,widht-PADDING_LEFT ,(int)(6.5*oneHour +paddingTop), paint );
         paint.setColor(Color.GREEN);
-        canvas.drawRect(PADDING_LEFT, 8*oneHour,widht-PADDING_LEFT ,9*oneHour , paint );
+        canvas.drawRect(PADDING_LEFT+border, 5*oneHour+paddingTop+border,widht-PADDING_LEFT -border,(int)(6.5*oneHour +paddingTop)-border, paint );
         
-        paint.setColor(Color.GREEN);
-        canvas.drawRect(PADDING_LEFT, 23*oneHour,widht-PADDING_LEFT ,24*oneHour , paint );
-        
+        paint.setColor(Color.BLACK);
+        canvas.drawRect(PADDING_LEFT, 0*oneHour+paddingTop,widht-PADDING_LEFT ,(int)(3*oneHour +paddingTop), paint );
         paint.setColor(Color.BLUE);
-        canvas.drawRect(PADDING_LEFT, 0*oneHour,widht-PADDING_LEFT ,2*oneHour , paint );
+        canvas.drawRect(PADDING_LEFT+border, 0*oneHour+paddingTop+border,widht-PADDING_LEFT -border,(int)(3*oneHour +paddingTop)-border, paint );
         
-    	drawBackground(canvas);
+        paint.setColor(Color.BLACK);
+        canvas.drawRect(PADDING_LEFT, 22*oneHour+paddingTop,widht-PADDING_LEFT ,(int)(24*oneHour +paddingTop), paint );
+        paint.setColor(Color.RED);
+        canvas.drawRect(PADDING_LEFT+border, 22*oneHour+paddingTop+border,widht-PADDING_LEFT -border,(int)(24*oneHour +paddingTop)-border, paint );
+        
+        
     }
 
 	private void drawBackground(Canvas canvas) {
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.GRAY);
         canvas.drawRect(PADDING_LEFT-20, 0+paddingTop,PADDING_LEFT -18,(oneHour*24)+paddingTop, paint );
         canvas.drawRect(widht-PADDING_LEFT+18, 0+paddingTop,widht-PADDING_LEFT+20,(oneHour*24)+paddingTop, paint );
         for (int i = 0; i <= 24; i++) {

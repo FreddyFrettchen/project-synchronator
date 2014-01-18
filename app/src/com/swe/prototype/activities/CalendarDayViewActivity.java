@@ -87,6 +87,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 		for (int i = 0; i <= 24; i++) {
 			
 			TextView tmp = new TextView(this);
+			tmp.setTextColor(Color.GRAY);
 			tmp.setTextSize(20);
 			tmp.setX(0+TEXTVIEW_PADDING_LEFT);
 			tmp.setY((i*oneHoure)+TEXTVIEW_PADDING_TOP);
