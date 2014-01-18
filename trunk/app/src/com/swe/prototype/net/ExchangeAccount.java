@@ -157,7 +157,7 @@ public class ExchangeAccount extends AccountBase {
 	                    exnote.setSubject(note.getSubject());
 	                    exnote.setBody(note.getBodyPlainText());
 	                    exnote.setID(note.getItemId().toString());
-	                    //list.add(exnote);
+	                    list.add(exnote);
 	                }
 	            }
 	        }
@@ -210,7 +210,7 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context, layout_id);
-		adapter.addAll(test);
+		adapter.addAll(getContacts());
 		return adapter;
 	}
 
@@ -481,8 +481,23 @@ public class ExchangeAccount extends AccountBase {
 
 	@Override
 	public boolean validateAccountData() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
+		
+		//Validierung wird vor benutzer eingabe aufgerufen, ich komme nicht dazu meinen benutzer zu testen
+		/*
+		try
+        {
+        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx", this.username, this.password);
+        
+            FindItemResponse response = service.findItem(StandardFolder.INBOX);
+            
+         }
+        catch (ServiceException e)
+        {
+         Log.i(TAG, "Benutzer Validierung nicht Erfolgreich");
+         return false;
+        }*/
+		
 	}
 
 }
