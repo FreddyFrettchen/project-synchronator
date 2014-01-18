@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.CalendarContract.CalendarEntity;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.swe.prototype.helpers.DrawView;
+import com.swe.prototype.helpers.RectangleCalendarEntry;
 import com.swe.prototype.helpers.Tools;
 import com.swe.prototype.models.CalendarEntry;
 
@@ -31,14 +33,23 @@ public class CalendarDayViewActivity extends BaseActivity {
 	private static final int TEXTVIEW_PADDING_TOP = 2;
 	private static final int HEIGHT_OFFSET = 170;
 	private static final int PADDING_TOP = 20;
+	private static final int PADDING_LEFT = 150;
+	private static final int PADDING_LEFT_LEFT = 20;
+	public static final int BORDER = 2;
+	private static final int PADDING_DESCRIPTION = 2+BORDER;
+	
+	
+	
 	
 	private int width;
 	private int height;
-	private float oneHoure;
+	private float oneHour;
+	private float oneMinute;
 	private int actionBarSize;
 	private DrawView drawView;
 	private String currentDate;
 	private ArrayList<CalendarEntry> calendarEntrys;
+	private ArrayList<RectangleCalendarEntry> recList;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,7 +58,8 @@ public class CalendarDayViewActivity extends BaseActivity {
 		Display display = getWindowManager().getDefaultDisplay();
 		width = display.getWidth();
 		height = display.getHeight();
-		oneHoure = (height - HEIGHT_OFFSET) / 24;
+		oneHour = (height - HEIGHT_OFFSET) / 24;
+		oneMinute = oneHour/60;
 		final TypedArray styledAttributes = getBaseContext().getTheme()
 				.obtainStyledAttributes(
 						new int[] { android.R.attr.actionBarSize });
@@ -57,26 +69,80 @@ public class CalendarDayViewActivity extends BaseActivity {
 		// ausgewählte datum in der dayView anzeigen
 		currentDate = getIntent().getStringExtra("date");
 		getActionBar().setTitle(Tools.convertDate(currentDate)); 
+		
+		
 		calendarEntrys = getSynchronatorApplication()
 				.getCurrentCalendarEntryList();
-
-
-		drawView = new DrawView(this, width, height, PADDING_TOP, oneHoure,
-				actionBarSize, calendarEntrys);
+		if(calendarEntrys!=null){
+			initRectangles(calendarEntrys);
+			addEventDescriptionTextViews(layout);
+		}
+		drawView = new DrawView(this, BORDER,width, PADDING_TOP, PADDING_LEFT,PADDING_LEFT_LEFT, oneHour, recList);
 		layout.addView(drawView);
 		this.addHourTextViews(layout);
-		this.addEventDescriptionTextViews(layout);
+		
+		if(calendarEntrys!=null){
+			addEventDescriptionTextViews(layout);
+		}
+		
 		setContentView(layout);
+	}
+	
+	/**
+	 * @param e
+	 * @return res[0]: minuten von 00:00 an & res[1]: länge des events in minuten
+	 * 
+	 */
+	private int [] getEventLenght(CalendarEntry e){
+		int [] res=new int[2];
+		//Format: hh:mm:ss 
+		String startTime = e.getStartTime();
+		String endTime = e.getEndTime();
+		int sH = Integer.parseInt(""+startTime.charAt(0)+""+startTime.charAt(1));
+		int sM = Integer.parseInt(""+startTime.charAt(3)+""+startTime.charAt(4));
+		res[0] = sH*60+sM;
+		if(e.getStartDate().equals(e.getEndDate())){
+			// eintages Event
+			int eH = Integer.parseInt(""+endTime.charAt(0)+""+endTime.charAt(1));
+			int eM = Integer.parseInt(""+endTime.charAt(3)+""+endTime.charAt(4));
+			res[1]=(eH-sH)*60+(eM-sM);
+			
+		}else{
+			//mehrtagesEvent: zähle bis mitternacht
+			res[1]= (24-sH) *60 +sM;
+		}
+		return res;
+		
+	}
+	
+	private void initRectangles(ArrayList<CalendarEntry> entrys){
+		recList = new ArrayList<RectangleCalendarEntry>();
+		for (CalendarEntry e : entrys) {
+			int []a = getEventLenght(e);
+			System.out.println("a[0]"+a[0]+" a[1]"+a[1]);
+			RectangleCalendarEntry rec = new RectangleCalendarEntry(e,PADDING_LEFT,(int)(a[0]*oneMinute)+PADDING_TOP,width-PADDING_LEFT,(int)((a[0]+a[1])*oneMinute +PADDING_TOP));
+			recList.add(rec);
+			
+		}
 	}
 
 	private void addEventDescriptionTextViews(RelativeLayout layout) {
-		TextView t = new TextView(this);
-		t.setTextSize(8);
-		t.setTextColor(TEXT_COLOR);
-		t.setX(104);
-		t.setY(136);
-		t.setText("Kochen mit gertrude");
-		layout.addView(t);
+		
+		for (RectangleCalendarEntry r : this.recList) {
+			TextView t = new TextView(this);
+			t.setX(r.x1+BORDER);
+			t.setY(r.y1+BORDER);
+			t.setWidth(r.w);
+			t.setHeight(r.h);
+			t.setTextSize(8);
+			t.setTextColor(TEXT_COLOR);
+			t.setText(r.calEntry.getDescription());
+			layout.addView(t);
+		}
+		
+		
+
+
 		
 	}
 
@@ -86,7 +152,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 			tmp.setTextColor(HOUR_TEXTVIEW_COLOR);
 			tmp.setTextSize(20);
 			tmp.setX(0 + TEXTVIEW_PADDING_LEFT);
-			tmp.setY((i * oneHoure) + TEXTVIEW_PADDING_TOP);
+			tmp.setY((i * oneHour) + TEXTVIEW_PADDING_TOP);
 			String hourBack = "";
 			if (i < 10) {
 				hourBack = "0" + i + ":00";
@@ -105,6 +171,8 @@ public class CalendarDayViewActivity extends BaseActivity {
 		public void run() {
 			Log.i("info", "LongPress");
 			longClickFlag = true;
+			
+			
 		}
 	};
 

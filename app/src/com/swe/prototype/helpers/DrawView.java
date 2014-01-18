@@ -1,76 +1,91 @@
 package com.swe.prototype.helpers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import com.swe.prototype.models.CalendarEntry;
 
+import com.swe.prototype.helpers.RectangleCalendarEntry;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
+/**
+ * @author Dany Brossel
+ *
+ * Kasse wird in der DayView zum Zeichnen der Übergebenen CalendarEntys benutzt und zum Background zeichnen.
+ */
 public class DrawView extends View {
     Paint paint = new Paint();
-    float oneHour;
-    ArrayList<CalendarEntry> toPaint;
-    
-    final int paddingTop;
-    final int PADDING_LEFT=150;
-    final int border=2;
-    int widht;
-    int height;
-	private int abHeight;
-    public DrawView(Context context,int w,int h,int pt,float oneHour,int abHeight,ArrayList<CalendarEntry>toPaint) {
+
+    final int COLOR_SYNCHRONATOR = Color.rgb(121,121,255);
+    final int COLOR_GOOGLE = Color.rgb(241,73,82);
+    final int COLOR_EXCHANGE = Color.rgb(0,230,115);
+    final int PADDING_TOP;
+    final int PADDING_LEFT;
+    final int BORDER;
+    final int PADDING_LEFT_LEFT;
+    final float ONE_HOUR;
+    final int WIDTH;
+	private ArrayList<RectangleCalendarEntry> rectangles;
+	
+    public DrawView(Context context, int b,int width,int pt,int pl,int pll,float oneHour,ArrayList<RectangleCalendarEntry> rect) {
         super(context);
-        this.oneHour=oneHour;
-        this.toPaint=toPaint;
-        this.height=h;
-        this.widht=w;
-        this.abHeight = abHeight;
-        this.paddingTop = pt;
+        BORDER = b;
+        PADDING_TOP = pt;
+        PADDING_LEFT =pl;
+        PADDING_LEFT_LEFT =pll;
+        this.rectangles = rect;
+        this.ONE_HOUR = oneHour;
+        this.WIDTH=width;
     }
 
-    @Override
+    
+
+	@Override
     public void onDraw(Canvas canvas) {
-
     	drawBackground(canvas);
-        //halbe studne
-/*        for (int i = 3; i < 12; i++) {
-            paint.setColor(Color.BLACK);
-            canvas.drawRect(102, 138+(34*i)+(1*i), 699, 172+(34*i)+(1*i), paint );
-            paint.setColor(Color.RED);
-            if(i==10){
-                paint.setColor(Color.GREEN);
-            }
+    	
+    	if(rectangles==null){
+    		return;
+    	}
+    	for (RectangleCalendarEntry recPos : rectangles) {
+    		drawSynchronatorRectangle(canvas, recPos);
+		}
 
-            canvas.drawRect(104, 138+(34*i)+(1*i)+2, 697,172+(34*i)+(1*i)-2, paint );
-		}*/
         
-        paint.setColor(Color.BLACK);
-        canvas.drawRect(PADDING_LEFT, 5*oneHour+paddingTop,widht-PADDING_LEFT ,(int)(6.5*oneHour +paddingTop), paint );
-        paint.setColor(Color.GREEN);
-        canvas.drawRect(PADDING_LEFT+border, 5*oneHour+paddingTop+border,widht-PADDING_LEFT -border,(int)(6.5*oneHour +paddingTop)-border, paint );
+    }
+    
+    private void drawExchangeRectangle(Canvas canvas, RectangleCalendarEntry rectPos){
+    	paint.setColor(Color.BLACK);
+        canvas.drawRect(rectPos.x1, rectPos.y1,rectPos.x2,rectPos.y2, paint );
+        paint.setColor(COLOR_EXCHANGE);
+        canvas.drawRect(rectPos.x1+BORDER, rectPos.y1+BORDER,rectPos.x2-BORDER,rectPos.y2-BORDER, paint );
+    }
+    
+    private void drawSynchronatorRectangle(Canvas canvas, RectangleCalendarEntry rectPos){
+    	paint.setColor(Color.BLACK);
+        canvas.drawRect(rectPos.x1, rectPos.y1,rectPos.x2,rectPos.y2, paint );
+        paint.setColor(COLOR_SYNCHRONATOR);
+        canvas.drawRect(rectPos.x1+BORDER, rectPos.y1+BORDER,rectPos.x2-BORDER,rectPos.y2-BORDER, paint );
         
-        paint.setColor(Color.BLACK);
-        canvas.drawRect(PADDING_LEFT, 0*oneHour+paddingTop,widht-PADDING_LEFT ,(int)(3*oneHour +paddingTop), paint );
-        paint.setColor(Color.BLUE);
-        canvas.drawRect(PADDING_LEFT+border, 0*oneHour+paddingTop+border,widht-PADDING_LEFT -border,(int)(3*oneHour +paddingTop)-border, paint );
-        
-        paint.setColor(Color.BLACK);
-        canvas.drawRect(PADDING_LEFT, 22*oneHour+paddingTop,widht-PADDING_LEFT ,(int)(24*oneHour +paddingTop), paint );
-        paint.setColor(Color.RED);
-        canvas.drawRect(PADDING_LEFT+border, 22*oneHour+paddingTop+border,widht-PADDING_LEFT -border,(int)(24*oneHour +paddingTop)-border, paint );
-        
+    }
+    private void drawGoogleRectangle(Canvas canvas, RectangleCalendarEntry rectPos){
+    	paint.setColor(Color.BLACK);
+        canvas.drawRect(rectPos.x1, rectPos.y1,rectPos.x2,rectPos.y2, paint );
+        paint.setColor(COLOR_GOOGLE);
+        canvas.drawRect(rectPos.x1+BORDER, rectPos.y1+BORDER,rectPos.x2-BORDER,rectPos.y2-BORDER, paint );
         
     }
 
 	private void drawBackground(Canvas canvas) {
 		paint.setColor(Color.GRAY);
-        canvas.drawRect(PADDING_LEFT-20, 0+paddingTop,PADDING_LEFT -18,(oneHour*24)+paddingTop, paint );
-        canvas.drawRect(widht-PADDING_LEFT+18, 0+paddingTop,widht-PADDING_LEFT+20,(oneHour*24)+paddingTop, paint );
+        canvas.drawRect(PADDING_LEFT-PADDING_LEFT_LEFT, PADDING_TOP,PADDING_LEFT -PADDING_LEFT_LEFT +BORDER,(ONE_HOUR*24)+PADDING_TOP, paint );
+        canvas.drawRect(WIDTH-PADDING_LEFT+PADDING_LEFT_LEFT-BORDER, PADDING_TOP,WIDTH-PADDING_LEFT+PADDING_LEFT_LEFT,(ONE_HOUR*24)+PADDING_TOP, paint );
         for (int i = 0; i <= 24; i++) {
-        	canvas.drawRect(PADDING_LEFT-20, 0+i*oneHour +paddingTop,widht-PADDING_LEFT+20,2+i*oneHour+paddingTop, paint );
+        	canvas.drawRect(PADDING_LEFT-PADDING_LEFT_LEFT, 0+i*ONE_HOUR +PADDING_TOP,WIDTH-PADDING_LEFT+PADDING_LEFT_LEFT,BORDER+i*ONE_HOUR+PADDING_TOP, paint );
 		}
         
 	}

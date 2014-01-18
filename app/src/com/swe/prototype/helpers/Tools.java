@@ -3,6 +3,11 @@ package com.swe.prototype.helpers;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author Dany Brossel
+ *
+ *	Hier kommen alle methoden  rein, die man an mehreren stellen zur prüfung und konvertierung brauchen kann.
+ */
 public class Tools {
 
 	/* Die Methode sollte auf jeden fall mal richtig getestet werden */
