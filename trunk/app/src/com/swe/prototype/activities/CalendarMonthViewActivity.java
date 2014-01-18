@@ -11,7 +11,7 @@ import com.commonsware.cwac.merge.MergeAdapter;
 import com.swe.prototype.R;
 import com.swe.prototype.adapter.CalendarAdapter;
 import com.swe.prototype.adapter.ContactAdapter;
-import com.swe.prototype.globalsettings.DateOnSaveLocation;
+import com.swe.prototype.helpers.DateOnSaveLocation;
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.server.ServerCalendarEntry;
 
