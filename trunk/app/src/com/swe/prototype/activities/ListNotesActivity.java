@@ -145,23 +145,29 @@ public class ListNotesActivity extends BaseActivity {
 		btn_move.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i(TAG, "moving note ...");
-				showToast("Moving notes...");
+				
 
 				int cntChoice = list_accounts.getCount();
 				SparseBooleanArray selected_accounts = list_accounts
 						.getCheckedItemPositions();
-
-				// create new notes
-				for (int i = 0; i < cntChoice; i++) {
-					if (selected_accounts.get(i) == true) {
-						accounts.getAccounts().get(i)
-								.createNote(n.getTitle(), n.getNote());
+				
+				if (list_accounts.getCheckedItemCount() != 0) {
+					// create new notes
+					for (int i = 0; i < cntChoice; i++) {
+						if (selected_accounts.get(i) == true) {
+							accounts.getAccounts().get(i)
+									.createNote(n.getTitle(), n.getNote());
+						}
 					}
+					Log.i(TAG, "moving note ...");
+					showToast("Moving notes...");
+	
+					// delete original
+					n.getAccount().deleteNote(n);
+					
+					dialog.cancel();
 				}
-
-				// delete original
-				n.getAccount().deleteNote(n);
+				showToast("No server selected.");
 			}
 		});
 

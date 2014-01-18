@@ -133,25 +133,31 @@ public class ListContactsActivity extends BaseActivity {
 		btn_move.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i(TAG, "moving contacts ...");
-				showToast("Moving contacts...");
+				
 
 				int cntChoice = list_accounts.getCount();
 				SparseBooleanArray selected_accounts = list_accounts
 						.getCheckedItemPositions();
 
-				// create new accounts
-				for (int i = 0; i < cntChoice; i++) {
-					if (selected_accounts.get(i) == true) {
-						accounts.getAccounts()
-								.get(i)
-								.createContact(c.getLastName(), c.getFirstName(),
-										c.getPhoneumber(), c.getEmail());
+				if(list_accounts.getCheckedItemCount() != 0) {
+					// create new accounts
+					for (int i = 0; i < cntChoice; i++) {
+						if (selected_accounts.get(i) == true) {
+							accounts.getAccounts()
+									.get(i)
+									.createContact(c.getLastName(), c.getFirstName(),
+											c.getPhoneumber(), c.getEmail());
+						}
 					}
+					Log.i(TAG, "moving contacts ...");
+					showToast("Moving contacts...");
+					
+					//delete original 
+					c.getAccount().deleteContact(c);
+					
+					dialog.cancel();
 				}
-				
-				//delete original 
-				c.getAccount().deleteContact(c);
+				showToast("No server selected.");
 			}
 		});
 
