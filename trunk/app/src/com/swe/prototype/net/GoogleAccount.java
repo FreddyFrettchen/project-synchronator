@@ -78,7 +78,7 @@ public class GoogleAccount extends AccountBase {
 	@Override
 	public void synchronizeContacts() {
 		Log.i(TAG, "Synchronize wurde aufgerufen!");
-		GoogleHelpClass.getContacts(this.username, this.password);
+	//	GoogleHelpClass.getContacts(this.username, this.password);
 	}
 	
 	@Override
