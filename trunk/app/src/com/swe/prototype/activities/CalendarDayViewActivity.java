@@ -38,18 +38,21 @@ public class CalendarDayViewActivity extends BaseActivity {
 		Display display = getWindowManager().getDefaultDisplay(); 
 		int width = display.getWidth();
 		int height = display.getHeight();
-		
-		
+		float oneHoure = (height-200)/24;
+		int actionbarHight = getActionBar().getHeight();
+		System.out.println("actionbarHight: "+actionbarHight);
 		// ausgewählte datum in der dayView anzeigen
 		String date = getIntent().getStringExtra("date");
 		getActionBar().setTitle(Tools.convertDate(date));
-		TextView headline = new TextView(this);
+		/*
+		 * TextView headline = new TextView(this);
 		headline.setTextSize(30);
 		//headline.setX((width/2)-200);
 		SpannableString spanStringDate = new SpannableString(date);
 		spanStringDate.setSpan(new StyleSpan(Typeface.BOLD), 0, spanStringDate.length(), 0); // fettschrift
 		headline.setText(spanStringDate);
 		layout.addView(headline);
+		*/
 		
 
 		String dates = "Entrys: ";
@@ -67,7 +70,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 		t.setX(104);
 		t.setY(136);
 		t.setText("Kochen mit gertrude");
-		drawView = new DrawView(this);
+		drawView = new DrawView(this,width,height,oneHoure,actionbarHight,calendarEntrys);
         //drawView.setBackground(getResources().getDrawable(R.drawable.dayview_background));
         layout.addView(drawView);
 		layout.addView(t);
@@ -75,9 +78,9 @@ public class CalendarDayViewActivity extends BaseActivity {
 		for (int i = 0; i <= 24; i++) {
 			
 			TextView tmp = new TextView(this);
-			tmp.setTextSize(14);
+			tmp.setTextSize(20);
 			tmp.setX(0);
-			tmp.setY(i*40);
+			tmp.setY(i*oneHoure);
 			String hourBack = "";
 			if(i<10){
 				hourBack = "0"+i+":00";

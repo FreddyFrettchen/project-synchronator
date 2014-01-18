@@ -1,5 +1,9 @@
 package com.swe.prototype.globalsettings;
 
+import java.util.ArrayList;
+
+import com.swe.prototype.models.CalendarEntry;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,28 +12,28 @@ import android.view.View;
 
 public class DrawView extends View {
     Paint paint = new Paint();
-    int height = 991-136;
-    int width = 701 -100;
-    int pTop = 136;
-    int pLeft=100;
-    public DrawView(Context context) {
-        super(context);            
+    float oneHour;
+    ArrayList<CalendarEntry> toPaint;
+    
+    final int PADDING_LEFT=100;
+    int widht;
+    int height;
+	private int abHeight;
+    public DrawView(Context context,int w,int h,float oneHour,int abHeight,ArrayList<CalendarEntry>toPaint) {
+        super(context);
+        this.oneHour=oneHour;
+        this.toPaint=toPaint;
+        this.height=h;
+        this.widht=w;
+        this.abHeight = abHeight;
     }
 
     @Override
     public void onDraw(Canvas canvas) {
 
-    	drawBackground();
     	
-        //kochen mit gertrude
-        paint.setColor(Color.BLACK);
-        canvas.drawRect(pLeft+2, pTop+2, pLeft+width-2, pTop+(height/(24*2)) , paint );
-        
-        paint.setColor(Color.YELLOW);
-        canvas.drawRect(pLeft+4, pTop+4,  pLeft+width-4, pTop+(height/(24*2)) -2, paint );
-
         //halbe studne
-        for (int i = 3; i < 12; i++) {
+/*        for (int i = 3; i < 12; i++) {
             paint.setColor(Color.BLACK);
             canvas.drawRect(102, 138+(34*i)+(1*i), 699, 172+(34*i)+(1*i), paint );
             paint.setColor(Color.RED);
@@ -38,18 +42,30 @@ public class DrawView extends View {
             }
 
             canvas.drawRect(104, 138+(34*i)+(1*i)+2, 697,172+(34*i)+(1*i)-2, paint );
-		}
+		}*/
+        
+        paint.setColor(Color.BLACK);
+        canvas.drawRect(PADDING_LEFT, 5*oneHour,widht-PADDING_LEFT ,6*oneHour , paint );
         paint.setColor(Color.GREEN);
-        int yy= 991;
-        canvas.drawRect(102, yy, 699, yy+34,paint );
+        canvas.drawRect(PADDING_LEFT, 8*oneHour,widht-PADDING_LEFT ,9*oneHour , paint );
         
-      
+        paint.setColor(Color.GREEN);
+        canvas.drawRect(PADDING_LEFT, 23*oneHour,widht-PADDING_LEFT ,24*oneHour , paint );
         
+        paint.setColor(Color.BLUE);
+        canvas.drawRect(PADDING_LEFT, 0*oneHour,widht-PADDING_LEFT ,2*oneHour , paint );
+        
+    	drawBackground(canvas);
     }
 
-	private void drawBackground() {
-		
-		
+	private void drawBackground(Canvas canvas) {
+		paint.setColor(Color.BLACK);
+        canvas.drawRect(PADDING_LEFT-20, 0,PADDING_LEFT -18,height-abHeight, paint );
+        canvas.drawRect(widht-PADDING_LEFT+18, 0,widht-PADDING_LEFT+20,height-abHeight, paint );
+        for (int i = 0; i <= 25; i++) {
+        	canvas.drawRect(PADDING_LEFT-20, 0+i*oneHour,widht-PADDING_LEFT+20,2+i*oneHour, paint );
+		}
+        
 	}
 
 }
