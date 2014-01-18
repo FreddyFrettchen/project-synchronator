@@ -26,4 +26,8 @@ public abstract class Contact extends BaseData implements Serializable{
 	public void delete(){
 		this.account.deleteContact(this);
 	}
+	
+	public String toString() {
+		return getLastName() + ", " + getFirstName();
+	}
 }

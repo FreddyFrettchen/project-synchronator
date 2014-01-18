@@ -12,9 +12,17 @@ import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
@@ -37,6 +45,41 @@ import android.os.AsyncTask;
 
 public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		AsyncTask<Params, Progress, Result> {
+
+	private static class FakeHostnameVerifier implements HostnameVerifier {
+		public boolean verify(String hostname, SSLSession session) {
+			return true;
+		}
+	}
+
+	private static void trustAllHosts() {
+		// Create a trust manager that does not validate certificate chains
+		X509TrustManager myManager = new X509TrustManager() {
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return new java.security.cert.X509Certificate[] {};
+			}
+
+			public void checkClientTrusted(X509Certificate[] chain,
+					String authType) throws CertificateException {
+			}
+
+			public void checkServerTrusted(X509Certificate[] chain,
+					String authType) throws CertificateException {
+			}
+		};
+		
+		TrustManager[] trustAllCerts = new TrustManager[] { myManager };
+
+		// Install the all-trusting trust manager
+		try {
+			SSLContext sc = SSLContext.getInstance("TLS");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection
+					.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * urlencodes list of NameValuePairs
@@ -63,7 +106,7 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 
 		return result.toString();
 	}
-	
+
 	/**
 	 * Sets up a post request and returns it. connect(); function has to be
 	 * called to make the actual network call then.
@@ -76,7 +119,11 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 			throws IOException {
 
 		URL url = new URL(_url);
+		//trustAllHosts();
+		//HttpsURLConnection
+				//.setDefaultHostnameVerifier(new FakeHostnameVerifier());
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		//conn.setHostnameVerifier(new FakeHostnameVerifier());
 		conn.setReadTimeout(10000);
 		conn.setConnectTimeout(15000);
 		conn.setRequestMethod("POST");

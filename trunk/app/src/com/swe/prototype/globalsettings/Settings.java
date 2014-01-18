@@ -27,7 +27,7 @@ public class Settings {
 	}
 
 	public static String getServer() {
-	//	return "http://10.0.2.2:45678";
+		//return "https://10.0.2.2:45678";
 		return getIp() + ":" + getPort();
 	}
 
@@ -46,7 +46,7 @@ public class Settings {
 	 */
 	public static void setServer(String ip, String port) {
 		//TODO auf https umstellen
-		Settings.server = "http://" + ip + ":" + port;
+		Settings.server = "https://" + ip + ":" + port;
 		Settings.ip = ip;
 		Settings.port = port;
 	}
