@@ -1,28 +1,23 @@
 package com.swe.prototype.models.exchange;
 
-import android.content.Context;
+import java.io.Serializable;
+
 import android.util.Log;
 
-import com.independentsoft.exchange.FileAsMapping;
-import com.independentsoft.exchange.ItemId;
-import com.independentsoft.exchange.Service;
-import com.independentsoft.exchange.ServiceException;
-import com.independentsoft.exchange.ContactPropertyPath;
-import com.independentsoft.exchange.FindItemResponse;
-import com.independentsoft.exchange.IsEqualTo;
-import com.independentsoft.exchange.StandardFolder;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.Contact;
 
 public class ExchangeContact extends Contact {
 	
+	/**
+	 * 
+	 */
 	public static String TAG = "ExchangeContact";
 	public String lastname = null;
 	public String firstname = null;
 	public String id = null;
 	public String phoneumber = null;
 	public String email = null;
-	
 	
 	public ExchangeContact(AccountBase account){
 		super(account);
@@ -36,6 +31,16 @@ public class ExchangeContact extends Contact {
 	public ExchangeContact(AccountBase account, Contact c) {
 		super(account);
 	}
+	public ExchangeContact(AccountBase account, String id, String lastname, String firstname, String phonenumber,
+			String email) {
+		super(account);
+		this.id = id;
+		this.lastname = lastname;
+		this.firstname = firstname;
+		this.phoneumber = phonenumber;
+		this.email = email;
+	}
+
 /*
 		public boolean findContact() {
 		try {

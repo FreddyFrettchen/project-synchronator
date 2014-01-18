@@ -307,9 +307,9 @@ public class ServerAccount extends AccountBase {
 		if (cursor.moveToFirst()) {
 			Log.i(TAG, "Decrypting Contacts");
 			do {
-				contacts.add(new EncryptedData(cursor.getInt(0), cursor
-						.getString(2)).toContact(this.password,
-						cursor.getInt(1), this));
+				contacts.add(new EncryptedData(cursor.getInt(0), cursor.
+						getString(2)).toContact(this.password,
+								cursor.getInt(1), this));
 			} while (cursor.moveToNext());
 		}
 		return contacts;
