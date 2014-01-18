@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.swe.prototype.SynchronatorApplication;
 import com.swe.prototype.activities.CalendarAddEventActivity;
 import com.swe.prototype.activities.ChangeNoteActivity;
 import com.swe.prototype.activities.CreateContactActivity;
@@ -91,6 +93,7 @@ public class ServerAccount extends AccountBase {
 		checkForNewlyCreated(data_type, data);
 		checkForDeletions(data_type, data);
 		checkForUpdates(data_type, data);
+		setLastSynchronisationTimestamp();
 	}
 
 	/*
@@ -159,16 +162,17 @@ public class ServerAccount extends AccountBase {
 
 		// first try to find entry and update it, or save if new
 		for (EncryptedData encryptedData : data) {
-			if(encryptedData.deleted) continue;
+			if (encryptedData.deleted)
+				continue;
 			where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
 					+ ServerDataTable.COLUMN_TAG + " = ?";
-			args = new String[] { encryptedData.getId() + "", data_type };
+			args = new String[] { encryptedData.getIdData() + "", data_type };
 			values.put("data", encryptedData.getData());
 			values.put("data_id", encryptedData.getIdData());
 			values.put("tag", data_type);
 			values.put("STATUS", "INSYNC");
 			values.put("resend", "false");
-			
+
 			if (entryExists(contentUri, where, args)) { // update entry
 				this.context.getContentResolver().update(contentUri, values,
 						where, args);
@@ -176,15 +180,22 @@ public class ServerAccount extends AccountBase {
 				this.context.getContentResolver().insert(contentUri, values);
 			}
 		}
-
 	}
 
 	public int getLastSynchronisationTimestamp() {
+		SynchronatorApplication app = ((SynchronatorApplication) this.context
+				.getApplicationContext());
 		return 0;// (int) (System.currentTimeMillis() / 1000L);
 	}
 
 	public void setLastSynchronisationTimestamp() {
-
+		SynchronatorApplication app = ((SynchronatorApplication) this.context
+				.getApplicationContext());
+		SharedPreferences.Editor editor = app.getPreferences().edit();
+		int timestamp = (int) (System.currentTimeMillis() / 1000L);
+		Log.i(TAG, "Set Last sync timestamp:" + timestamp);
+		editor.putInt("last_sync", timestamp);
+		editor.commit();
 	}
 
 	/**
@@ -323,10 +334,8 @@ public class ServerAccount extends AccountBase {
 		return cursor;
 	}
 
-	
-	/* 
+	/*
 	 * return: Der zur�ckgegebene String muss als erstes Zeichen 'S',havben!!!
-	 *  
 	 */
 	@Override
 	public String toString() {
@@ -396,7 +405,7 @@ public class ServerAccount extends AccountBase {
 				"server_data");
 
 		values.put("data_id", -1);
-		Log.i(TAG,centry.toJson());
+		Log.i(TAG, centry.toJson());
 		values.put("data", (new EncryptedData(-1, centry.toJson()))
 				.encryptData(this.password));
 		values.put("tag", "calendar");
@@ -571,7 +580,8 @@ public class ServerAccount extends AccountBase {
 		String where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
 				+ ServerDataTable.COLUMN_TAG + " = ? AND "
 				+ ServerDataTable.COLUMN_STATUS + " = ?";
-		String[] args = new String[] { contact.getId() + "", "contacts", "INSYNC" };
+		String[] args = new String[] { contact.getId() + "", "contacts",
+				"INSYNC" };
 		ContentValues values = new ContentValues();
 
 		contact.setLastName(lastname);

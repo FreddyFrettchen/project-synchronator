@@ -32,7 +32,7 @@ public abstract class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		scheduleTaskExecutor = Executors.newScheduledThreadPool(2);
-//new DBTools(this).purgeDatabase();
+
 		if (isLoggedIn()) {
 			accounts = new AccountManager(this);
 		}
