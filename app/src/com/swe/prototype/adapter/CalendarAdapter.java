@@ -9,8 +9,8 @@ import java.util.Locale;
 
 import com.commonsware.cwac.merge.MergeAdapter;
 import com.swe.prototype.R;
-import com.swe.prototype.globalsettings.DateOnSaveLocation;
 
+import com.swe.prototype.helpers.DateOnSaveLocation;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
