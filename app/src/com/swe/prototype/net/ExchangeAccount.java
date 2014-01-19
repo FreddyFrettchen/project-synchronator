@@ -560,22 +560,21 @@ public class ExchangeAccount extends AccountBase{
 
 	@Override
 	public boolean validateAccountData() {
-		return true;
 		
 		//Validierung wird vor benutzer eingabe aufgerufen, ich komme nicht dazu meinen benutzer zu testen
-		/*
+		
 		try
         {
         	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx", this.username, this.password);
-        
             FindItemResponse response = service.findItem(StandardFolder.INBOX);
-            
+            Log.i(TAG, "Benutzer Validierung Erfolgreich");
+            return true;
          }
         catch (ServiceException e)
         {
-         Log.i(TAG, "Benutzer Validierung nicht Erfolgreich");
-         return false;
-        }*/
+        	Log.i(TAG, "Benutzer Validierung nicht Erfolgreich");
+        	return false;
+        }
 	}
 
 }
