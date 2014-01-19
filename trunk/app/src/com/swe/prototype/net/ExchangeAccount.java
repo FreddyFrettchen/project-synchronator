@@ -76,6 +76,10 @@ public class ExchangeAccount extends AccountBase{
 	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",this.username, this.password);
 
 	            FindItemResponse response = service.findItem(StandardFolder.NOTES, ContactPropertyPath.getAllPropertyPaths());
+	            
+	            Log.i(TAG, "delete all notes before Synchronize");
+	            new DBTools(context).purgeNotesTable();
+	            
 	            Log.i(TAG, "Synchronize Note for FORSCHLEIFE");
 	            for (int i = 0; i < response.getItems().size(); i++)
 	            {
@@ -123,7 +127,9 @@ public class ExchangeAccount extends AccountBase{
 	            FindItemResponse response = service.findItem(StandardFolder.CONTACTS, ContactPropertyPath.getAllPropertyPaths());
 	            Log.i(TAG, "Synchronize for FORSCHLEIFE");
 	      
+	            Log.i(TAG, "Delete All COntacts before Synchronize");
 	            new DBTools(context).purgeContactTable();
+	            
 	            for (int i = 0; i < response.getItems().size(); i++)
 	            {
 	                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact)
