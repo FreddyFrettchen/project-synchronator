@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import android.content.Context;
 
-public abstract class CalendarEntry extends BaseData implements Serializable
+public abstract class CalendarEntry extends BaseData
 {
 	public CalendarEntry(AccountBase account) {
 		super(account);

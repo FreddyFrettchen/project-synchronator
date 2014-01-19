@@ -161,6 +161,12 @@ public class ExchangeNote extends Note {
 	}
 
 	@Override
+	public boolean isUpToDate() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
 	public String getTitle() {
 		// TODO Auto-generated method stub
 		return this.subject;

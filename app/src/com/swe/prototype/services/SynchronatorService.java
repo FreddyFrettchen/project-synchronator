@@ -35,7 +35,7 @@ public class SynchronatorService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		this.accounts = new AccountManager(this);
-		Log.i(TAG, "Starting syncthreads on "
+		Log.i(TAG, "Starting Syncthreads on "
 				+ this.accounts.getAccounts().size() + " accounts.");
 		ArrayList<AccountBase> accounts = this.accounts.getAccounts();
 		for (int i = 0; i < accounts.size(); ++i) {
@@ -47,7 +47,6 @@ public class SynchronatorService extends Service {
 				accounts.get(i).join();
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

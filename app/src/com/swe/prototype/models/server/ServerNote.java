@@ -59,4 +59,9 @@ public class ServerNote extends Note {
 	public void setText(String text) {
 		this.text = text;
 	}
+
+	@Override
+	public boolean isUpToDate() {
+		return true;
+	}
 }

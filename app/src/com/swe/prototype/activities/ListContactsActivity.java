@@ -90,6 +90,12 @@ public class ListContactsActivity extends BaseActivity {
 				.getMenuInfo();
 
 		Contact o = (Contact) listView.getAdapter().getItem(info.position);
+
+		if (!o.isUpToDate()) {
+			showToast("This Contact is not in Sync. Please refresh before making operations on this Contact.");
+			return false;
+		}
+
 		switch (item.getItemId()) {
 		case R.id.edit:
 			editContact(o);
@@ -160,9 +166,6 @@ public class ListContactsActivity extends BaseActivity {
 					
 					dialog.cancel();
 				}
-
-				
-				//delete original 
 				c.getAccount().deleteContact(c);
 				showToast("No server selected.");
 
@@ -189,6 +192,7 @@ public class ListContactsActivity extends BaseActivity {
 			Intent in = new Intent(parent.getContext(), ContactActivity.class);
 			ServerContact o = (ServerContact) listView
 					.getItemAtPosition(position);
+
 			in.putExtra("name", o.toString());
 			in.putExtra("phone", o.getPhoneumber());
 			in.putExtra("email", o.getEmail());

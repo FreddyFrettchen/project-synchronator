@@ -25,6 +25,13 @@ public abstract class BaseData implements Serializable {
 	public AccountBase getAccount() {
 		return this.account;
 	}
+	
+	/**
+	 * returns true if the dataset is up to date.
+	 * A Data object is considered up to date
+	 * if the local data matches the data on the server
+	 */
+	public abstract boolean isUpToDate();
 
 	/**
 	 * get special gson instance that resolves circular dependencies

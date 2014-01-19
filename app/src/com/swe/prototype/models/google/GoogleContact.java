@@ -79,4 +79,9 @@ public class GoogleContact extends Contact {
 		Log.i(TAG, "delete:"+this.toString());
 	}
 
+	@Override
+	public boolean isUpToDate() {
+		return true;
+	}
+
 }

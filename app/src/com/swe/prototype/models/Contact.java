@@ -4,10 +4,6 @@ import java.io.Serializable;
 
 public abstract class Contact extends BaseData {
 
-	/**
-	 * 
-	 */
-
 	public Contact(AccountBase account) {
 		super(account);
 	}

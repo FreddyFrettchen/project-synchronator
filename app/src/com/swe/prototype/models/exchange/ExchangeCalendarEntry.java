@@ -84,4 +84,9 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 	public int getRepeat() {
 		return this.Repeat;
 	}
+
+	@Override
+	public boolean isUpToDate() {
+		return true;
+	}
 }
