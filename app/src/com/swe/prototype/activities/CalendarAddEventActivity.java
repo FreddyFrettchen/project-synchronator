@@ -265,6 +265,12 @@ public class CalendarAddEventActivity extends BaseActivity {
 			String startTime = this.convertTime(hourFrom, minuteFrom);//format= hh:mm
 			String endTime = this.convertTime(hourTo, minuteTo);
 			String descr = description.getText().toString();
+			if(descr.isEmpty()){
+				showShortToast("Please enter a description!");
+				return;
+			}
+			
+			
 			int every = 0;
 			// radio button: every==0 keine wiederholung,every=1:
 			// every_Dayevery=2 : every_month every=3: every_year
@@ -334,7 +340,7 @@ public class CalendarAddEventActivity extends BaseActivity {
 		 * Fehlermeldungen if(this.getMinutesBetweenSelectedDates()<0){
 		 * showShortToast("From Time < To Time"); };
 		 */
-
+		
 		if (yearFrom > yearTo) {
 			this.showShortToast("From Date > To Date");
 			return false;
