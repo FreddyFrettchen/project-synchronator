@@ -1,6 +1,9 @@
 package com.swe.prototype.globalsettings;
 
+import com.swe.prototype.activities.MainActivity;
+
 import android.util.Log;
+import android.widget.Toast;
 
 /*
  * Autor: Dany
@@ -46,7 +49,11 @@ public class Settings {
 	 */
 	public static void setServer(String ip, String port) {
 		//TODO auf https umstellen
-		Settings.server = "https://" + ip + ":" + port;
+		if(ip.toLowerCase().startsWith("http")) {
+			Settings.server = ip + ":" + port;
+		} else {
+			Settings.server = "http://" + ip + ":" + port;
+		}
 		Settings.ip = ip;
 		Settings.port = port;
 	}
@@ -66,5 +73,14 @@ public class Settings {
 
 	public static void setRefreshTimeAsFloat(float refreshTime) {
 		Settings.refreshTime = (int) refreshTime * 3600;
+	}
+	
+	public static boolean isHTTPS() {
+		if(Settings.server.toLowerCase().charAt(4) == 's') {
+			System.out.println(Settings.server);
+			return true;
+		}else {
+			return false;
+		}
 	}
 }
