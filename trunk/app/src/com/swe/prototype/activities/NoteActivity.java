@@ -3,6 +3,7 @@ package com.swe.prototype.activities;
 import com.swe.prototype.R;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -23,5 +24,20 @@ public class NoteActivity extends BaseActivity {
 		
 		title.setText(getIntent().getExtras().getString("title"));
 		text.setText(getIntent().getExtras().getString("text"));
+	}
+	
+	protected void createNote() {
+		Intent intent = new Intent(NoteActivity.this,
+				ChangeNoteActivity.class);
+		Bundle b = new Bundle();
+		b.putBoolean("createNewNote", true);
+		intent.putExtras(b);
+		startActivity(intent);
+		finish();
+	}
+
+	@Override
+	protected void addClicked() {
+		this.createNote();
 	}
 }

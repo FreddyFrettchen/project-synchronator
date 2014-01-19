@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,5 +38,16 @@ public class ContactActivity extends BaseActivity {
 		
 		if(getIntent().hasExtra("email"))
 			email.setText(getIntent().getExtras().getString("email"));
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_add:
+			showAndFinish(CreateContactActivity.class);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }
