@@ -95,7 +95,7 @@ public class RegisterActivity extends BaseActivity {
 
 		if (hasInternetConnection()) {
 			new ServerAccount(this, 0, Settings.getRefreshTimeAsInt(), email,
-					Security.sha1(password)).new RegisterUserTask() {
+					Security.sha1(password)).new RegisterUserTask(this) {
 				@Override
 				protected void onPostExecute(Boolean result) {
 					dialog.dismiss();

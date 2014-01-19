@@ -18,6 +18,10 @@ import com.swe.prototype.net.AsyncTaskBase;
 
 public abstract class AsyncUserTask extends
 		AsyncTaskBase<String, Void, Boolean> {
+	
+	public AsyncUserTask(Context context){
+		super(context);
+	}
 
 	protected static final String TAG = "AsyncUserTask";
 

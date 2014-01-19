@@ -12,6 +12,7 @@ import java.util.Scanner;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.content.Context;
 import android.nfc.Tag;
 import android.util.Log;
 
@@ -28,6 +29,10 @@ public abstract class AsyncDataTask<Result> extends
 		AsyncTaskBase<String, Void, Result> {
 
 	protected static final String TAG = "AsyncDataTask";
+
+	public AsyncDataTask(Context context) {
+		super(context);
+	}
 
 	protected boolean add(String server, String email, String password,
 			String type, String data, String id_data) throws IOException {
@@ -107,16 +112,16 @@ public abstract class AsyncDataTask<Result> extends
 			s = new Scanner(request.getInputStream());
 		}
 
-		try{
+		try {
 			return s.next();
-		} catch (NoSuchElementException e){
+		} catch (NoSuchElementException e) {
 			e.printStackTrace();
 		}
-		
+
 		// error occured pulling data, suppling empty dataset
 		return "[]";
 	}
-	
+
 	protected String ids(String server, String email, String password,
 			String type) throws IOException {
 		String add_url = server + "/data/ids/" + type;
@@ -124,7 +129,7 @@ public abstract class AsyncDataTask<Result> extends
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("password", password));
-		
+
 		HttpURLConnection request = postRequest(add_url, params);
 		request.connect();
 		Scanner s;
@@ -145,11 +150,11 @@ public abstract class AsyncDataTask<Result> extends
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("password", password));
-		params.add(new BasicNameValuePair("data_id", data_id+""));
+		params.add(new BasicNameValuePair("data_id", data_id + ""));
 
 		HttpURLConnection request = postRequest(add_url, params);
 		request.connect();
-		
+
 		return request.getResponseCode() == 200;
 	}
 }

@@ -6,6 +6,12 @@ import com.google.gson.Gson;
 import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.AccountBase;
 
+/**
+ * Wrapper for Encrypted Datapackages.
+ * Can contain a contact/note or calendar entry
+ * @author batman
+ *
+ */
 public class EncryptedData {
 	private static String TAG = "EncryptedData";
 	

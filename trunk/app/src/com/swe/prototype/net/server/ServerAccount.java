@@ -55,7 +55,7 @@ public class ServerAccount extends AccountBase {
 	 *            -> possible values: calendar, contacts, notes
 	 */
 	private void synchronizeByType(final String data_type) {
-		new SyncDataTask(data_type) {
+		new SyncDataTask(context, data_type) {
 			protected void onPostExecute(
 					java.util.ArrayList<EncryptedData> result) {
 				synchronizeDatabase(data_type, result);
@@ -180,7 +180,7 @@ public class ServerAccount extends AccountBase {
 	public int getLastSynchronisationTimestamp() {
 		SynchronatorApplication app = ((SynchronatorApplication) this.context
 				.getApplicationContext());
-		return app.getPreferences().getInt("timestamp", 0);
+		return app.getPreferences().getInt("last_sync", 0);
 	}
 
 	public void setLastSynchronisationTimestamp() {
@@ -201,7 +201,8 @@ public class ServerAccount extends AccountBase {
 	private class SyncDataTask extends AsyncDataTask<ArrayList<EncryptedData>> {
 		private String data_type = null;
 
-		public SyncDataTask(String data_type) {
+		public SyncDataTask(Context context, String data_type) {
+			super(context);
 			this.data_type = data_type;
 		}
 
@@ -234,7 +235,8 @@ public class ServerAccount extends AccountBase {
 		private String data_type = null;
 		private int data_id = 0;
 
-		public DeleteDataTask(String data_type, int data_id) {
+		public DeleteDataTask(Context context, String data_type, int data_id) {
+			super(context);
 			this.data_type = data_type;
 			this.data_id = data_id;
 		}
@@ -345,9 +347,11 @@ public class ServerAccount extends AccountBase {
 		values.put("resend", "false");
 		Uri result = this.context.getContentResolver().insert(contentUri,
 				values);
+		
+		final String id_result = result.getLastPathSegment();
 
 		// send data to server
-		new AddDataTask() {
+		new AddDataTask(context) {
 			protected void onPostExecute(Boolean result) {
 				if (result) {
 					synchronizeContacts();
@@ -357,9 +361,10 @@ public class ServerAccount extends AccountBase {
 							context,
 							"An error occured while posting data to the server. The data set will be resend at next refresh",
 							Toast.LENGTH_LONG).show();
+					setResendDataset(Integer.parseInt(id_result), true);
 				}
 			};
-		}.execute("contact", contact.toJson(), result.getLastPathSegment());
+		}.execute("contact", contact.toJson(), id_result);
 	}
 
 	@Override
@@ -379,10 +384,24 @@ public class ServerAccount extends AccountBase {
 		values.put("resend", "false");
 		Uri result = this.context.getContentResolver().insert(contentUri,
 				values);
+		
+		final String id_result = result.getLastPathSegment();
 
 		// send data to server
-		new AddDataTask() {
-		}.execute("note", note.toJson(), result.getLastPathSegment());
+		new AddDataTask(context) {
+			protected void onPostExecute(Boolean result) {
+				if (result) {
+					synchronizeNotes();
+				} else {
+					// problem with saving on server. resending later
+					Toast.makeText(
+							context,
+							"An error occured while posting data to the server. The data set will be resend at next refresh",
+							Toast.LENGTH_LONG).show();
+					setResendDataset(Integer.parseInt(id_result), true);
+				}
+			};
+		}.execute("note", note.toJson(), id_result);
 	}
 
 	@Override
@@ -405,13 +424,42 @@ public class ServerAccount extends AccountBase {
 		values.put("resend", "false");
 		Uri result = this.context.getContentResolver().insert(contentUri,
 				values);
-		new AddDataTask() {
-		}.execute("calendar", centry.toJson(), result.getLastPathSegment());
+		
+		final String id_result = result.getLastPathSegment();
+		
+		new AddDataTask(context) {
+			protected void onPostExecute(Boolean result) {
+				if (result) {
+					synchronizeCalendarEntries();
+				} else {
+					// problem with saving on server. resending later
+					Toast.makeText(
+							context,
+							"An error occured while posting data to the server. The data set will be resend at next refresh",
+							Toast.LENGTH_LONG).show();
+					setResendDataset(Integer.parseInt(id_result), true);
+				}
+			};
+		}.execute("calendar", centry.toJson(), id_result);
+	}
+	
+	/**
+	 * sets the resend field on a dataset to 
+	 * value of do_resend
+	 * 
+	 * @param dataset_id
+	 */
+	public void setResendDataset(int dataset_id, boolean do_resend){
+		String where = ServerDataTable.COLUMN_ID + " = ?";
+		String[] args = new String[] { dataset_id+"" };
+		ContentValues values = new ContentValues();
+		values.put("resend", do_resend);
+		this.context.getContentResolver().update(this.contentUri, values, where, args);
 	}
 
 	public void deleteAccount() {
 		Log.i(TAG, "Deleting user account.");
-		new DeleteUserTask() {
+		new DeleteUserTask(context) {
 			protected void onPostExecute(Boolean result) {
 				// if deletion successful, clean database
 				new DBTools(context).purgeDatabase();
@@ -423,6 +471,10 @@ public class ServerAccount extends AccountBase {
 	 * Task for User authentification
 	 */
 	public class AuthenticateUserTask extends AsyncUserTask {
+		public AuthenticateUserTask(Context context){
+			super(context);
+		}
+		
 		protected Boolean doInBackground(String... params) {
 			try {
 				return authenticate(context, server_url, username, password);
@@ -437,6 +489,10 @@ public class ServerAccount extends AccountBase {
 	 * Task for User account deletion
 	 */
 	public class DeleteUserTask extends AsyncUserTask {
+		public DeleteUserTask(Context context){
+			super(context);
+		}
+		
 		protected Boolean doInBackground(String... params) {
 			try {
 				return delete(server_url, username, password);
@@ -451,6 +507,10 @@ public class ServerAccount extends AccountBase {
 	 * Task for user registration
 	 */
 	public class RegisterUserTask extends AsyncUserTask {
+		public RegisterUserTask(Context context){
+			super(context);
+		}
+		
 		protected Boolean doInBackground(String... params) {
 			try {
 				return register(server_url, username, password);
@@ -466,6 +526,10 @@ public class ServerAccount extends AccountBase {
 	 * entry was created on the server.
 	 */
 	public class AddDataTask extends AsyncDataTask<Boolean> {
+		public AddDataTask(Context context){
+			super(context);
+		}
+		
 		/**
 		 * @params[1] -> possible values: calendar, contact, note
 		 */
@@ -488,6 +552,10 @@ public class ServerAccount extends AccountBase {
 	 * entry was updated on the server.
 	 */
 	public class UpdateDataTask extends AsyncDataTask<Boolean> {
+		public UpdateDataTask(Context context){
+			super(context);
+		}
+		
 		/**
 		 * @params[1] -> possible values: calendar, contact, note
 		 */
@@ -512,6 +580,10 @@ public class ServerAccount extends AccountBase {
 	 * encrypted and json encoded seperatly and have to be processed further.
 	 */
 	public class GetDataTask extends AsyncDataTask<ArrayList<EncryptedData>> {
+		public GetDataTask(Context context){
+			super(context);
+		}
+		
 		/**
 		 * @params[2] -> possible values: calendar, contacts, notes
 		 */
@@ -593,7 +665,7 @@ public class ServerAccount extends AccountBase {
 		}
 
 		// send update to server
-		new UpdateDataTask() {
+		new UpdateDataTask(context) {
 		}.execute("contacts", contact.toJson(), contact.getId() + "");
 	}
 
@@ -624,7 +696,7 @@ public class ServerAccount extends AccountBase {
 		}
 
 		// send update to server
-		new UpdateDataTask() {
+		new UpdateDataTask(context) {
 		}.execute("notes", sn.toJson(), sn.getId() + "");
 	}
 
@@ -660,7 +732,7 @@ public class ServerAccount extends AccountBase {
 		}
 
 		// send update to server
-		new UpdateDataTask() {
+		new UpdateDataTask(context) {
 		}.execute("calendar", entry.toJson(), entry.getId() + "");
 	}
 
@@ -687,7 +759,7 @@ public class ServerAccount extends AccountBase {
 		}
 
 		// send delete to server
-		new DeleteDataTask("contacts", contact.getId()) {
+		new DeleteDataTask(context, "contacts", contact.getId()) {
 		}.execute();
 	}
 
@@ -713,7 +785,7 @@ public class ServerAccount extends AccountBase {
 		}
 
 		// send delete to server
-		new DeleteDataTask("notes", note.getId()) {
+		new DeleteDataTask(context, "notes", note.getId()) {
 		}.execute();
 	}
 
@@ -740,7 +812,7 @@ public class ServerAccount extends AccountBase {
 		}
 
 		// send delete to server
-		new DeleteDataTask("calendar", centry.getId()) {
+		new DeleteDataTask(context, "calendar", centry.getId()) {
 		}.execute();
 	}
 
