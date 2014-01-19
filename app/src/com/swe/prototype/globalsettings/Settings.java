@@ -27,8 +27,8 @@ public class Settings {
 	}
 
 	public static String getServer() {
-		return "http://10.0.2.2:45678";
-		//return getIp() + ":" + getPort();
+//		return "http://10.0.2.2:45678";
+		return getIp() + ":" + getPort();
 	}
 
 	public static String getIp() {
