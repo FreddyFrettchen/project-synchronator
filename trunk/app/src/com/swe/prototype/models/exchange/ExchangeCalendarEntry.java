@@ -21,21 +21,30 @@ import com.swe.prototype.models.AccountBase;
 
 public class ExchangeCalendarEntry extends CalendarEntry {
 
-	public Date StartDate;
-	public Date EndDate;
+	public String id;
+	public String StartDate;
+	public String EndDate;
 	public String Subject;
 	public String Description;
 	public int Repeat;
+	
+	public void setId(String _id){
+		this.id = _id;
+	}
+	
+	public String getId(){
+		return this.id;
+	}
 	
     public String getSubject() {
 		return Subject;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		StartDate = startDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		EndDate = endDate;
 	}
 
@@ -54,15 +63,15 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 	public ExchangeCalendarEntry(AccountBase account) {
         super(account);
     }
-	
+
 	@Override
 	public String getStartDate() {
-		return this.StartDate.toString();
+		return this.StartDate;
 	}
 
 	@Override
 	public String getEndDate() {
-		return this.EndDate.toString();
+		return this.EndDate;
 	}
 
 	@Override

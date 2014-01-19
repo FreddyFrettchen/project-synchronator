@@ -9,12 +9,15 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
+import com.google.gdata.data.spreadsheet.Column;
 import com.independentsoft.exchange.Appointment;
+import com.independentsoft.exchange.AppointmentPropertyPath;
 import com.independentsoft.exchange.Body;
 import com.independentsoft.exchange.ContactPropertyPath;
 import com.independentsoft.exchange.DeleteType;
@@ -30,15 +33,19 @@ import com.independentsoft.exchange.Response;
 import com.independentsoft.exchange.Service;
 import com.independentsoft.exchange.ServiceException;
 import com.independentsoft.exchange.StandardFolder;
+import com.swe.prototype.database.DBTools;
 import com.swe.prototype.database.SQLiteDataProvider;
+import com.swe.prototype.database.tables.ExchangeCalendarTable;
 import com.swe.prototype.database.tables.ExchangeContactTable;
 import com.swe.prototype.database.tables.ExchangeNoteTable;
+import com.swe.prototype.database.tables.ServerDataTable;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.exchange.ExchangeCalendarEntry;
 import com.swe.prototype.models.exchange.ExchangeContact;
 import com.swe.prototype.models.exchange.ExchangeNote;
+import com.swe.prototype.models.server.ServerCalendarEntry;
 
 public class ExchangeAccount extends AccountBase{
 
@@ -115,6 +122,8 @@ public class ExchangeAccount extends AccountBase{
 	        	Log.i(TAG, "SnchronizeContacts for response.findItem");
 	            FindItemResponse response = service.findItem(StandardFolder.CONTACTS, ContactPropertyPath.getAllPropertyPaths());
 	            Log.i(TAG, "Synchronize for FORSCHLEIFE");
+	      
+	            new DBTools(context).purgeContactTable();
 	            for (int i = 0; i < response.getItems().size(); i++)
 	            {
 	                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact)
@@ -151,7 +160,42 @@ public class ExchangeAccount extends AccountBase{
 
 	@Override
 	public void synchronizeCalendarEntries() {
+		Log.i(TAG, "Synchronize Start CalendarEntry");
+		ArrayList<CalendarEntry> list = new ArrayList<CalendarEntry>();
+			try
+	        {
+				ContentValues values = new ContentValues();
+				Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
+						"calendar");
+				ExchangeCalendarEntry excal = new ExchangeCalendarEntry(this);
+	        	Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",this.username, this.password);
+	        	Log.i(TAG, "SnchronizeCalendar for response.findItem");
+	            FindItemResponse response = service.findItem(StandardFolder.CALENDAR, AppointmentPropertyPath.getAllPropertyPaths());
+	            Log.i(TAG, "Synchronize for FORSCHLEIFE");
+	            for (int i = 0; i < response.getItems().size(); i++)
+	            {
+	                if (response.getItems().get(i) instanceof com.independentsoft.exchange.Appointment)
+	                {
+	                    Appointment appointment = (Appointment) response.getItems().get(i);
 
+	                    values.put("_id", appointment.getItemId().toString());
+	                    values.put("title", appointment.getSubject());
+	                    values.put("body", appointment.getBodyPlainText());
+	                    values.put("startTime", appointment.getStartTime().toString());
+	                    values.put("endTime", appointment.getEndTime().toString());
+	                    values.put("repeat", appointment.getRecurrencePattern());
+	                    
+	                    this.context.getContentResolver().insert(contentUri,values);
+	                }
+	            }
+	        }
+	        catch (ServiceException e)
+	        {
+	            System.out.println(e.getMessage());
+	            System.out.println(e.getXmlMessage());
+
+	            e.printStackTrace();
+	        }
 	}
 
 	/* 
@@ -223,7 +267,8 @@ public class ExchangeAccount extends AccountBase{
 	public ArrayList<Contact> getContacts(){
 	    ArrayList<Contact> contactlist = new ArrayList<Contact>();
 		Cursor cursor = getContactData("contacts");
-		while(cursor.moveToNext()){
+		if(cursor.moveToFirst()){
+		do{
 			ExchangeContact excon = new ExchangeContact(this);
 			excon.setId(cursor.getString(0));
 			excon.setFirstname(cursor.getString(1));
@@ -231,6 +276,7 @@ public class ExchangeAccount extends AccountBase{
 			excon.setEmail(cursor.getString(3));
 			excon.setPhoneumber(cursor.getString(4));
 			contactlist.add(excon);
+		}while(cursor.moveToNext());
 		}
 		cursor.close();
 		return contactlist;
@@ -239,19 +285,38 @@ public class ExchangeAccount extends AccountBase{
 	public ArrayList<com.swe.prototype.models.Note> getNotes(){
 		ArrayList<com.swe.prototype.models.Note> notelist = new ArrayList<com.swe.prototype.models.Note>();		
 		Cursor cursor = getNoteData("note");
-		while(cursor.moveToNext()){
+		if(cursor.moveToFirst()){
+		do{
 			ExchangeNote exnote = new ExchangeNote(this);
 			exnote.setID(cursor.getString(0));
 			exnote.setTitle(cursor.getString(1));
 			exnote.setBody(cursor.getString(2));
 			notelist.add(exnote);  
+		}while(cursor.moveToNext());
 		}
 		cursor.close();
 		return notelist;
 	}
 
 	public ArrayList<CalendarEntry> getCalendarEntry(){
-	       
+	   
+	    ArrayList<CalendarEntry> calendarlist = new ArrayList<CalendarEntry>();
+		Cursor cursor = getCalendarData("calendar");
+		if(cursor.moveToFirst()){
+		do{
+			ExchangeCalendarEntry excal = new ExchangeCalendarEntry(this);
+			excal.setId(cursor.getString(0));
+			excal.setSubject(cursor.getString(1));
+			excal.setDescription(cursor.getString(2));
+			excal.setStartDate(cursor.getString(3).toString());
+			excal.setEndDate(cursor.getString(4).toString());
+			excal.setRepeat(cursor.getInt(5));
+			calendarlist.add(excal);
+		}while(cursor.moveToNext());
+		}
+		return calendarlist;
+		
+		/*   
 		ArrayList<CalendarEntry> list = new ArrayList<CalendarEntry>();
 		ExchangeCalendarEntry excal = new ExchangeCalendarEntry(this);
 			try
@@ -282,10 +347,21 @@ public class ExchangeAccount extends AccountBase{
 
 	            e.printStackTrace();
 	        }
-		return list;
+		return list;*/
 	}
 
 	
+	private Cursor getCalendarData(String string) {
+		final ContentResolver resolver = this.context.getContentResolver();
+		final Uri dataUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,ExchangeCalendarTable.TABLE_CALENDAR);
+		final String[] projection = { ExchangeCalendarTable.COLUMN_ID,ExchangeCalendarTable.COLUMN_SUBJECT, 
+				ExchangeCalendarTable.COLUMN_BODY, ExchangeCalendarTable.COLUMN_STARTTIME, ExchangeCalendarTable.COLUMN_ENDTIME,
+				ExchangeCalendarTable.COLUMN_REPEAT};
+		String[] selectionArgs = null;
+		Cursor cursor = resolver.query(dataUri, projection, null ,selectionArgs, null);
+		return cursor;
+	}
+
 	@Override
 	public BaseAdapter getContactAdapter(Context context, int layout_id) {
 		ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(context, layout_id);
@@ -317,8 +393,7 @@ public class ExchangeAccount extends AccountBase{
 
 	@Override
 	public BaseAdapter getCalendarAdapter(Context context, int layout_id) {
-		ArrayAdapter<CalendarEntry> adapter = new ArrayAdapter<CalendarEntry>(
-				context, layout_id);
+		ArrayAdapter<CalendarEntry> adapter = new ArrayAdapter<CalendarEntry>(context, layout_id);
 		adapter.addAll(getCalendarEntry());
 		/*	try {
 			Service service = new Service(
