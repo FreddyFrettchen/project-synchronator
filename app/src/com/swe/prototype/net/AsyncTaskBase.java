@@ -43,6 +43,12 @@ import com.swe.prototype.R;
 public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		AsyncTask<Params, Progress, Result> {
 
+	private Context context = null;
+
+	public AsyncTaskBase(Context context) {
+		this.context = context;
+	}
+
 	/**
 	 * urlencodes list of NameValuePairs
 	 * 
@@ -119,7 +125,8 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 
 		try {
 			keyStore = KeyStore.getInstance("BKS");
-			InputStream in = context.getResources().openRawResource(R.raw.certs);
+			InputStream in = context.getResources()
+					.openRawResource(R.raw.certs);
 			keyStore.load(in, "swe1314".toCharArray());
 			tmf = TrustManagerFactory.getInstance("X509");
 			tmf.init(keyStore);
@@ -186,8 +193,8 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		return response;
 	}
 
-	public Pair<Integer, String> getPostRequestSSLResponse(Context context,
-			String _url, List<NameValuePair> params) {
+	public Pair<Integer, String> getPostRequestSSLResponse(String _url,
+			List<NameValuePair> params) {
 
 		HttpsURLConnection request = null;
 		try {
@@ -210,9 +217,7 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 			if (response_code != 200) {
 				s = new Scanner(request.getErrorStream());
 			} else {
-
 				s = new Scanner(request.getInputStream());
-
 			}
 			s.useDelimiter("\\Z");
 
