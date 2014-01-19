@@ -84,6 +84,11 @@ public class MainActivity extends BaseActivity {
 				doAuthentication();
 			}
 		});
+		// Laden des Servers aus den SharedPreferences wenn sie dort schon abgespeichert sind
+		SharedPreferences pref = getPreferences();
+		if(pref.getString("Server_IP", "") != "" && pref.getString("Server_Port", "") != "") {
+			Settings.setServer(pref.getString("Server_IP", ""), pref.getString("Server_Port", ""));
+		}		
 	}
 
 	/*
@@ -125,9 +130,17 @@ public class MainActivity extends BaseActivity {
 						String newIP = ip.getText().toString();
 						String newPort = port.getText().toString();
 						if (Tools.isValidPort(newPort)
-								&& Tools.isValidIP(newIP)) {
+								&& (Tools.isValidIP(newIP)
+								|| Tools.isValidHost(newIP))) {
 							Settings.setServer(newIP, newPort);
+							SharedPreferences pref = getPreferences();
+							SharedPreferences.Editor editor = getPreferences().edit();
+							editor.putString("Server_IP", newIP);
+							editor.putString("Server_Port", newPort);
+							editor.commit();
 						} else {
+							Toast.makeText(getApplicationContext(), "Server Settings IP oder Port nicht valide!",
+									Toast.LENGTH_LONG).show();
 							System.out
 									.println("Server Settings IP oder Port nicht valide!");
 						}
@@ -177,7 +190,7 @@ public class MainActivity extends BaseActivity {
 	private void loginFailed() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
-		dlgAlert.setMessage("Username/Password wrong or not activated yet.");
+		dlgAlert.setMessage("Username/Password wrong or not activated yet. Or maybe wrong Server?!");
 		dlgAlert.setTitle(getString(R.string.login_failed));
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.setCancelable(true);

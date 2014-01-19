@@ -28,6 +28,11 @@ public class Tools {
 
 		return false;
 	}
+	
+	public static boolean isValidHost(String newIP) {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
 	public static boolean isValidPort(String port) {
 		try {
@@ -127,5 +132,7 @@ public class Tools {
 		}
 		return res;
 	}
+
+	
 
 }
