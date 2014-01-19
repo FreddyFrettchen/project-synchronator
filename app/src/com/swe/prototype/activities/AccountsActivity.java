@@ -64,15 +64,16 @@ public class AccountsActivity extends BaseActivity implements
 			SQLiteDataProvider.CONTENT_URI, AccountTable.TABLE_ACCOUNT);
 
 	private ListView listView = null;
-	SimpleCursorAdapter mAdapter;
-	LoaderManager loadermanager;
-	CursorLoader cursorLoader;
+	private SimpleCursorAdapter mAdapter;
+	private LoaderManager loadermanager;
+	private CursorLoader cursorLoader;
+	private Context context = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_accounts);
-
+		this.context = this;
 		loadermanager = getLoaderManager();
 
 		String[] uiBindFrom = { AccountTable.COLUMN_USERNAME,
@@ -142,7 +143,8 @@ public class AccountsActivity extends BaseActivity implements
 		Log.i(TAG,"Deleting account " + id_account);
 		getContentResolver().delete(CONTENT_URI, "_id = ?",
 				new String[] { id_account + "" });
-		loadermanager.restartLoader(1, null, (LoaderCallbacks<Cursor>) this);
+		showToast("Account deleted");
+		showAndFinish(AccountsActivity.class);
 	}
 
 	public void editAccount(int id_account) {
@@ -190,7 +192,7 @@ public class AccountsActivity extends BaseActivity implements
 			editAccount((int) info.id);
 			break;
 		case R.id.delete:
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 			 
 			// set title
 			alertDialogBuilder.setTitle("Do you want to delete the account?");
