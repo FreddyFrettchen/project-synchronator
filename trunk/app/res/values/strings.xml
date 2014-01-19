@@ -10,7 +10,7 @@
     <string name="server_settings">Server Settings</string>
     <string name="ip">IP:</string>
     <string name="port">Port:</string>
-    <string name="ip_example">10.0.2.2</string>
+    <string name="ip_example">http://10.0.2.2</string>
     <string name="port_example">45678</string>
     <string name="settings">Settings</string>
     <string name="save">Save</string>
