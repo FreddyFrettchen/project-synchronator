@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,16 +15,9 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.swe.prototype.SynchronatorApplication;
-import com.swe.prototype.activities.CalendarAddEventActivity;
-import com.swe.prototype.activities.ChangeNoteActivity;
-import com.swe.prototype.activities.CreateContactActivity;
-import com.swe.prototype.activities.ListContactsActivity;
 import com.swe.prototype.database.DBTools;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.ServerDataTable;
@@ -37,8 +29,8 @@ import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.Note;
 import com.swe.prototype.models.server.EncryptedData;
 import com.swe.prototype.models.server.ServerCalendarEntry;
-import com.swe.prototype.models.server.ServerNote;
 import com.swe.prototype.models.server.ServerContact;
+import com.swe.prototype.models.server.ServerNote;
 
 public class ServerAccount extends AccountBase {
 	private final static String TAG = "ServerAccount";
@@ -47,8 +39,8 @@ public class ServerAccount extends AccountBase {
 	protected Security sec = null;
 	protected Gson gson = null;
 
-	Uri contentUri = Uri.withAppendedPath(SQLiteDataProvider.CONTENT_URI,
-			"server_data");
+	private Uri contentUri = Uri.withAppendedPath(
+			SQLiteDataProvider.CONTENT_URI, "server_data");
 
 	public ServerAccount(Context context, int account_id, int refresh_time_sec,
 			String username, String password) {
@@ -165,8 +157,11 @@ public class ServerAccount extends AccountBase {
 			if (encryptedData.deleted)
 				continue;
 			where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
-					+ ServerDataTable.COLUMN_TAG + " = ? AND "+ ServerDataTable.COLUMN_STATUS +" = ? OR " + ServerDataTable.COLUMN_STATUS +" = ?";
-			args = new String[] { encryptedData.getId() + "", data_type, "INSYNC", "UPDATE" };
+					+ ServerDataTable.COLUMN_TAG + " = ? AND "
+					+ ServerDataTable.COLUMN_STATUS + " = ? OR "
+					+ ServerDataTable.COLUMN_STATUS + " = ?";
+			args = new String[] { encryptedData.getId() + "", data_type,
+					"INSYNC", "UPDATE" };
 			values.put("data", encryptedData.getData());
 			values.put("data_id", encryptedData.getId());
 			values.put("tag", data_type);
@@ -185,7 +180,7 @@ public class ServerAccount extends AccountBase {
 	public int getLastSynchronisationTimestamp() {
 		SynchronatorApplication app = ((SynchronatorApplication) this.context
 				.getApplicationContext());
-		return 0;// (int) (System.currentTimeMillis() / 1000L);
+		return app.getPreferences().getInt("timestamp", 0);
 	}
 
 	public void setLastSynchronisationTimestamp() {
@@ -235,8 +230,7 @@ public class ServerAccount extends AccountBase {
 	/**
 	 * deletes user from the server. cant be undone when called!!!
 	 */
-	private class DeleteDataTask extends
-			AsyncDataTask<ArrayList<EncryptedData>> {
+	private class DeleteDataTask extends AsyncDataTask<Boolean> {
 		private String data_type = null;
 		private int data_id = 0;
 
@@ -245,31 +239,20 @@ public class ServerAccount extends AccountBase {
 			this.data_id = data_id;
 		}
 
-		// TODO wrong type
-		protected ArrayList<EncryptedData> doInBackground(String... params) {
+		protected Boolean doInBackground(String... params) {
 			Boolean response = null;
-			int timestamp = getLastSynchronisationTimestamp();
-			Type listType = new TypeToken<ArrayList<EncryptedData>>() {
-			}.getType();
 
 			try {
 				response = delete(server_url, username, password,
 						this.data_type, this.data_id);
 				Log.i(TAG, "response of deleting " + this.data_type + ": "
 						+ (response ? "True" : "False"));
+				return response;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
-			Log.i(TAG, "Error occured while syncing. Returning empty resultset");
-			return new ArrayList<EncryptedData>();
-		}
-
-		protected void onPostExecute(ArrayList<EncryptedData> list) {
-			super.onPostExecute(list);
-			if (list == null)
-				return;
-			synchronizeDatabase(this.data_type, list);
+			return false;
 		}
 	}
 
@@ -278,7 +261,6 @@ public class ServerAccount extends AccountBase {
 		Cursor cursor = getData("notes");
 		if (cursor.moveToFirst()) {
 			do {
-				Log.i(TAG, "Decrypting Notes");
 				notes.add(new EncryptedData(cursor.getInt(0), cursor
 						.getString(2)).toNote(this.password, cursor.getInt(1),
 						this));
@@ -293,7 +275,6 @@ public class ServerAccount extends AccountBase {
 		Cursor cursor = getData("calendar");
 		if (cursor.moveToFirst()) {
 			do {
-				Log.i(TAG, "Decrypting CalendarEntries");
 				entries.add(new EncryptedData(cursor.getInt(0), cursor
 						.getString(2)).toCalendarEntry(this.password,
 						cursor.getInt(1), this));
@@ -307,7 +288,6 @@ public class ServerAccount extends AccountBase {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
 		Cursor cursor = getData("contacts");
 		if (cursor.moveToFirst()) {
-			Log.i(TAG, "Decrypting Contacts");
 			do {
 				contacts.add(new EncryptedData(cursor.getInt(0), cursor
 						.getString(2)).toContact(this.password,
@@ -369,11 +349,14 @@ public class ServerAccount extends AccountBase {
 		// send data to server
 		new AddDataTask() {
 			protected void onPostExecute(Boolean result) {
-				if(result){
+				if (result) {
 					synchronizeContacts();
-				}else{
-					//problem with saving on server. resending later
-					Toast.makeText(context, "An error occured while posting data to the server. The data set will be resend at next refresh", Toast.LENGTH_LONG).show();
+				} else {
+					// problem with saving on server. resending later
+					Toast.makeText(
+							context,
+							"An error occured while posting data to the server. The data set will be resend at next refresh",
+							Toast.LENGTH_LONG).show();
 				}
 			};
 		}.execute("contact", contact.toJson(), result.getLastPathSegment());
