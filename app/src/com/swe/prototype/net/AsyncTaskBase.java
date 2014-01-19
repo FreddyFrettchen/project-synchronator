@@ -6,54 +6,40 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 
-import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.SingleClientConnManager;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.HTTP;
 
-import com.swe.prototype.R;
-import com.swe.prototype.activities.MainActivity;
-
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.util.Pair;
 
+import com.swe.prototype.R;
+
+/**
+ * All Server related requests that are issued extend this baseclass that
+ * supplies post functions for http and https.
+ * 
+ * @author batman
+ * 
+ * @param <Params>
+ * @param <Progress>
+ * @param <Result>
+ */
 public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		AsyncTask<Params, Progress, Result> {
 
@@ -114,62 +100,42 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		return conn;
 	}
 
+	/**
+	 * uses an https connection to make requests.
+	 * 
+	 * @param context
+	 * @param _url
+	 * @param params
+	 * @return
+	 * @throws IOException
+	 */
 	public HttpsURLConnection postRequestSSL(Context context, String _url,
 			List<NameValuePair> params) throws IOException {
-
+		HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 		HttpsURLConnection conn = null;
 		KeyStore keyStore = null;
+		TrustManagerFactory tmf = null;
+		SSLContext ssl_context = null;
+
 		try {
 			keyStore = KeyStore.getInstance("BKS");
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		InputStream in = context.getResources().openRawResource(R.raw.certs);
-
-		try {
+			InputStream in = context.getResources().openRawResource(R.raw.certs);
 			keyStore.load(in, "swe1314".toCharArray());
+			tmf = TrustManagerFactory.getInstance("X509");
+			tmf.init(keyStore);
+			ssl_context = SSLContext.getInstance("TLS");
+			ssl_context.init(null, tmf.getTrustManagers(), null);
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
-		TrustManagerFactory tmf = null;
-		try {
-			tmf = TrustManagerFactory.getInstance("X509");
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try {
-			tmf.init(keyStore);
 		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
-		SSLContext ssl_context = null;
-		try {
-			ssl_context = SSLContext.getInstance("TLS");
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try {
-			ssl_context.init(null, tmf.getTrustManagers(), null);
 		} catch (KeyManagementException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		System.setProperty("http.keepAlive", "false");
-
-		HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 
 		URL url = new URL(_url);
 		conn = (HttpsURLConnection) url.openConnection();
@@ -254,7 +220,7 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return new Pair<Integer, String>(response_code, response_body);
 	}
 }

@@ -232,6 +232,7 @@ public class ExchangeAccount extends AccountBase{
 			excon.setPhoneumber(cursor.getString(4));
 			contactlist.add(excon);
 		}
+		cursor.close();
 		return contactlist;
 	}
 
@@ -245,6 +246,7 @@ public class ExchangeAccount extends AccountBase{
 			exnote.setBody(cursor.getString(2));
 			notelist.add(exnote);  
 		}
+		cursor.close();
 		return notelist;
 	}
 

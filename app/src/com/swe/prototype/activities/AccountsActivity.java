@@ -1,26 +1,8 @@
 package com.swe.prototype.activities;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
-/*import android.support.v4.app.LoaderManager;
- import android.support.v4.app.LoaderManager.LoaderCallbacks;
- import android.support.v4.content.CursorLoader;
- import android.support.v4.content.Loader;
- import android.support.v4.widget.CursorAdapter;*/
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -28,10 +10,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -40,19 +19,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
 import com.swe.prototype.R;
 import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.AccountTable;
-import com.swe.prototype.globalsettings.Settings;
-import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.net.server.ServerAccount;
 
 public class AccountsActivity extends BaseActivity implements
@@ -64,11 +38,11 @@ public class AccountsActivity extends BaseActivity implements
 			SQLiteDataProvider.CONTENT_URI, AccountTable.TABLE_ACCOUNT);
 
 	private ListView listView = null;
-	private SimpleCursorAdapter mAdapter;
-	private LoaderManager loadermanager;
-	private CursorLoader cursorLoader;
+	private SimpleCursorAdapter mAdapter = null;
+	private LoaderManager loadermanager = null;
 	private Context context = null;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

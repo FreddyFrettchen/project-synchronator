@@ -6,8 +6,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.models.AccountManager;
 import com.swe.prototype.models.CalendarEntry;
@@ -18,18 +16,34 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+/**
+ * Extends Basic functionality of the standard 
+ * application class.
+ * @author batman
+ *
+ */
 public class SynchronatorApplication extends Application {
 
 	private static String TAG = "SynchronatorApplication";
 
+	// holds all accounts
 	private AccountManager accountManager = null;
-	private ScheduledExecutorService scheduleTaskExecutor = null;
+	
+	// service that runs the synchronisation
 	private ScheduledFuture<?> synchronizeThread = null;
+	private ScheduledExecutorService scheduleTaskExecutor = null;
 
+	private Note current_note = null;
 	private Contact current_contact = null;
-	private com.swe.prototype.models.Note current_note = null;
 	private CalendarEntry current_calendar_entry = null;
 	private ArrayList<CalendarEntry> current_calendar_entry_list = null;
+
+	// asyc task that synchronizes all accounts
+	private Runnable SYNCHRONIZE_RUNNER = new Runnable() {
+		public void run() {
+			accountManager.synchronizeAll();
+		}
+	};
 
 	public void onCreate() {
 		super.onCreate();
@@ -65,11 +79,8 @@ public class SynchronatorApplication extends Application {
 		if (isSchedulerRunning())
 			stopScheduler();
 		synchronizeThread = scheduleTaskExecutor.scheduleAtFixedRate(
-				new Runnable() {
-					public void run() {
-						accountManager.synchronizeAll();
-					}
-				}, 0, Settings.getRefreshTimeAsInt(), TimeUnit.SECONDS);
+				SYNCHRONIZE_RUNNER, 0, Settings.getRefreshTimeAsInt(),
+				TimeUnit.SECONDS);
 	}
 
 	private boolean isSchedulerRunning() {
