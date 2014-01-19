@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,8 @@ public class CreateAccountActivity extends BaseActivity {
 	private int id_account = 0;
 	private boolean edit_mode = false;
 	ProgressDialog dialog;
+	
+	boolean valid = false;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,21 +52,28 @@ public class CreateAccountActivity extends BaseActivity {
 		getActionBar().setTitle(edit_mode ? "Edit Account" : "Save Account");  
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
-
-				if (!isValidAccount()) {
-					showShortToast("Account data not valid. Please supply correct logindata.");
-					return;
-				}
-
-				if (correctInputChoise()) {
-					if (edit_mode) {
-						updateAccount(v);
-					} else {
-						saveAccount(v);
+			public void onClick(final View v) {
+				final ProgressDialog dialog;
+				dialog = ProgressDialog.show(CreateAccountActivity.this, "",getString(R.string.wait), true);
+				dialog.show();
+				new MyAccountValidator() {
+					protected void onPostExecute(Boolean result) {
+						dialog.dismiss();
+						if (!result) {
+							showShortToast("Account data not valid. Please supply correct logindata.");
+							return;
+						}
+		
+						if (correctInputChoise()) {
+							if (edit_mode) {
+								updateAccount(v);
+							} else {
+								saveAccount(v);
+							}
+							finish();
+						}
 					}
-					finish();
-				}
+				}.execute();
 			}
 		});
 
@@ -75,15 +85,6 @@ public class CreateAccountActivity extends BaseActivity {
 				finish();
 			}
 		});
-	}
-
-	protected boolean isValidAccount(){
-		String tag = ((Spinner) findViewById(R.id.spinner_account))
-						.getSelectedItem().toString();
-		String username = getEditText(R.id.edit_text_username);
-		String password = getEditText(R.id.edit_text_password);
-		AccountBase created_acc = accounts.getAccountByTag(tag,username,password);
-		return created_acc.validateAccountData();
 	}
 
 	// load account from db
@@ -167,4 +168,16 @@ public class CreateAccountActivity extends BaseActivity {
 		return ((EditText) findViewById(id)).getText().toString();
 	}
 
+	class MyAccountValidator extends AsyncTask<Void, Void, Boolean>{
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			String tag = ((Spinner) findViewById(R.id.spinner_account))
+					.getSelectedItem().toString();
+			String username = getEditText(R.id.edit_text_username);
+			String password = getEditText(R.id.edit_text_password);
+			AccountBase created_acc = accounts.getAccountByTag(tag,username,password);
+			return created_acc.validateAccountData();
+		}
+	}
 }
