@@ -52,6 +52,10 @@
             android:label="Calendar Month View" android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name="com.swe.prototype.activities.CalendarShowEventActivity"
+            android:label="Show Event View" android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name="com.swe.prototype.activities.CalendarDayViewActivity"
             android:label="Calendar Day View" android:screenOrientation="portrait">
         </activity>
