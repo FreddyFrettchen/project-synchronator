@@ -235,6 +235,11 @@ public class CalendarDayViewActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				//show entry
+				getSynchronatorApplication().setCurrentCalendarEntry(rec.calEntry);
+				Intent intent = new Intent(CalendarDayViewActivity.this,
+						CalendarShowEventActivity.class);
+				startActivity(intent);
+				
 			}
 		});
 		edit.setOnClickListener(new View.OnClickListener() {
