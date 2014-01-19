@@ -113,7 +113,6 @@ public class ListContactsActivity extends BaseActivity {
 
 	public void editContact(Contact c) {
 		getSynchronatorApplication().setCurrentContact(c);
-		// c.edit(this);
 		Intent in = new Intent(this, CreateContactActivity.class);
 		startActivity(in);
 	}
@@ -139,8 +138,6 @@ public class ListContactsActivity extends BaseActivity {
 		btn_move.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				Log.i(TAG, "moving contacts ...");
 				showToast("Moving contacts...");
 
 
@@ -158,15 +155,14 @@ public class ListContactsActivity extends BaseActivity {
 											c.getPhoneumber(), c.getEmail());
 						}
 					}
-					Log.i(TAG, "moving contacts ...");
 					showToast("Moving contacts...");
 					
 					//delete original 
 					c.getAccount().deleteContact(c);
 					
-					dialog.cancel();
+					dialog.dismiss();
+					return;
 				}
-				c.getAccount().deleteContact(c);
 				showToast("No server selected.");
 
 			}
@@ -184,13 +180,15 @@ public class ListContactsActivity extends BaseActivity {
 
 	public void deleteContact(Contact c) {
 		c.delete();
+		showToast("Contact marked for deletion");
+		adapter.notifyDataSetChanged();
 	}
 
 	class ViewListItem implements OnItemClickListener {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			Intent in = new Intent(parent.getContext(), ContactActivity.class);
-			ServerContact o = (ServerContact) listView
+			Contact o = (Contact) listView
 					.getItemAtPosition(position);
 
 			in.putExtra("name", o.toString());

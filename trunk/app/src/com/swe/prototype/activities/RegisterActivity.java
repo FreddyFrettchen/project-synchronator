@@ -65,7 +65,7 @@ public class RegisterActivity extends BaseActivity {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
 		dlgAlert.setTitle("Registrierung fehlgeschlagen");
-		dlgAlert.setMessage("Die Passwörter stimmen leider nicht überein.");
+		dlgAlert.setMessage("Die Passwï¿½rter stimmen leider nicht ï¿½berein.");
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.setCancelable(true);
 		dialog.dismiss();
@@ -128,8 +128,8 @@ public class RegisterActivity extends BaseActivity {
 	private void postRegister() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
-		dlgAlert.setMessage("Nachdem Ihr Account vom Admin freigeschaltet wurde, können Sie sich einloggen.");
-		dlgAlert.setTitle("Registrierung erfolgreich");
+		dlgAlert.setMessage("Congratulations! You can log in as soon as the Administrator approved your account.");
+		dlgAlert.setTitle("Registration successful");
 		dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				openLogin();

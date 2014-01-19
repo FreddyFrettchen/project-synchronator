@@ -123,7 +123,7 @@ public class ListNotesActivity extends BaseActivity {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			Intent in = new Intent(parent.getContext(), NoteActivity.class);
-			ServerNote sn = (ServerNote) listView.getItemAtPosition(position);
+			Note sn = (Note) listView.getItemAtPosition(position);
 			in.putExtra("title", sn.getTitle());
 			in.putExtra("text", sn.getNote());
 			startActivityForResult(in, 0);
@@ -175,13 +175,9 @@ public class ListNotesActivity extends BaseActivity {
 					// delete original
 					n.getAccount().deleteNote(n);
 					
-					dialog.cancel();
+					dialog.dismiss();
+					return;
 				}
-
-
-				// delete original
-				n.getAccount().deleteNote(n);
-
 				showToast("No server selected.");
 			}
 		});

@@ -62,6 +62,6 @@ public class ServerNote extends Note {
 
 	@Override
 	public boolean isUpToDate() {
-		return true;
+		return this.id != -1;
 	}
 }
