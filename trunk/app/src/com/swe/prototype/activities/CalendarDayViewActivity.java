@@ -246,7 +246,15 @@ public class CalendarDayViewActivity extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
-				//show entry
+				//edit entry
+				getSynchronatorApplication().setCurrentCalendarEntry(rec.calEntry);
+				Intent intent = new Intent(CalendarDayViewActivity.this,
+						CalendarAddEventActivity.class);
+				Bundle b = new Bundle();
+				b.putBoolean("edit", true);
+				intent.putExtras(b);
+				startActivity(intent);
+				finish();
 			}
 		});
 		delete.setOnClickListener(new View.OnClickListener() {
@@ -255,6 +263,10 @@ public class CalendarDayViewActivity extends BaseActivity {
 			public void onClick(View v) {
 				//delete
 				rec.calEntry.delete();
+				Intent intent = new Intent(CalendarDayViewActivity.this,
+						CalendarMonthViewActivity.class);
+				startActivity(intent);
+				finish();
 			}
 		});
 		
@@ -286,7 +298,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 			}
 		});
 		
-		onclickAlert.setCancelable(false);
+		onclickAlert.setCancelable(true);
 		onclickAlert.create().show();
 
 	}
