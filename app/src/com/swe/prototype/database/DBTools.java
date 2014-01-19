@@ -3,6 +3,7 @@ package com.swe.prototype.database;
 import java.util.ArrayList;
 
 import com.swe.prototype.database.tables.AccountTable;
+import com.swe.prototype.database.tables.ExchangeCalendarTable;
 import com.swe.prototype.database.tables.ExchangeContactTable;
 import com.swe.prototype.database.tables.ExchangeNoteTable;
 import com.swe.prototype.database.tables.ServerDataTable;
@@ -31,6 +32,7 @@ public class DBTools extends SQLiteOpenHelper {
 		AccountTable.onCreate(database);
 		ExchangeContactTable.onCreate(database);
 		ExchangeNoteTable.onCreate(database);
+		ExchangeCalendarTable.onCreate(database);
 	}
 
 	@Override
@@ -39,6 +41,7 @@ public class DBTools extends SQLiteOpenHelper {
 		AccountTable.onUpgrade(database, oldv, newv);
 		ExchangeContactTable.onUpgrade(database, oldv, newv);
 		ExchangeNoteTable.onUpgrade(database, oldv, newv);
+		ExchangeCalendarTable.onUpgrade(database, oldv, newv);
 	}
 
 	/**
@@ -55,5 +58,21 @@ public class DBTools extends SQLiteOpenHelper {
 	public void purgeData() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ServerDataTable.onUpgrade(db, 1, 1);
+	}
+	
+	/**
+	 * delete all contacts from ExchangeContactTable
+	 */
+	public void purgeContactTable() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ExchangeContactTable.onUpgrade(db, 1, 1);
+	}
+	
+	/**
+	 * delete all notes from ExchangeContactTable
+	 */
+	public void purgeNotesTable() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ExchangeNoteTable.onUpgrade(db, 1, 1);
 	}
 }
