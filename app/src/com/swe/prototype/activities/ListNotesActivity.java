@@ -91,7 +91,7 @@ public class ListNotesActivity extends BaseActivity {
 			editNote(o);
 			return true;
 		case R.id.move:
-			//moveNote(o);
+			moveNote(o);
 			return true;
 		case R.id.delete:
 			deleteNote(o);
@@ -143,6 +143,8 @@ public class ListNotesActivity extends BaseActivity {
 				.findViewById(R.id.dialog_button_cancel);
 		// if button is clicked, close the custom dialog
 		btn_move.setOnClickListener(new OnClickListener() {
+			
+			
 			@Override
 			public void onClick(View v) {
 

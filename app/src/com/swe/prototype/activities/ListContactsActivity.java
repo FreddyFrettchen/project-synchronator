@@ -95,7 +95,7 @@ public class ListContactsActivity extends BaseActivity {
 			editContact(o);
 			return true;
 		case R.id.move:
-		//	moveContact(o);
+			moveContact(o);
 			return true;
 		case R.id.delete:
 			deleteContact(o);
