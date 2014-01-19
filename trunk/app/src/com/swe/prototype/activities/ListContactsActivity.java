@@ -95,7 +95,7 @@ public class ListContactsActivity extends BaseActivity {
 			editContact(o);
 			return true;
 		case R.id.move:
-			moveContact(o);
+		//	moveContact(o);
 			return true;
 		case R.id.delete:
 			deleteContact(o);
@@ -133,7 +133,10 @@ public class ListContactsActivity extends BaseActivity {
 		btn_move.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
+				Log.i(TAG, "moving contacts ...");
+				showToast("Moving contacts...");
+
 
 				int cntChoice = list_accounts.getCount();
 				SparseBooleanArray selected_accounts = list_accounts
@@ -157,7 +160,12 @@ public class ListContactsActivity extends BaseActivity {
 					
 					dialog.cancel();
 				}
+
+				
+				//delete original 
+				c.getAccount().deleteContact(c);
 				showToast("No server selected.");
+
 			}
 		});
 
