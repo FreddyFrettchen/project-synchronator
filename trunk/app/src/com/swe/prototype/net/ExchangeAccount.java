@@ -48,8 +48,8 @@ public class ExchangeAccount extends AccountBase{
 	private static final String TAG = "ExchangeAccount";
 	  
 	// Database fields
-//	private SQLiteDatabase database;
-//	private MySQLiteHelper dbHelper;
+	//	private SQLiteDatabase database;
+	//	private MySQLiteHelper dbHelper;
 	  
 	public ExchangeAccount(Context context, int account_id,
 			int refresh_time_sec, String username, String password) {
@@ -166,7 +166,7 @@ public class ExchangeAccount extends AccountBase{
 	@Override
 	public void createContact(String lastname, String firstname,
 			String phonenumber, String email) {
-		try {
+	/*	try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
 					this.username, this.password);
@@ -185,7 +185,7 @@ public class ExchangeAccount extends AccountBase{
 			System.out.println(e.getXmlMessage());
 
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	/**
@@ -222,46 +222,29 @@ public class ExchangeAccount extends AccountBase{
 	
 	public ArrayList<Contact> getContacts(){
 	    ArrayList<Contact> contactlist = new ArrayList<Contact>();
-	    ExchangeContact excon = new ExchangeContact(this);
-	    /*try{
-	    	contactlist = SaveEntries.loadContacts(TAG);
-	    }
-	    catch(Exception e){
-	    	//e.printStackTrace();
-	    	Log.i(TAG, "getContacts Exception");
-	    }
-		return contactlist;*/
 		Cursor cursor = getContactData("contacts");
-		do{
+		while(cursor.moveToNext()){
+			ExchangeContact excon = new ExchangeContact(this);
 			excon.setId(cursor.getString(0));
 			excon.setFirstname(cursor.getString(1));
 			excon.setLastname(cursor.getString(2));
 			excon.setEmail(cursor.getString(3));
 			excon.setPhoneumber(cursor.getString(4));
 			contactlist.add(excon);
-		}while (cursor.moveToNext());
-		
-		
-		/*if (cursor.moveToFirst()) {
-			Log.i(TAG, "Decrypting Contacts");
-			do {
-				contacts.addAll((Collection<? extends Contact>) this);
-			} while (cursor.moveToNext());
-		}*/
+		}
 		return contactlist;
 	}
 
 	public ArrayList<com.swe.prototype.models.Note> getNotes(){
-		ArrayList<com.swe.prototype.models.Note> notelist = new ArrayList<com.swe.prototype.models.Note>();
-		ExchangeNote exnote = new ExchangeNote(this);
+		ArrayList<com.swe.prototype.models.Note> notelist = new ArrayList<com.swe.prototype.models.Note>();		
 		Cursor cursor = getNoteData("note");
-		do{
+		while(cursor.moveToNext()){
+			ExchangeNote exnote = new ExchangeNote(this);
 			exnote.setID(cursor.getString(0));
 			exnote.setTitle(cursor.getString(1));
 			exnote.setBody(cursor.getString(2));
 			notelist.add(exnote);  
-		}while (cursor.moveToNext());
-		
+		}
 		return notelist;
 	}
 
@@ -426,7 +409,7 @@ public class ExchangeAccount extends AccountBase{
 
 	@Override
 	public void createNote(String title, String text) {
-		try {
+	/*	try {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
 					this.username, this.password);// "bd8299s@ad.fh-aachen.de",
@@ -448,7 +431,7 @@ public class ExchangeAccount extends AccountBase{
 			System.out.println(e.getXmlMessage());
 
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	@Override
