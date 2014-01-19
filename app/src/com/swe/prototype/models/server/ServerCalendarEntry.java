@@ -103,7 +103,7 @@ public class ServerCalendarEntry extends CalendarEntry {
 
 	@Override
 	public boolean isUpToDate() {
-		return true;
+		return this.id != -1;
 	}
 
 }

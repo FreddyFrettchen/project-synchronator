@@ -69,6 +69,7 @@ public class AccountManager {
 				}
 			} while (data.moveToNext());
 		}
+		data.close();
 	}
 
 	public void loadServerAccount(Context context) {

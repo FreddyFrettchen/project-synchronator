@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -164,10 +165,10 @@ public class ServerAccount extends AccountBase {
 			if (encryptedData.deleted)
 				continue;
 			where = ServerDataTable.COLUMN_ID_DATA + " = ? AND "
-					+ ServerDataTable.COLUMN_TAG + " = ?";
-			args = new String[] { encryptedData.getIdData() + "", data_type };
+					+ ServerDataTable.COLUMN_TAG + " = ? AND "+ ServerDataTable.COLUMN_STATUS +" = ? OR " + ServerDataTable.COLUMN_STATUS +" = ?";
+			args = new String[] { encryptedData.getId() + "", data_type, "INSYNC", "UPDATE" };
 			values.put("data", encryptedData.getData());
-			values.put("data_id", encryptedData.getIdData());
+			values.put("data_id", encryptedData.getId());
 			values.put("tag", data_type);
 			values.put("STATUS", "INSYNC");
 			values.put("resend", "false");
@@ -283,6 +284,7 @@ public class ServerAccount extends AccountBase {
 						this));
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		return notes;
 	}
 
@@ -297,6 +299,7 @@ public class ServerAccount extends AccountBase {
 						cursor.getInt(1), this));
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		return entries;
 	}
 
@@ -311,6 +314,7 @@ public class ServerAccount extends AccountBase {
 						cursor.getInt(1), this));
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		return contacts;
 	}
 
@@ -364,6 +368,14 @@ public class ServerAccount extends AccountBase {
 
 		// send data to server
 		new AddDataTask() {
+			protected void onPostExecute(Boolean result) {
+				if(result){
+					synchronizeContacts();
+				}else{
+					//problem with saving on server. resending later
+					Toast.makeText(context, "An error occured while posting data to the server. The data set will be resend at next refresh", Toast.LENGTH_LONG).show();
+				}
+			};
 		}.execute("contact", contact.toJson(), result.getLastPathSegment());
 	}
 
@@ -388,8 +400,6 @@ public class ServerAccount extends AccountBase {
 		// send data to server
 		new AddDataTask() {
 		}.execute("note", note.toJson(), result.getLastPathSegment());
-
-		Log.i(TAG, "erstellte note: " + note.toJson());
 	}
 
 	@Override
