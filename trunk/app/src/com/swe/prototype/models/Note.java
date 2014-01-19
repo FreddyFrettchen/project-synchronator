@@ -5,7 +5,7 @@ import java.io.Serializable;
 import android.R.string;
 import android.content.Context;
 
-public abstract class Note extends BaseData implements Serializable{
+public abstract class Note extends BaseData{
 	public Note(AccountBase account){
 		super(account);
 	}

@@ -101,4 +101,9 @@ public class ServerCalendarEntry extends CalendarEntry {
 		this.repeat = repeat;
 	}
 
+	@Override
+	public boolean isUpToDate() {
+		return true;
+	}
+
 }

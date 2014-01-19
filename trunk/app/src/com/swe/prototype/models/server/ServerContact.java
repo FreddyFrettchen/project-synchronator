@@ -1,8 +1,10 @@
 package com.swe.prototype.models.server;
 
 import com.google.gson.Gson;
+import com.swe.prototype.database.tables.ServerDataTable;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.Contact;
+import com.swe.prototype.net.server.ServerAccount;
 
 public class ServerContact extends Contact {
 	
@@ -26,7 +28,7 @@ public class ServerContact extends Contact {
 		this.lastname = lastname;
 		this.firstname = firstname;
 		this.phonenumber = phonenumber;
-		this.email = email;
+		this.email = email;;
 	}
 
 	public ServerContact(AccountBase account, Contact c) {
@@ -88,5 +90,10 @@ public class ServerContact extends Contact {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public boolean isUpToDate() {
+		return true;
 	}
 }

@@ -46,4 +46,9 @@ public class GoogleCalendarEntry extends CalendarEntry {
 		return 0;
 	}
 
+	@Override
+	public boolean isUpToDate() {
+		return true;
+	}
+
 }

@@ -86,6 +86,12 @@ public class ListNotesActivity extends BaseActivity {
 				.getMenuInfo();
 
 		Note o = (Note) listView.getAdapter().getItem(info.position);
+		
+		if (!o.isUpToDate()) {
+			showToast("This Note is not in Sync. Please refresh before making operations on this Note.");
+			return false;
+		}
+		
 		switch (item.getItemId()) {
 		case R.id.edit:
 			editNote(o);

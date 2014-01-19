@@ -12,10 +12,10 @@ import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.models.AccountManager;
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
+import com.swe.prototype.models.Note;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.util.Log;
 
 public class SynchronatorApplication extends Application {
@@ -25,13 +25,11 @@ public class SynchronatorApplication extends Application {
 	private AccountManager accountManager = null;
 	private ScheduledExecutorService scheduleTaskExecutor = null;
 	private ScheduledFuture<?> synchronizeThread = null;
-	
+
 	private Contact current_contact = null;
 	private com.swe.prototype.models.Note current_note = null;
 	private CalendarEntry current_calendar_entry = null;
 	private ArrayList<CalendarEntry> current_calendar_entry_list = null;
-
-
 
 	public void onCreate() {
 		super.onCreate();
@@ -50,14 +48,9 @@ public class SynchronatorApplication extends Application {
 	}
 
 	public boolean isLoggedIn() {
-		// Restore preferences
-		SharedPreferences settings = getSharedPreferences(
-				Settings.getPrefs_name(), 0);
-
-		String email = settings.getString("email", null);
-		String password = settings.getString("password", null);
-
-		return email != null && password != null;
+		SharedPreferences settings = getPreferences();
+		return settings.getString("email", null) != null
+				&& settings.getString("password", null) != null;
 	}
 
 	public AccountManager getAccountManager() {
@@ -91,7 +84,7 @@ public class SynchronatorApplication extends Application {
 		accountManager = new AccountManager(this);
 		startScheduler();
 	}
-	
+
 	public void setCurrentContact(Contact c) {
 		this.current_contact = c;
 	}
@@ -103,22 +96,20 @@ public class SynchronatorApplication extends Application {
 	public void setCurrentCalendarEntry(CalendarEntry ce) {
 		this.current_calendar_entry = ce;
 	}
-	
+
 	public ArrayList<CalendarEntry> getCurrentCalendarEntryList() {
 		return current_calendar_entry_list;
 	}
 
-	public void setCurrentCalendarEntryList(
-			ArrayList<CalendarEntry> ccel) {
+	public void setCurrentCalendarEntryList(ArrayList<CalendarEntry> ccel) {
 		this.current_calendar_entry_list = ccel;
 	}
-	
-	
+
 	public Contact getCurrentContact() {
 		return this.current_contact;
 	}
 
-	public com.swe.prototype.models.Note getCurrentNote() {
+	public Note getCurrentNote() {
 		return this.current_note;
 	}
 

@@ -134,7 +134,6 @@ public class ServerAccount extends AccountBase {
 				+ ServerDataTable.COLUMN_TAG + " = ? AND "
 				+ ServerDataTable.COLUMN_STATUS + " = ?";
 		String[] args;
-		ContentValues values = new ContentValues();
 
 		for (EncryptedData encryptedData : data) {
 			args = new String[] { encryptedData.getId() + "", data_type,
@@ -307,9 +306,9 @@ public class ServerAccount extends AccountBase {
 		if (cursor.moveToFirst()) {
 			Log.i(TAG, "Decrypting Contacts");
 			do {
-				contacts.add(new EncryptedData(cursor.getInt(0), cursor.
-						getString(2)).toContact(this.password,
-								cursor.getInt(1), this));
+				contacts.add(new EncryptedData(cursor.getInt(0), cursor
+						.getString(2)).toContact(this.password,
+						cursor.getInt(1), this));
 			} while (cursor.moveToNext());
 		}
 		return contacts;
@@ -328,14 +327,14 @@ public class ServerAccount extends AccountBase {
 				ServerDataTable.TABLE_SERVERDATA);
 		final String[] projection = { ServerDataTable.COLUMN_ID,
 				ServerDataTable.COLUMN_ID_DATA, ServerDataTable.COLUMN_DATA,
-				ServerDataTable.COLUMN_TAG };
+				ServerDataTable.COLUMN_TAG, ServerDataTable.COLUMN_STATUS };
 		Cursor cursor = resolver.query(dataUri, projection, "tag = ?",
 				new String[] { tag }, null);
 		return cursor;
 	}
 
 	/*
-	 * return: Der zur�ckgegebene String muss als erstes Zeichen 'S',havben!!!
+	 * return: Der zurückgegebene String muss als erstes Zeichen 'S',habben!!!
 	 */
 	@Override
 	public String toString() {
