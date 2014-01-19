@@ -91,7 +91,7 @@ public class ListNotesActivity extends BaseActivity {
 			editNote(o);
 			return true;
 		case R.id.move:
-			moveNote(o);
+			//moveNote(o);
 			return true;
 		case R.id.delete:
 			deleteNote(o);
@@ -145,7 +145,9 @@ public class ListNotesActivity extends BaseActivity {
 		btn_move.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
+				Log.i(TAG, "moving note ...");
+				showToast("Moving notes...");
 
 				int cntChoice = list_accounts.getCount();
 				SparseBooleanArray selected_accounts = list_accounts
@@ -167,6 +169,11 @@ public class ListNotesActivity extends BaseActivity {
 					
 					dialog.cancel();
 				}
+
+
+				// delete original
+				n.getAccount().deleteNote(n);
+
 				showToast("No server selected.");
 			}
 		});
