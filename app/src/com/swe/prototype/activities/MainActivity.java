@@ -27,6 +27,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import com.swe.prototype.R;
 import com.swe.prototype.helpers.Security;
 import com.swe.prototype.models.server.ServerContact;
+import com.swe.prototype.activities.SettingsActivity.MyRefresher;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.helpers.Tools;
 import com.swe.prototype.net.server.AsyncUserTask;
@@ -84,11 +85,14 @@ public class MainActivity extends BaseActivity {
 				doAuthentication();
 			}
 		});
-		// Laden des Servers aus den SharedPreferences wenn sie dort schon abgespeichert sind
+		// Laden des Servers aus den SharedPreferences wenn sie dort schon
+		// abgespeichert sind
 		SharedPreferences pref = getPreferences();
-		if(pref.getString("Server_IP", "") != "" && pref.getString("Server_Port", "") != "") {
-			Settings.setServer(pref.getString("Server_IP", ""), pref.getString("Server_Port", ""));
-		}		
+		if (pref.getString("Server_IP", "") != ""
+				&& pref.getString("Server_Port", "") != "") {
+			Settings.setServer(pref.getString("Server_IP", ""),
+					pref.getString("Server_Port", ""));
+		}
 	}
 
 	/*
@@ -130,16 +134,19 @@ public class MainActivity extends BaseActivity {
 						String newIP = ip.getText().toString();
 						String newPort = port.getText().toString();
 						if (Tools.isValidPort(newPort)
-								&& (Tools.isValidIP(newIP)
-								|| Tools.isValidHost(newIP))) {
+								&& (Tools.isValidIP(newIP) || Tools
+										.isValidHost(newIP))) {
 							Settings.setServer(newIP, newPort);
 							SharedPreferences pref = getPreferences();
-							SharedPreferences.Editor editor = getPreferences().edit();
+							SharedPreferences.Editor editor = getPreferences()
+									.edit();
 							editor.putString("Server_IP", newIP);
 							editor.putString("Server_Port", newPort);
 							editor.commit();
 						} else {
-							Toast.makeText(getApplicationContext(), "Server Settings IP oder Port nicht valide!",
+							Toast.makeText(
+									getApplicationContext(),
+									"Server Settings IP oder Port nicht valide!",
 									Toast.LENGTH_LONG).show();
 							System.out
 									.println("Server Settings IP oder Port nicht valide!");
@@ -210,7 +217,33 @@ public class MainActivity extends BaseActivity {
 		editor.commit();
 		getSynchronatorApplication().onApplicationLogin();
 
-		startActivity(new Intent(this, ListContactsActivity.class));
-		finish();
+		//final ProgressDialog dialog = ProgressDialog.show(this, "", getString(R.string.wait), true);
+		//dialog.show();
+		new MyRefresher(this) {
+			protected void onPostExecute(Boolean result) {
+				dialog.dismiss();
+				startActivity(new Intent(context, ListContactsActivity.class));
+				finish();
+			}
+		}.execute();
+	}
+
+	class MyRefresher extends AsyncTask<Void, Void, Boolean> {
+		protected Context context = null;
+		protected ProgressDialog dialog = null;
+
+		public MyRefresher(Context context) {
+			this.context = context;
+			this.dialog = ProgressDialog.show(context, "", getString(R.string.atsync), true);
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			// onClickRefresh(getCurrentFocus());
+			dialog.show();
+			getSynchronatorApplication().getAccountManager().synchronizeAll();
+			//accounts.synchronizeAll();
+			return true;
+		}
 	}
 }

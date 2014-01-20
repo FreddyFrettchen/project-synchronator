@@ -56,12 +56,13 @@ public class ServerAccount extends AccountBase {
 	 *            -> possible values: calendar, contacts, notes
 	 */
 	private void synchronizeByType(final String data_type) {
-		new SyncDataTask(context, data_type) {
+		/*new SyncDataTask(context, data_type) {
 			protected void onPostExecute(
 					java.util.ArrayList<EncryptedData> result) {
 				synchronizeDatabase(data_type, result);
 			};
-		}.execute();
+		}.execute();*/
+		synchronizeDatabase(data_type, new SyncDataTask(context, data_type).doSync());
 	}
 
 	/**
@@ -208,6 +209,10 @@ public class ServerAccount extends AccountBase {
 		}
 
 		protected ArrayList<EncryptedData> doInBackground(String... params) {
+			return doSync();
+		}
+
+		public ArrayList<EncryptedData> doSync() {
 			String response_sync = null;
 			int timestamp = getLastSynchronisationTimestamp();
 			Type listType = new TypeToken<ArrayList<EncryptedData>>() {
@@ -217,21 +222,22 @@ public class ServerAccount extends AccountBase {
 				response_sync = sync(server_url, username, password,
 						this.data_type, timestamp);
 
-				Log.i(TAG, "response of sync: '" + response_sync + "'");
+				// Log.i(TAG, "response of sync: '" + response_sync + "'");
 
 				ArrayList<EncryptedData> list = (ArrayList<EncryptedData>) gson
 						.fromJson(response_sync, listType);
 				Log.i(TAG, list.size() + " datasets for sync.");
 				return list;
-			}  catch (IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
-			}catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			Log.i(TAG, "Error occured while syncing. Returning empty resultset");
 			return new ArrayList<EncryptedData>();
 		}
+
 	}
 
 	/**

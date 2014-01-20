@@ -80,7 +80,7 @@ public class SettingsActivity extends BaseActivity {
 			public void onClick(View v) {
 				if (hasInternetConnection()) {
 					final ProgressDialog dialog;
-					dialog = ProgressDialog.show(SettingsActivity.this, "",getString(R.string.wait), true);
+					dialog = ProgressDialog.show(SettingsActivity.this, "",getString(R.string.atsync), true);
 					dialog.show();
 					new MyRefresher() {
 						protected void onPostExecute(Boolean result) {

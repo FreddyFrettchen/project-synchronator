@@ -48,7 +48,6 @@ public class Settings {
 	 * garantiert konsistenz.
 	 */
 	public static void setServer(String ip, String port) {
-		//TODO auf https umstellen
 		if(ip.toLowerCase().startsWith("http")) {
 			Settings.server = ip + ":" + port;
 			Settings.ip = ip;
