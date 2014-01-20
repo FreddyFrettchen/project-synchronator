@@ -21,7 +21,7 @@ import android.view.View;
 public class DrawView extends View {
     Paint paint = new Paint();
 
-    final int COLOR_SYNCHRONATOR = Color.rgb(121,121,255);
+    final int COLOR_SYNCHRONATOR = Color.rgb(0,108,206);
     final int COLOR_GOOGLE = Color.rgb(241,73,82);
     final int COLOR_EXCHANGE = Color.rgb(0,230,115);
     final int PADDING_TOP;
