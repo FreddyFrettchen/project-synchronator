@@ -25,6 +25,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import com.swe.prototype.R;
 import com.swe.prototype.globalsettings.Settings;
 import com.swe.prototype.helpers.DrawView;
+import com.swe.prototype.helpers.RectPairs;
 import com.swe.prototype.helpers.RectangleCalendarEntry;
 import com.swe.prototype.helpers.Tools;
 import com.swe.prototype.models.CalendarEntry;
@@ -83,8 +84,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 				.getCurrentCalendarEntryList();
 		if (calendarEntrys != null) {
 			initRectangles(calendarEntrys);
-		}
-		else{
+		} else {
 			// falls es nichts anzuzeigen gibt,braucht man auch keinen onclick
 			onTouchBlocked = true;
 		}
@@ -152,47 +152,53 @@ public class CalendarDayViewActivity extends BaseActivity {
 		}
 		initRectanglesScaleY();
 	}
-	
-	private boolean collision(RectangleCalendarEntry r1,RectangleCalendarEntry r2){
-		boolean collision =true;
-		if(r1.y1<r2.y1){
-			if(r1.y2<r2.y1){
-				//keine kollision
+
+	private boolean collision(RectangleCalendarEntry r1,
+			RectangleCalendarEntry r2) {
+		boolean collision = true;
+		if (r1.y1 < r2.y1) {
+			if (r1.y2 < r2.y1) {
+				// keine kollision
 				collision = false;
+			} else {
+				// kollision
 			}
-			else{
-				//kollision
+		} else {
+			if (r2.y2 < r1.y1) {
+				// keine
+				collision = false;
+			} else {
+				// kollision
 			}
 		}
-		else{
-			if(r2.y2<r1.y1){
-				//keine
-				collision = false;
-			}
-			else{
-				//kollision
-			}
-		}
-		
+
 		return collision;
 	}
 
+	private ArrayList<RectPairs> handeldPairs = new ArrayList<RectPairs>();
 	private void initRectanglesScaleY() {
+		int calWidth = width -(2*PADDING_LEFT) ;
 		for (RectangleCalendarEntry r1 : recList) {
 			for (RectangleCalendarEntry r2 : recList) {
-				if(r1!=r2){
-					if(collision(r1,r2)){
-						System.out.println("r1: "+r1.x1+","+r1.x2+"  r2: "+r2.x1+","+r2.x2);
-						r1.x2 = r1.getWidth()/2;
-						r2.x1 = r1.x2 +BORDER;
-						r2.x2 = r2.getWidth();
-						System.out.println("r1: "+r1.x1+","+r1.x2+"  r2: "+r2.x1+","+r2.x2);
+				if (r1 != r2) {
+					if (collision(r1, r2)) {
+						if (!handeldPairs.contains(new RectPairs(r1, r2))) {
+							handeldPairs.add(new RectPairs(r1, r2));
+							System.out.println("calWidth: "+calWidth);
+							System.out.println("r1: " + r1.x1 + "," + r1.x2
+									+ "  r2: " + r2.x1 + "," + r2.x2);
+							r1.x2 = r1.x1 +(calWidth / 2) -BORDER;
+							r2.x1 = r1.x2 + BORDER;
+							r2.x2 = r2.x1+(calWidth/2) -BORDER;
+							System.out.println("r1: " + r1.x1 + "," + r1.x2
+									+ "  r2: " + r2.x1 + "," + r2.x2);
+						}
 					}
 				}
 			}
-			
+
 		}
-		
+
 	}
 
 	/**
@@ -254,7 +260,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 					// System.out.println("x: " + x + "y: " + e.getY());
 					// System.out.println("Treffer: "+rect.calEntry.getDescription());
 					// System.out.println("ry1: "+rect.y1+" ry2: "+rect.y2);
-					
+
 					onTouchBlocked = true;
 					CalendarEntry calEntry = rect.calEntry;
 					clickedEntry(rect);
@@ -270,29 +276,34 @@ public class CalendarDayViewActivity extends BaseActivity {
 	private void clickedEntry(final RectangleCalendarEntry rec) {
 		AlertDialog.Builder onclickAlert = new AlertDialog.Builder(this);
 		LayoutInflater inflator = getLayoutInflater();
-		View optionDialogView = inflator.inflate(
-				R.layout.dialog_calendarentry, null);
-		Button show = (Button)optionDialogView.findViewById(R.id.button_show_cal_entry);
-		Button edit = (Button)optionDialogView.findViewById(R.id.button_change_cal_entry);
-		Button delete = (Button)optionDialogView.findViewById(R.id.button_delete_cal_entry);
+		View optionDialogView = inflator.inflate(R.layout.dialog_calendarentry,
+				null);
+		Button show = (Button) optionDialogView
+				.findViewById(R.id.button_show_cal_entry);
+		Button edit = (Button) optionDialogView
+				.findViewById(R.id.button_change_cal_entry);
+		Button delete = (Button) optionDialogView
+				.findViewById(R.id.button_delete_cal_entry);
 		show.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				//show entry
-				getSynchronatorApplication().setCurrentCalendarEntry(rec.calEntry);
+				// show entry
+				getSynchronatorApplication().setCurrentCalendarEntry(
+						rec.calEntry);
 				Intent intent = new Intent(CalendarDayViewActivity.this,
 						CalendarShowEventActivity.class);
 				startActivity(intent);
-				
+
 			}
 		});
 		edit.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				//edit entry
-				getSynchronatorApplication().setCurrentCalendarEntry(rec.calEntry);
+				// edit entry
+				getSynchronatorApplication().setCurrentCalendarEntry(
+						rec.calEntry);
 				Intent intent = new Intent(CalendarDayViewActivity.this,
 						CalendarAddEventActivity.class);
 				Bundle b = new Bundle();
@@ -303,10 +314,10 @@ public class CalendarDayViewActivity extends BaseActivity {
 			}
 		});
 		delete.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				//delete
+				// delete
 				rec.calEntry.delete();
 				Intent intent = new Intent(CalendarDayViewActivity.this,
 						CalendarMonthViewActivity.class);
@@ -314,7 +325,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 				finish();
 			}
 		});
-		
+
 		onclickAlert.setView(optionDialogView);
 		onclickAlert.setCancelable(false);
 		onclickAlert.setTitle("" + rec.calEntry.getDescription());
@@ -335,14 +346,15 @@ public class CalendarDayViewActivity extends BaseActivity {
 			break;
 		}
 
-		onclickAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		onclickAlert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				onTouchBlocked = false;
-			}
-		});
-		
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						onTouchBlocked = false;
+					}
+				});
+
 		onclickAlert.setCancelable(true);
 		onclickAlert.create().show();
 
