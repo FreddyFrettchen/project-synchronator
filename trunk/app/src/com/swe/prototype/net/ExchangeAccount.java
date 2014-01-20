@@ -465,23 +465,9 @@ public class ExchangeAccount extends AccountBase {
 	}
 
 	@Override
-	public void createNote(String title, String text) {
-		/*
-		 * try { Service service = new Service(
-		 * "https://mail.fh-aachen.de/EWS/exchange.asmx", this.username,
-		 * this.password);// "bd8299s@ad.fh-aachen.de", // "password");
-		 * 
-		 * Note note = new Note(); note.setSubject(title); note.setBody(new
-		 * Body(text)); note.setColor(NoteColor.GREEN);
-		 * note.setIconColor(NoteColor.GREEN); note.setHeight(200);
-		 * note.setWidth(300); note.setLeft(400); note.setTop(200);
-		 * 
-		 * ItemId itemId = service.createItem(note, StandardFolder.NOTES); }
-		 * catch (ServiceException e) { System.out.println(e.getMessage());
-		 * System.out.println(e.getXmlMessage());
-		 * 
-		 * e.printStackTrace(); }
-		 */
+	public void createNote(String title, String text)
+	{
+		new ExchangeCreateNote().execute(this.username, this.password,title, text);	
 	}
 
 	@Override
