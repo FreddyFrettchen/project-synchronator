@@ -51,10 +51,11 @@ public class Settings {
 		//TODO auf https umstellen
 		if(ip.toLowerCase().startsWith("http")) {
 			Settings.server = ip + ":" + port;
+			Settings.ip = ip;
 		} else {
 			Settings.server = "http://" + ip + ":" + port;
+			Settings.ip = "http://" + ip;
 		}
-		Settings.ip = ip;
 		Settings.port = port;
 	}
 
@@ -68,11 +69,11 @@ public class Settings {
 	}
 
 	public static float getRefreshTimeAsFloat() {
-		return refreshTime / 3600;
+		return (float) (refreshTime / 3600.0);
 	}
 
 	public static void setRefreshTimeAsFloat(float refreshTime) {
-		Settings.refreshTime = (int) refreshTime * 3600;
+		Settings.refreshTime = (int) (refreshTime * 3600.0);
 	}
 	
 	public static boolean isHTTPS() {

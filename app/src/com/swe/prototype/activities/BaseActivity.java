@@ -115,6 +115,7 @@ public abstract class BaseActivity extends Activity {
 												.edit();
 										editor.putString("email", null);
 										editor.putString("password", null);
+										editor.putInt("last_sync", 0);
 										editor.commit();
 										new DBTools(getApplicationContext()).purgeData();
 										show(MainActivity.class);
