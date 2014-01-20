@@ -188,8 +188,10 @@ public class ExchangeAccount extends AccountBase {
 					values.put("_id", appointment.getItemId().toString());
 					values.put("title", appointment.getSubject());
 					values.put("body", appointment.getBodyPlainText());
-					values.put("startTime", appointment.getStartTime().toLocaleString());
-					values.put("endTime", appointment.getEndTime().toLocaleString());
+					values.put("startTime", appointment.getStartTime()
+							.toLocaleString());
+					values.put("endTime", appointment.getEndTime()
+							.toLocaleString());
 
 					this.context.getContentResolver()
 							.insert(contentUri, values);
@@ -215,32 +217,8 @@ public class ExchangeAccount extends AccountBase {
 	public void createContact(String lastname, String firstname,
 			String phonenumber, String email) {
 
-		// new ExchangeCreateContact().execute();
-		Log.i(TAG, "CreateContact Start");
-		try {
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					this.username, this.password);
-			Log.i(TAG, "CreateContact nach serviceanfrage");
-
-			FindItemResponse respone = service
-					.findItem(StandardFolder.CONTACTS);
-
-			com.independentsoft.exchange.Contact contact = new com.independentsoft.exchange.Contact();
-			Log.i(TAG, firstname);
-			contact.setGivenName(firstname);
-			contact.setSurname(lastname);
-			contact.setBusinessPhone(phonenumber);
-			contact.setEmail1Address(email);
-			contact.setDisplayName(firstname + " " + lastname);
-
-			service.createItem(contact);
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		}
+		new ExchangeCreateContact().execute(this.username, this.password,
+				firstname, lastname, email, phonenumber);
 	}
 
 	/**
@@ -630,18 +608,18 @@ public class ExchangeAccount extends AccountBase {
 
 	@Override
 	public boolean validateAccountData() {
-		return true;
-		// Validierung wird vor benutzer eingabe aufgerufen, ich komme nicht
-		// dazu meinen benutzer zu testen
-		/*
-		 * try { Service service = new
-		 * Service("https://mail.fh-aachen.de/EWS/exchange.asmx", this.username,
-		 * this.password); FindItemResponse response =
-		 * service.findItem(StandardFolder.INBOX); Log.i(TAG,
-		 * "Benutzer Validierung Erfolgreich"); return true; } catch
-		 * (ServiceException e) { Log.i(TAG,
-		 * "Benutzer Validierung nicht Erfolgreich"); return false; }
-		 */
+		try {
+			Service service = new Service(
+					"https://mail.fh-aachen.de/EWS/exchange.asmx",
+					this.username, this.password);
+			FindItemResponse response = service.findItem(StandardFolder.INBOX);
+			Log.i(TAG, "Benutzer Validierung Erfolgreich");
+			return true;
+		} catch (ServiceException e) {
+			Log.i(TAG, "Benutzer Validierung nicht Erfolgreich");
+			return false;
+		}
+
 	}
 
 }
