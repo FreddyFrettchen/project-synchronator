@@ -4,10 +4,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.independentsoft.exchange.AbsoluteYearlyRecurrencePattern;
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.Body;
+import com.independentsoft.exchange.DailyRecurrencePattern;
+import com.independentsoft.exchange.DayOfWeek;
+import com.independentsoft.exchange.EndDateRecurrenceRange;
+import com.independentsoft.exchange.Recurrence;
 import com.independentsoft.exchange.Service;
 import com.independentsoft.exchange.ServiceException;
+import com.independentsoft.exchange.WeeklyRecurrencePattern;
 
 import android.os.AsyncTask;
 
@@ -30,10 +36,39 @@ public class ExchangeCreateCalendar extends AsyncTask<String, Void, Boolean> {
 			appointment.setBody(new Body(params[6]));
 			appointment.setStartTime(_startTime);
 			appointment.setEndTime(_endTime);
-			//appointment.setLocation(description);
 			appointment.setReminderIsSet(true);
 			appointment.setReminderMinutesBeforeStart(30);
-
+			
+			int repeat = Integer.parseInt(params[7]);
+			if(repeat != 0){
+				
+				Date patternStartTime = dateFormat.parse(params[2] + " 00:00:00");//"2014-03-01 00:00:00");
+	            Date patternEndTime = dateFormat.parse("2016-01-31 00:00:00");
+	            Recurrence recurrence = new Recurrence();
+	            
+				if(repeat == 1){
+					DailyRecurrencePattern pattern = new DailyRecurrencePattern();
+					EndDateRecurrenceRange range = new EndDateRecurrenceRange(patternStartTime, patternEndTime);
+					recurrence.setPattern(pattern);
+		            recurrence.setRange(range);
+				}
+				else if(repeat == 2){
+					WeeklyRecurrencePattern pattern = new WeeklyRecurrencePattern();
+					EndDateRecurrenceRange range = new EndDateRecurrenceRange(patternStartTime, patternEndTime);
+					recurrence.setPattern(pattern);
+		            recurrence.setRange(range);
+				}
+				else if(repeat == 3){
+					AbsoluteYearlyRecurrencePattern pattern = new AbsoluteYearlyRecurrencePattern();
+					EndDateRecurrenceRange range = new EndDateRecurrenceRange(patternStartTime, patternEndTime);
+					recurrence.setPattern(pattern);
+		            recurrence.setRange(range);
+				}
+				
+	            appointment.setRecurrence(recurrence);
+			}
+			
+			
 			service.createItem(appointment);
 			return true;
 		} catch (ServiceException e) {
