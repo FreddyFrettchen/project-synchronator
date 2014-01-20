@@ -47,7 +47,7 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 	private final static String TAG = "AsyncTaskBase";
 
 	private Context context = null;
-	private final static int readTimeout = 10000; // ms
+	private final static int readTimeout = 15000; // ms
 	private final static int connectionTimeout = 15000; // ms
 
 	public AsyncTaskBase(Context context) {
