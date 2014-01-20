@@ -412,6 +412,8 @@ public class ExchangeAccount extends AccountBase {
 				
 				excal.setStartDate(cursor.getString(3).toString());
 				excal.setEndDate(cursor.getString(4).toString());
+				excal.setStartTime(cursor.getString(5).toString());
+				excal.setEndTime(cursor.getString(6).toString());
 				
 				calendarlist.add(excal);
 			} while (cursor.moveToNext());
@@ -456,7 +458,9 @@ public class ExchangeAccount extends AccountBase {
 				ExchangeCalendarTable.COLUMN_SUBJECT,
 				ExchangeCalendarTable.COLUMN_BODY,
 				ExchangeCalendarTable.COLUMN_STARTDATE,
-				ExchangeCalendarTable.COLUMN_ENDDATE };
+				ExchangeCalendarTable.COLUMN_ENDDATE, 
+				ExchangeCalendarTable.COLUMN_STARTTIME,
+				ExchangeCalendarTable.COLUMN_ENDTIME};
 		String[] selectionArgs = null;
 		Cursor cursor = resolver.query(dataUri, projection, null,
 				selectionArgs, null);

@@ -12,6 +12,8 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 	public String id;
 	public String StartDate;
 	public String EndDate;
+	public String StartTime;
+	public String EndTime;
 	public String Subject;
 	public String Description;
 	public int Repeat;
@@ -40,6 +42,15 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 		this.EndDate = endDate;
 	}
 
+	public void setStartTime(String startTime) {
+		this.StartTime = startTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.EndTime = endTime;
+	}
+
+	
 	public void setSubject(String subject) {
 		this.Subject = subject;
 	}
@@ -64,12 +75,12 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 
 	@Override
 	public String getStartTime() {
-		return this.StartDate;
+		return this.StartTime;
 	}
 
 	@Override
 	public String getEndTime() {
-		return this.EndDate;
+		return this.EndTime;
 	}
 
 	@Override
