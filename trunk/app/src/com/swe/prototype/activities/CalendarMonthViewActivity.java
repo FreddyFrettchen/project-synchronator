@@ -35,6 +35,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class CalendarMonthViewActivity extends BaseActivity {
+	
+	final int REPEAT_EVERY_YEAR_HOW_MANY_YEARS = 10; 
 
 	protected static final String TAG = "CalendarMonthViewActivity";
 	public GregorianCalendar month, itemmonth;// calendar instances.
@@ -243,15 +245,48 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		// erster Fall: eintagesEvent
 		if (startDate.equals(endDate)) {
 			putIntoDataStructures(e, startDate);
+			
+			// hier ist das so gehandelt, das wir nur noch die folgenden daten hinzufügen mussen
+			if(e.getRepeat()==3){
+				ArrayList<String> allDates = getDatesEveryYear(e.getStartDate());
+				for (String date : allDates) {
+					putIntoDataStructures(e, date);
+				}
+			}
+			
 		} else {
 			// 2.Fall mehrere Tage event
 			ArrayList<String> allDates = getDatesBetween(e.getStartDate(),e.getEndDate());
 			for (String date : allDates) {
 				putIntoDataStructures(e, date);
 			}
+			if(e.getRepeat()==3){
+				for (String date : allDates) {
+					ArrayList<String> allDatesWithRepeat = getDatesEveryYear(date);
+					for (String allDate : allDatesWithRepeat) {
+						putIntoDataStructures(e, allDate);
+					}
+					
+					
+				}
+
+			}
 
 		}
 
+	}
+	
+	private ArrayList<String> getDatesEveryYear(String date){
+		ArrayList<String> res = new ArrayList<String>();
+		int year = Integer.parseInt(date.substring(0, 4));
+		String tmp = date.substring(4, 10);
+		for(int i = 0;i<REPEAT_EVERY_YEAR_HOW_MANY_YEARS;i++){
+			year++;
+			res.add(""+year+tmp);
+			System.out.println("repeated: "+year+tmp);
+		}
+		
+		return res;
 	}
 
 	/**
