@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -87,6 +88,10 @@ public class CreateAccountActivity extends BaseActivity {
 		});
 	}
 
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
+	
 	// load account from db
 	protected void prefill_fields() {
 		String[] projection = { AccountTable.COLUMN_PROVIDER,
