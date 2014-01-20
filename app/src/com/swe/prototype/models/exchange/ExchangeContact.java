@@ -131,11 +131,6 @@ public class ExchangeContact extends Contact {
 	}
 
 	@Override
-	public void delete() {
-		Log.i(TAG, "delete:"+this.toString());
-	}
-
-	@Override
 	public boolean isUpToDate() {
 		return true;
 	}

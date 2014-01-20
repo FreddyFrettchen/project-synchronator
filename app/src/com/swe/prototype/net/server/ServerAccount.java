@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.MalformedJsonException;
 import com.swe.prototype.SynchronatorApplication;
 import com.swe.prototype.database.DBTools;
 import com.swe.prototype.database.SQLiteDataProvider;
@@ -180,7 +181,7 @@ public class ServerAccount extends AccountBase {
 	public int getLastSynchronisationTimestamp() {
 		SynchronatorApplication app = ((SynchronatorApplication) this.context
 				.getApplicationContext());
-		return 0;//app.getPreferences().getInt("last_sync", 0);
+		return 0;// app.getPreferences().getInt("last_sync", 0);
 	}
 
 	public void setLastSynchronisationTimestamp() {
@@ -216,13 +217,18 @@ public class ServerAccount extends AccountBase {
 				response_sync = sync(server_url, username, password,
 						this.data_type, timestamp);
 
+				Log.i(TAG, "response of sync: '" + response_sync + "'");
+
 				ArrayList<EncryptedData> list = (ArrayList<EncryptedData>) gson
 						.fromJson(response_sync, listType);
 				Log.i(TAG, list.size() + " datasets for sync.");
 				return list;
+			} catch (MalformedJsonException e) {
+				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+
 			Log.i(TAG, "Error occured while syncing. Returning empty resultset");
 			return new ArrayList<EncryptedData>();
 		}
@@ -347,7 +353,7 @@ public class ServerAccount extends AccountBase {
 		values.put("resend", "false");
 		Uri result = this.context.getContentResolver().insert(contentUri,
 				values);
-		
+
 		final String id_result = result.getLastPathSegment();
 
 		// send data to server
@@ -384,7 +390,7 @@ public class ServerAccount extends AccountBase {
 		values.put("resend", "false");
 		Uri result = this.context.getContentResolver().insert(contentUri,
 				values);
-		
+
 		final String id_result = result.getLastPathSegment();
 
 		// send data to server
@@ -424,9 +430,9 @@ public class ServerAccount extends AccountBase {
 		values.put("resend", "false");
 		Uri result = this.context.getContentResolver().insert(contentUri,
 				values);
-		
+
 		final String id_result = result.getLastPathSegment();
-		
+
 		new AddDataTask(context) {
 			protected void onPostExecute(Boolean result) {
 				if (result) {
@@ -442,19 +448,19 @@ public class ServerAccount extends AccountBase {
 			};
 		}.execute("calendar", centry.toJson(), id_result);
 	}
-	
+
 	/**
-	 * sets the resend field on a dataset to 
-	 * value of do_resend
+	 * sets the resend field on a dataset to value of do_resend
 	 * 
 	 * @param dataset_id
 	 */
-	public void setResendDataset(int dataset_id, boolean do_resend){
+	public void setResendDataset(int dataset_id, boolean do_resend) {
 		String where = ServerDataTable.COLUMN_ID + " = ?";
-		String[] args = new String[] { dataset_id+"" };
+		String[] args = new String[] { dataset_id + "" };
 		ContentValues values = new ContentValues();
 		values.put("resend", do_resend);
-		this.context.getContentResolver().update(this.contentUri, values, where, args);
+		this.context.getContentResolver().update(this.contentUri, values,
+				where, args);
 	}
 
 	public void deleteAccount() {
@@ -471,10 +477,10 @@ public class ServerAccount extends AccountBase {
 	 * Task for User authentification
 	 */
 	public class AuthenticateUserTask extends AsyncUserTask {
-		public AuthenticateUserTask(Context context){
+		public AuthenticateUserTask(Context context) {
 			super(context);
 		}
-		
+
 		protected Boolean doInBackground(String... params) {
 			try {
 				return authenticate(context, server_url, username, password);
@@ -489,10 +495,10 @@ public class ServerAccount extends AccountBase {
 	 * Task for User account deletion
 	 */
 	public class DeleteUserTask extends AsyncUserTask {
-		public DeleteUserTask(Context context){
+		public DeleteUserTask(Context context) {
 			super(context);
 		}
-		
+
 		protected Boolean doInBackground(String... params) {
 			try {
 				return delete(server_url, username, password);
@@ -507,10 +513,10 @@ public class ServerAccount extends AccountBase {
 	 * Task for user registration
 	 */
 	public class RegisterUserTask extends AsyncUserTask {
-		public RegisterUserTask(Context context){
+		public RegisterUserTask(Context context) {
 			super(context);
 		}
-		
+
 		protected Boolean doInBackground(String... params) {
 			try {
 				return register(server_url, username, password);
@@ -526,10 +532,10 @@ public class ServerAccount extends AccountBase {
 	 * entry was created on the server.
 	 */
 	public class AddDataTask extends AsyncDataTask<Boolean> {
-		public AddDataTask(Context context){
+		public AddDataTask(Context context) {
 			super(context);
 		}
-		
+
 		/**
 		 * @params[1] -> possible values: calendar, contact, note
 		 */
@@ -552,10 +558,10 @@ public class ServerAccount extends AccountBase {
 	 * entry was updated on the server.
 	 */
 	public class UpdateDataTask extends AsyncDataTask<Boolean> {
-		public UpdateDataTask(Context context){
+		public UpdateDataTask(Context context) {
 			super(context);
 		}
-		
+
 		/**
 		 * @params[1] -> possible values: calendar, contact, note
 		 */
@@ -580,10 +586,10 @@ public class ServerAccount extends AccountBase {
 	 * encrypted and json encoded seperatly and have to be processed further.
 	 */
 	public class GetDataTask extends AsyncDataTask<ArrayList<EncryptedData>> {
-		public GetDataTask(Context context){
+		public GetDataTask(Context context) {
 			super(context);
 		}
-		
+
 		/**
 		 * @params[2] -> possible values: calendar, contacts, notes
 		 */
