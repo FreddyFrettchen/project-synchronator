@@ -35,9 +35,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class CalendarMonthViewActivity extends BaseActivity {
-	
-	final int REPEAT_EVERY_YEAR_HOW_MANY_YEARS = 10; 
 
+	final int REPEAT_EVERY_YEAR_HOW_MANY_YEARS = 10;
+	final int REPEAT_EVERY_DAY_HOW_MANY_YEARS = 1;
 	protected static final String TAG = "CalendarMonthViewActivity";
 	public GregorianCalendar month, itemmonth;// calendar instances.
 
@@ -244,30 +244,49 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		}
 		// erster Fall: eintagesEvent
 		if (startDate.equals(endDate)) {
-			putIntoDataStructures(e, startDate);
-			
-			// hier ist das so gehandelt, das wir nur noch die folgenden daten hinzufügen mussen
-			if(e.getRepeat()==3){
+
+			if (e.getRepeat() == 0) {
+				putIntoDataStructures(e, startDate);
+			}
+			if (e.getRepeat() == 1) {
+
+				// dirty dancing sag ich da nur!:D
+				String sDate = e.getStartDate();
+				int year = Integer.parseInt(sDate.substring(0, 4));
+				String restString = sDate.substring(4, 10);
+				year += REPEAT_EVERY_DAY_HOW_MANY_YEARS;
+				ArrayList<String> allDates = getDatesBetween(e.getStartDate(),
+						"" + year + restString);
+				for (String date : allDates) {
+					putIntoDataStructures(e, date);
+				}
+			}
+
+			if (e.getRepeat() == 3) {
+				putIntoDataStructures(e, startDate); // erst das eigentliche datum und dann den rest
 				ArrayList<String> allDates = getDatesEveryYear(e.getStartDate());
 				for (String date : allDates) {
 					putIntoDataStructures(e, date);
 				}
 			}
-			
+
 		} else {
 			// 2.Fall mehrere Tage event
-			ArrayList<String> allDates = getDatesBetween(e.getStartDate(),e.getEndDate());
-			for (String date : allDates) {
-				putIntoDataStructures(e, date);
-			}
-			if(e.getRepeat()==3){
+			ArrayList<String> allDates = getDatesBetween(e.getStartDate(),
+					e.getEndDate());
+			if (e.getRepeat() == 0) {
 				for (String date : allDates) {
+					putIntoDataStructures(e, date);
+				}
+			}
+			if (e.getRepeat() == 3) {
+				for (String date : allDates) {
+					putIntoDataStructures(e, date);
 					ArrayList<String> allDatesWithRepeat = getDatesEveryYear(date);
 					for (String allDate : allDatesWithRepeat) {
 						putIntoDataStructures(e, allDate);
 					}
-					
-					
+
 				}
 
 			}
@@ -275,17 +294,17 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		}
 
 	}
-	
-	private ArrayList<String> getDatesEveryYear(String date){
+
+	private ArrayList<String> getDatesEveryYear(String date) {
 		ArrayList<String> res = new ArrayList<String>();
 		int year = Integer.parseInt(date.substring(0, 4));
 		String tmp = date.substring(4, 10);
-		for(int i = 0;i<REPEAT_EVERY_YEAR_HOW_MANY_YEARS;i++){
+		for (int i = 0; i < REPEAT_EVERY_YEAR_HOW_MANY_YEARS; i++) {
 			year++;
-			res.add(""+year+tmp);
-			System.out.println("repeated: "+year+tmp);
+			res.add("" + year + tmp);
+			System.out.println("repeated: " + year + tmp);
 		}
-		
+
 		return res;
 	}
 
@@ -299,18 +318,22 @@ public class CalendarMonthViewActivity extends BaseActivity {
 	 * @param endDate
 	 * @return alle daten dazwischen inklusive start und end date
 	 */
-	boolean flag=true;
+	boolean flag = true;
+
 	private ArrayList<String> getDatesBetween(String startDate, String endDate) {
 		// Format: yyyy-mm-dd
 
 		int sYear = Integer.parseInt(startDate.substring(0, 4));
 		int eYear = Integer.parseInt(endDate.substring(0, 4));
-		
+
 		ArrayList<String> res = new ArrayList<String>();
 
-		//Format:27/08/2010
-		String str_date = ""+startDate.charAt(8)+""+startDate.charAt(9)+"/"+startDate.charAt(5)+""+startDate.charAt(6)+"/"+sYear;
-		String end_date = ""+endDate.charAt(8)+""+endDate.charAt(9)+"/"+endDate.charAt(5)+""+endDate.charAt(6)+"/"+eYear;
+		// Format:27/08/2010
+		String str_date = "" + startDate.charAt(8) + "" + startDate.charAt(9)
+				+ "/" + startDate.charAt(5) + "" + startDate.charAt(6) + "/"
+				+ sYear;
+		String end_date = "" + endDate.charAt(8) + "" + endDate.charAt(9) + "/"
+				+ endDate.charAt(5) + "" + endDate.charAt(6) + "/" + eYear;
 
 		DateFormat formatter;
 		try {
@@ -326,7 +349,7 @@ public class CalendarMonthViewActivity extends BaseActivity {
 												// using Calendar or Date
 			long curTime = startDatee.getTime();
 			while (curTime <= endTime) {
-				String cdate= formatter.format(new Date(curTime));
+				String cdate = formatter.format(new Date(curTime));
 				res.add(Tools.concertSimpleDateFormatToNormal(cdate));
 				curTime += interval;
 			}
