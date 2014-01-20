@@ -383,11 +383,13 @@ public class CalendarAddEventActivity extends BaseActivity {
 			}
 
 			// jetzt auf allen hinzugef�gten Accounts speichern.
+			//System.out.println("startDate: "+startDate+" _ endDate: "+ endDate+ " startTime: "+startTime+" endTime: "+ endTime+ " descr: "+descr+"repert: "+ every);
 			if (!editMode) {
 				int cntChoice = list_accounts.getCount();
 				SparseBooleanArray selected_accounts = list_accounts
 						.getCheckedItemPositions();
 				boolean saveLocationChecked = false;
+				//System.out.println("startDate: "+startDate+" _ endDate: "+ endDate+ " startTime: "+startTime+" endTime: "+ endTime+ " descr: "+descr+"repert: "+ every);
 				for (int k = 0; k < cntChoice; k++) {
 					if (selected_accounts.get(k) == true) {
 						saveLocationChecked = true;
