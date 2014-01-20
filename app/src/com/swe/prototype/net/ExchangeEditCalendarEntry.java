@@ -52,6 +52,8 @@ public class ExchangeEditCalendarEntry extends AsyncTask<String, Void, Boolean> 
 		            List<Property> properties = new ArrayList<Property>();
 		            properties.add(startTimeProperty);
 		            properties.add(endTimeProperty);
+		            properties.add(textProperty);
+		            properties.add(titleProperty);
 
 		            itemId = service.updateItem(itemId, properties);
 		            return true;
