@@ -44,58 +44,36 @@ public abstract class AsyncDataTask<Result> extends
 		params.add(new BasicNameValuePair("data", data));
 		params.add(new BasicNameValuePair("id_data", id_data));
 
-		HttpURLConnection request = postRequest(add_url, params);
-		request.connect();
-
-		// response code of 200 is accepted and 304 is failed.
-		int response = request.getResponseCode();
-
-		return response == 200;
+		return getPostRequestReturnCode(add_url, params) == 200;
 	}
 
 	protected String get(String server, String email, String password,
 			String type) throws IOException {
-		String add_url = server + "/data/get/" + type;
+		String get_url = server + "/data/get/" + type;
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("password", password));
 
-		HttpURLConnection request = postRequest(add_url, params);
-		request.connect();
-
-		Scanner s;
-		if (request.getResponseCode() != 200) {
-			s = new Scanner(request.getErrorStream());
-		} else {
-			s = new Scanner(request.getInputStream());
-		}
-		s.useDelimiter("\\Z");
-
-		String response = s.next();
-
-		return response;
+		return getPostRequestResponse(get_url, params).second;
 	}
 
 	protected Boolean update(String server, String email, String password,
 			String type, String id, String data) throws IOException {
-		String add_url = server + "/data/update/" + type;
+		String update_url = server + "/data/update/" + type;
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("data", data));
 		params.add(new BasicNameValuePair("id_data", id));
-
-		HttpURLConnection request = postRequest(add_url, params);
-		request.connect();
-
-		return request.getResponseCode() == 200;
+		
+		return getPostRequestReturnCode(update_url, params) == 200;
 	}
 
 	protected String sync(String server, String email, String password,
 			String type, int timestamp) throws IOException {
-		String add_url = server + "/data/sync/" + type;
+		String sync_url = server + "/data/sync/" + type;
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
@@ -103,58 +81,18 @@ public abstract class AsyncDataTask<Result> extends
 		params.add(new BasicNameValuePair("last_sync", Integer
 				.toString(timestamp)));
 
-		HttpURLConnection request = postRequest(add_url, params);
-		request.connect();
-		Scanner s;
-		if (request.getResponseCode() != 200) {
-			s = new Scanner(request.getErrorStream());
-		} else {
-			s = new Scanner(request.getInputStream());
-		}
-
-		try {
-			return s.next();
-		} catch (NoSuchElementException e) {
-			e.printStackTrace();
-		}
-
-		// error occured pulling data, suppling empty dataset
-		return "[]";
-	}
-
-	protected String ids(String server, String email, String password,
-			String type) throws IOException {
-		String add_url = server + "/data/ids/" + type;
-
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("email", email));
-		params.add(new BasicNameValuePair("password", password));
-
-		HttpURLConnection request = postRequest(add_url, params);
-		request.connect();
-		Scanner s;
-		if (request.getResponseCode() != 200) {
-			s = new Scanner(request.getErrorStream());
-		} else {
-			s = new Scanner(request.getInputStream());
-		}
-
-		String response = s.next();
-		return response;
+		return getPostRequestResponse(sync_url, params).second;
 	}
 
 	protected Boolean delete(String server, String email, String password,
 			String type, int data_id) throws IOException {
-		String add_url = server + "/data/delete/" + type;
+		String delete_url = server + "/data/delete/" + type;
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("data_id", data_id + ""));
 
-		HttpURLConnection request = postRequest(add_url, params);
-		request.connect();
-
-		return request.getResponseCode() == 200;
+		return getPostRequestReturnCode(delete_url, params) == 200;
 	}
 }

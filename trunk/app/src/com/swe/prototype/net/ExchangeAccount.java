@@ -398,7 +398,7 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public void deleteCalendarEntry(CalendarEntry ce) {
 		ExchangeCalendarEntry e = (ExchangeCalendarEntry)ce;
-		
+		Log.i(TAG,"delete got called");
 		// TODO Auto-generated method stub
 
 	}

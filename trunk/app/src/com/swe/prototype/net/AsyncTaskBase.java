@@ -26,6 +26,7 @@ import org.apache.http.NameValuePair;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.Pair;
 
 import com.swe.prototype.R;
@@ -42,8 +43,12 @@ import com.swe.prototype.R;
  */
 public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		AsyncTask<Params, Progress, Result> {
+	
+	private final static String TAG = "AsyncTaskBase";
 
 	private Context context = null;
+	private final static int readTimeout = 10000; // ms
+	private final static int connectionTimeout = 15000; // ms
 
 	public AsyncTaskBase(Context context) {
 		this.context = context;
@@ -86,10 +91,11 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 	public HttpURLConnection postRequest(String _url, List<NameValuePair> params)
 			throws IOException {
 
+		//Log.w(TAG, "Executing HTTP call to: " + _url);
+		
 		URL url = new URL(_url);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setReadTimeout(10000);
-		conn.setConnectTimeout(15000);
+
 		conn.setRequestMethod("POST");
 		conn.setDoInput(true);
 		conn.setDoOutput(true);
@@ -106,6 +112,76 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		return conn;
 	}
 
+	public Pair<Integer, String> getPostRequestResponse(String _url,
+			List<NameValuePair> params) {
+		return (_url.startsWith("https")) ? _getPostRequestSSLResponse(_url,
+				params) : _getPostRequestResponse(_url, params);
+	}
+
+	public int getPostRequestReturnCode(String _url, List<NameValuePair> params) {
+		return (_url.startsWith("https")) ? _getPostRequestSSLReturnCode(_url,
+				params) : _getPostRequestReturnCode(_url, params);
+	}
+
+	/**
+	 * only returns return code of a post request
+	 * 
+	 * @return
+	 */
+	public int _getPostRequestReturnCode(String _url, List<NameValuePair> params) {
+		HttpURLConnection request = null;
+		int response_code = 0;
+
+		try {
+			request = postRequest(_url, params);
+			request.connect();
+			response_code = request.getResponseCode();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return response_code;
+	}
+
+	public Pair<Integer, String> _getPostRequestResponse(String _url,
+			List<NameValuePair> params) {
+
+		String response = null;
+		HttpURLConnection request = null;
+
+		try {
+			request = postRequest(_url, params);
+			request.connect();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		int response_code = 0;
+		try {
+			response_code = request.getResponseCode();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Scanner s = null;
+		if (response_code != 200) {
+			s = new Scanner(request.getErrorStream());
+		} else {
+			try {
+				s = new Scanner(request.getInputStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (s != null) {
+			s.useDelimiter("\\Z");
+			response = s.next();
+		}
+
+		return new Pair<Integer, String>(response_code, response);
+	}
+
 	/**
 	 * uses an https connection to make requests.
 	 * 
@@ -115,8 +191,11 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 	 * @return
 	 * @throws IOException
 	 */
-	public HttpsURLConnection postRequestSSL(Context context, String _url,
+	public HttpsURLConnection postRequestSSL(String _url,
 			List<NameValuePair> params) throws IOException {
+		
+		//Log.w(TAG, "Executing HTTPS call to: " + _url);
+		
 		HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 		HttpsURLConnection conn = null;
 		KeyStore keyStore = null;
@@ -149,8 +228,8 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		conn.setSSLSocketFactory(ssl_context.getSocketFactory());
 		conn.setHostnameVerifier(hostnameVerifier);
 
-		conn.setReadTimeout(10000);
-		conn.setConnectTimeout(15000);
+		conn.setReadTimeout(readTimeout);
+		conn.setConnectTimeout(connectionTimeout);
 		conn.setRequestMethod("POST");
 		conn.setDoInput(true);
 		conn.setDoOutput(true);
@@ -172,12 +251,12 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 	 * 
 	 * @return
 	 */
-	public int getPostRequestSSLReturnCode(Context context, String _url,
+	public int _getPostRequestSSLReturnCode(String _url,
 			List<NameValuePair> params) {
 
 		HttpsURLConnection request = null;
 		try {
-			request = postRequestSSL(context, _url, params);
+			request = postRequestSSL(_url, params);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -193,12 +272,12 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 		return response;
 	}
 
-	public Pair<Integer, String> getPostRequestSSLResponse(String _url,
+	public Pair<Integer, String> _getPostRequestSSLResponse(String _url,
 			List<NameValuePair> params) {
 
 		HttpsURLConnection request = null;
 		try {
-			request = postRequestSSL(context, _url, params);
+			request = postRequestSSL(_url, params);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
