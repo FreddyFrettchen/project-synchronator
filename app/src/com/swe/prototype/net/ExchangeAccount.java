@@ -433,8 +433,7 @@ public class ExchangeAccount extends AccountBase {
 	public void editNote(com.swe.prototype.models.Note n, String title,
 			String text) {
 		ExchangeNote exnote = (ExchangeNote) n;
-		new ExchangeEditNote().execute(this.username, this.password, 
-				exnote.getID(), title, text);
+		new ExchangeEditNote().execute(this.username, this.password, exnote.getID(), title, text);
 	}
 
 	@Override
@@ -462,7 +461,5 @@ public class ExchangeAccount extends AccountBase {
 			Log.i(TAG, "Benutzer Validierung nicht Erfolgreich");
 			return false;
 		}
-
 	}
-
 }

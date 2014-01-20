@@ -35,10 +35,8 @@ public class ExchangeEditNote extends AsyncTask<String, Void, Boolean> {
 				ItemId itemId = response.getItems().get(i).getItemId();
 				Log.i(TAG, "response EditNotes itemId");
 				if (itemId.toString().equals(params[2])) {
-					Property notePropertySubject = new Property(
-							NotePropertyPath.SUBJECT, params[3]);
-					Property notePropertyBody = new Property(
-							NotePropertyPath.BODY, params[4]);
+					Property notePropertySubject = new Property(NotePropertyPath.SUBJECT, params[3]);
+					Property notePropertyBody = new Property(NotePropertyPath.BODY, params[4]);
 
 					List<Property> properties = new ArrayList<Property>();
 					properties.add(notePropertySubject);
