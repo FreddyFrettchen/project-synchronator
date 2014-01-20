@@ -122,6 +122,10 @@ public class ChangeNoteActivity extends BaseActivity {
 		});
 	}
 
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
+	
 	private void toNotes() {
 		startActivity(new Intent(this, ListNotesActivity.class));
 		finish();

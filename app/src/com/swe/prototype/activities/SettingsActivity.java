@@ -50,12 +50,15 @@ public class SettingsActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				try {
-					float f = Float
-							.parseFloat(refreshTime.getText().toString());
-					com.swe.prototype.globalsettings.Settings
-							.setRefreshTimeAsFloat(f);
-					saveRefreshTimePerm(f);
-					returnToLastActivity();
+					float f = Float.parseFloat(refreshTime.getText().toString());
+					if(f <= 0.0) {
+						Toast.makeText(getApplicationContext(),"Refreshtime <= 0.0 not allowed!", Toast.LENGTH_LONG).show();
+						refreshTime.setText("" + com.swe.prototype.globalsettings.Settings.getRefreshTimeAsFloat());
+					}else {
+						com.swe.prototype.globalsettings.Settings.setRefreshTimeAsFloat(f);
+						saveRefreshTimePerm(f);
+						returnToLastActivity();
+					}
 				} catch (Exception e) {
 					System.out.println("Refreshing time falsches format");
 				}
