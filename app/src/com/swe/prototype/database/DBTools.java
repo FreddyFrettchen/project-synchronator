@@ -69,10 +69,18 @@ public class DBTools extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * delete all notes from ExchangeContactTable
+	 * delete all from ExchangeNoteTable
 	 */
 	public void purgeNotesTable() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ExchangeNoteTable.onUpgrade(db, 1, 1);
+	}
+	
+	/**
+	 * delete all from ExchangeCalendarTable
+	 */
+	public void purgeCalendarTable() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ExchangeCalendarTable.onUpgrade(db, 1, 1);
 	}
 }

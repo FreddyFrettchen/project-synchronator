@@ -1,26 +1,14 @@
 package com.swe.prototype.models.exchange;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.independentsoft.exchange.And;
-import com.independentsoft.exchange.Appointment;
-import com.independentsoft.exchange.AppointmentPropertyPath;
-import com.independentsoft.exchange.Body;
-import com.independentsoft.exchange.FindItemResponse;
-import com.independentsoft.exchange.IsGreaterThanOrEqualTo;
-import com.independentsoft.exchange.IsLessThanOrEqualTo;
-import com.independentsoft.exchange.ItemId;
-import com.independentsoft.exchange.Service;
-import com.independentsoft.exchange.ServiceException;
-import com.independentsoft.exchange.StandardFolder;
-
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.AccountBase;
 
 public class ExchangeCalendarEntry extends CalendarEntry {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public String id;
 	public String StartDate;
 	public String EndDate;
@@ -28,6 +16,10 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 	public String Description;
 	public int Repeat;
 	
+	public ExchangeCalendarEntry(AccountBase account) {
+        super(account);
+    }
+
 	public void setId(String _id){
 		this.id = _id;
 	}
@@ -37,32 +29,28 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 	}
 	
     public String getSubject() {
-		return Subject;
+		return this.Subject;
 	}
 
 	public void setStartDate(String startDate) {
-		StartDate = startDate;
+		this.StartDate = startDate;
 	}
 
 	public void setEndDate(String endDate) {
-		EndDate = endDate;
+		this.EndDate = endDate;
 	}
 
 	public void setSubject(String subject) {
-		Subject = subject;
+		this.Subject = subject;
 	}
 
 	public void setDescription(String description) {
-		Description = description;
+		this.Description = description;
 	}
 
 	public void setRepeat(int repeat) {
-		Repeat = repeat;
+		this.Repeat = repeat;
 	}
-
-	public ExchangeCalendarEntry(AccountBase account) {
-        super(account);
-    }
 
 	@Override
 	public String getStartDate() {
@@ -76,12 +64,12 @@ public class ExchangeCalendarEntry extends CalendarEntry {
 
 	@Override
 	public String getStartTime() {
-		return null;
+		return this.StartDate;
 	}
 
 	@Override
 	public String getEndTime() {
-		return null;
+		return this.EndDate;
 	}
 
 	@Override

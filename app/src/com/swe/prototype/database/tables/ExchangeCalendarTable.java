@@ -11,7 +11,6 @@ public class ExchangeCalendarTable {
 		public static final String COLUMN_BODY = "body";
 		public static final String COLUMN_STARTTIME = "startTime";
 		public static final String COLUMN_ENDTIME = "endTime";
-		public static final String COLUMN_REPEAT = "repeat";
 
 		// Database creation SQL statement
 		private static final String DATABASE_CREATE = "create table "
@@ -19,7 +18,7 @@ public class ExchangeCalendarTable {
 				+ " text not null, " + COLUMN_SUBJECT
 				+ " text not null, " + COLUMN_BODY + " text not null,"
 				+ COLUMN_STARTTIME + " text not null," + COLUMN_ENDTIME
-				+ " text not null," + COLUMN_REPEAT + " text not null" + ")";
+				+ " text not null" + ")";
 
 		public static void onCreate(SQLiteDatabase database) {
 			database.execSQL(DATABASE_CREATE);
