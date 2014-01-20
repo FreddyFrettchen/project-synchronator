@@ -79,7 +79,7 @@ public class SynchronatorApplication extends Application {
 		if (isSchedulerRunning())
 			stopScheduler();
 		synchronizeThread = scheduleTaskExecutor.scheduleAtFixedRate(
-				SYNCHRONIZE_RUNNER, 0, Settings.getRefreshTimeAsInt(),
+				SYNCHRONIZE_RUNNER, Settings.getRefreshTimeAsInt(), Settings.getRefreshTimeAsInt(),
 				TimeUnit.SECONDS);
 	}
 
