@@ -116,17 +116,36 @@ public class CalendarDayViewActivity extends BaseActivity {
 		int sM = Integer.parseInt("" + startTime.charAt(3) + ""
 				+ startTime.charAt(4));
 		res[0] = sH * 60 + sM;
-		if (e.getStartDate().equals(e.getEndDate())) {
+		String startDate = e.getStartDate();
+		String endDate = e.getEndDate();
+		int eH = Integer.parseInt("" + endTime.charAt(0) + ""
+				+ endTime.charAt(1));
+		int eM = Integer.parseInt("" + endTime.charAt(3) + ""
+				+ endTime.charAt(4));
+		if (startDate.equals(endDate)) {
 			// eintages Event
-			int eH = Integer.parseInt("" + endTime.charAt(0) + ""
-					+ endTime.charAt(1));
-			int eM = Integer.parseInt("" + endTime.charAt(3) + ""
-					+ endTime.charAt(4));
+
 			res[1] = (eH - sH) * 60 + (eM - sM);
 
 		} else {
-			// mehrtagesEvent: zähle bis mitternacht
-			res[1] = (24 - sH) * 60 + sM;
+			// mehrtagesEvent:
+			//falls heute startdate
+			if(startDate.equals(currentDate)){
+				//  zähle bis mitternacht
+				res[1] = (24*60) -res[0];
+			}else{
+				if(endDate.equals(currentDate)){
+					//falls heute das endDate
+					//male von anfang des tages bis endTime
+					res[0] = 0;
+					res[1] = (eH ) * 60 + eM ;
+				}else{
+				// wir liegen iwo dazwischen, male den ganzen tag an.
+					res[0] = 0;
+					res[1] = 24*60;
+				}
+			}
+			
 		}
 		return res;
 
@@ -318,7 +337,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// delete
-				rec.calEntry.delete();
+				rec.calEntry.getAccount().deleteCalendarEntry(rec.calEntry);
 				Intent intent = new Intent(CalendarDayViewActivity.this,
 						CalendarMonthViewActivity.class);
 				startActivity(intent);

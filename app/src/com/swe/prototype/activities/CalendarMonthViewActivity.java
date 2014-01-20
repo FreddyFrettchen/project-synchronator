@@ -246,6 +246,28 @@ public class CalendarMonthViewActivity extends BaseActivity {
 			putIntoDataStructures(e, startDate);
 		} else {
 			// 2.Fall mehrere Tage event
+			//Format: yyyy-mm-dd
+			int sday = Integer.parseInt(""+startDate.charAt(8)+""+startDate.charAt(9));
+			int eday = Integer.parseInt(""+endDate.charAt(8)+""+endDate.charAt(9));
+			
+			int sMonth = Integer.parseInt(""+startDate.charAt(5)+""+startDate.charAt(6));
+			int eMonth = Integer.parseInt(""+endDate.charAt(5)+""+endDate.charAt(6));
+			
+			int sYear = Integer.parseInt(startDate.substring(0, 4));
+			int eYear = Integer.parseInt(endDate.substring(0, 4));
+			if(sday<eday){
+				for(int i=sday;i<=eday;i++){
+					if(i<=9){
+						putIntoDataStructures(e, sYear+"-"+startDate.charAt(5)+""+startDate.charAt(6)+"-0"+i);
+					}else{
+						System.out.println("date in structure: "+sYear+"-"+startDate.charAt(5)+""+startDate.charAt(6)+"-"+i);
+						putIntoDataStructures(e, sYear+"-"+startDate.charAt(5)+""+startDate.charAt(6)+"-"+i);
+					}
+					
+					
+				}
+			}
+			
 		}
 
 	}
