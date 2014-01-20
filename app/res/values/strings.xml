@@ -88,4 +88,5 @@
 	<string name="provider">Provider</string>
 	<string name="purge_db">DEV: Purge DB</string>
 	<string name="store_pass">swe1314</string>
+	<string name="name">Name</string>
 </resources>
