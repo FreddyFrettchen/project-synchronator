@@ -1,8 +1,10 @@
 package com.swe.prototype.activities;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -12,6 +14,7 @@ import com.swe.prototype.R;
 import com.swe.prototype.adapter.CalendarAdapter;
 import com.swe.prototype.adapter.ContactAdapter;
 import com.swe.prototype.helpers.DateOnSaveLocation;
+import com.swe.prototype.helpers.Tools;
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.server.ServerCalendarEntry;
 
@@ -61,9 +64,6 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		// Methode zieht die daten aus dem Adapter jedes Accounts heraus
 		initCalendarEvents();
 		// itemHashMap +eventsOnDate initialisiert
-		
-		
-
 
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(adapter);
@@ -71,7 +71,6 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		handler = new Handler();
 		handler.post(calendarUpdater);
 
-		
 		TextView title = (TextView) findViewById(R.id.title);
 		title.setText(android.text.format.DateFormat.format("MMMM yyyy", month));
 
@@ -187,11 +186,11 @@ public class CalendarMonthViewActivity extends BaseActivity {
 			String itemvalue;
 			itemvalue = df.format(itemmonth.getTime());
 			itemmonth.add(GregorianCalendar.DATE, 1);
-			
+
 			for (Object e : itemHashMap.values()) {
-				items.add((DateOnSaveLocation)e);
+				items.add((DateOnSaveLocation) e);
 			}
-			
+
 			adapter.setItems(items);
 			adapter.notifyDataSetChanged();
 		}
@@ -215,15 +214,15 @@ public class CalendarMonthViewActivity extends BaseActivity {
 					.getAccounts()
 					.get(i)
 					.getCalendarAdapter(this, R.layout.item_calendar_month_view);
-			//Log.i(TAG, "der CalenderAdapter des " + i + ". Accounts hat "
-			//		+ adapterI.getCount() + " EintrÃ¤ge");
+			// Log.i(TAG, "der CalenderAdapter des " + i + ". Accounts hat "
+			// + adapterI.getCount() + " EintrÃ¤ge");
 			for (int j = 0; j < adapterI.getCount(); j++) {
 				CalendarEntry e = (CalendarEntry) adapterI.getItem(j);
 				if (e != null) {
-					//Log.i(TAG,
-					//		"CalenderAdapter: Account (" + i
-					//				+ ") CalenderEvent:" + e + "\nDate:"
-					//				+ e.getStartDate());
+					// Log.i(TAG,
+					// "CalenderAdapter: Account (" + i
+					// + ") CalenderEvent:" + e + "\nDate:"
+					// + e.getStartDate());
 
 					putIntoDataStructures(e);
 
@@ -246,35 +245,69 @@ public class CalendarMonthViewActivity extends BaseActivity {
 			putIntoDataStructures(e, startDate);
 		} else {
 			// 2.Fall mehrere Tage event
-			//Format: yyyy-mm-dd
-			int sday = Integer.parseInt(""+startDate.charAt(8)+""+startDate.charAt(9));
-			int eday = Integer.parseInt(""+endDate.charAt(8)+""+endDate.charAt(9));
-			
-			int sMonth = Integer.parseInt(""+startDate.charAt(5)+""+startDate.charAt(6));
-			int eMonth = Integer.parseInt(""+endDate.charAt(5)+""+endDate.charAt(6));
-			
-			int sYear = Integer.parseInt(startDate.substring(0, 4));
-			int eYear = Integer.parseInt(endDate.substring(0, 4));
-			if(sday<eday){
-				for(int i=sday;i<=eday;i++){
-					if(i<=9){
-						putIntoDataStructures(e, sYear+"-"+startDate.charAt(5)+""+startDate.charAt(6)+"-0"+i);
-					}else{
-						System.out.println("date in structure: "+sYear+"-"+startDate.charAt(5)+""+startDate.charAt(6)+"-"+i);
-						putIntoDataStructures(e, sYear+"-"+startDate.charAt(5)+""+startDate.charAt(6)+"-"+i);
-					}
-					
-					
-				}
+			ArrayList<String> allDates = getDatesBetween(e.getStartDate(),e.getEndDate());
+			for (String date : allDates) {
+				putIntoDataStructures(e, date);
 			}
-			
+
 		}
 
 	}
 
+	/**
+	 * Unbedingt Refactorn hässlichster code meines Lebens; naja Zeitdruck
+	 * Methode gibt ne Liste von String daten (richtiges Format) die zwischen
+	 * start und endDate zurück (inklusive start und end date). Vorbedinung:
+	 * startDate<endDate
+	 * 
+	 * @param startDate
+	 * @param endDate
+	 * @return alle daten dazwischen inklusive start und end date
+	 */
+	boolean flag=true;
+	private ArrayList<String> getDatesBetween(String startDate, String endDate) {
+		// Format: yyyy-mm-dd
+
+		int sYear = Integer.parseInt(startDate.substring(0, 4));
+		int eYear = Integer.parseInt(endDate.substring(0, 4));
+		
+		ArrayList<String> res = new ArrayList<String>();
+
+		//Format:27/08/2010
+		String str_date = ""+startDate.charAt(8)+""+startDate.charAt(9)+"/"+startDate.charAt(5)+""+startDate.charAt(6)+"/"+sYear;
+		String end_date = ""+endDate.charAt(8)+""+endDate.charAt(9)+"/"+endDate.charAt(5)+""+endDate.charAt(6)+"/"+eYear;
+
+		DateFormat formatter;
+		try {
+			formatter = new SimpleDateFormat("dd/MM/yyyy");
+			Date startDatee = (Date) formatter.parse(str_date);
+			Date endDatee;
+
+			endDatee = (Date) formatter.parse(end_date);
+
+			long interval = 24 * 1000 * 60 * 60; // 1 hour in millis
+			long endTime = endDatee.getTime(); // create your endtime here,
+												// possibly
+												// using Calendar or Date
+			long curTime = startDatee.getTime();
+			while (curTime <= endTime) {
+				String cdate= formatter.format(new Date(curTime));
+				res.add(Tools.concertSimpleDateFormatToNormal(cdate));
+				curTime += interval;
+			}
+			System.out.println("alles gut ! keine Exception");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			Log.i(TAG, "Fehler beim einordenen eines mehrtagesEvent");
+			e.printStackTrace();
+		}
+		return res;
+	}
+
 	private void putIntoDataStructures(CalendarEntry e, String date) {
 
-		// erstmal bauen wir uns ne Liste von CalendarEntrys fï¿½r jeden mï¿½glichen
+		// erstmal bauen wir uns ne Liste von CalendarEntrys fï¿½r jeden
+		// mï¿½glichen
 		// Tag, um spï¿½ter der dayview zu ï¿½bergeben
 		if (eventsOnDate.containsKey(date)) {
 			eventsOnDate.get(date).add(e);
@@ -285,7 +318,8 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		}
 
 		char acc = e.getAccount().toString().charAt(0);
-		// hier bauen wir fï¿½r den Adapter ne Hashmap die Weiss, an welchem datum
+		// hier bauen wir fï¿½r den Adapter ne Hashmap die Weiss, an welchem
+		// datum
 		// welcher Account nen eintrag hat
 		// diese hashmap wir dann spï¿½ter zu ner Liste und dem Calendar Adapter
 		// ï¿½bergeben

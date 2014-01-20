@@ -1,5 +1,6 @@
 package com.swe.prototype.helpers;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -132,6 +133,19 @@ public class Tools {
 		}
 		return res;
 	}
+
+	public static String concertSimpleDateFormatToNormal(String cdate) {
+		//getestet, sollte klappen
+		String res = "";
+		//format cdate: dd/mm/yyyy
+		res+=cdate.substring(6, 10)+"-";
+		res+=""+cdate.charAt(3)+""+cdate.charAt(4)+"-";
+		res+=""+cdate.charAt(0)+""+cdate.charAt(1);
+		
+		return res;
+	}
+
+
 
 	
 
