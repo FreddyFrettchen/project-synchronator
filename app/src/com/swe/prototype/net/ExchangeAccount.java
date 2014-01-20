@@ -394,41 +394,11 @@ public class ExchangeAccount extends AccountBase {
 	}
 
 	@Override
-	public void deleteContact(Contact c) {
-		try {
-			String vergleichsString = "";
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					this.username, this.password);
-
-			FindItemResponse contactItems = service
-					.findItem(StandardFolder.CONTACTS);
-
-			// falls vorname oder nachname nicht angegeben ist, wird das
-			// leerzeichen nicht mit abgefragt
-			if (!(c.getFirstName().isEmpty() || c.getLastName().isEmpty())) {
-				vergleichsString = c.getFirstName() + c.getLastName();
-			}
-
-			for (int i = 0; i < contactItems.getItems().size(); i++) {
-				if (contactItems.getItems().get(i).getSubject()
-						.equals(vergleichsString)) {
-					System.out.println(contactItems.getItems().get(i)
-							.getSubject());
-					Response response = service.deleteItem(contactItems
-							.getItems().get(i).getItemId(),
-							DeleteType.HARD_DELETE);
-				} else {
-					System.out.println("Loeschen nicht Erfolgreich: "
-							+ contactItems.getItems().get(i));
-				}
-			}
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		}
+	public void deleteContact(Contact c) 
+	{
+		String id = ((ExchangeContact)c).getID();
+		Log.i(TAG,"ID = "+id);
+		new ExchangeDeleteContact().execute(this.username, this.password,id);	
 	}
 
 	@Override
