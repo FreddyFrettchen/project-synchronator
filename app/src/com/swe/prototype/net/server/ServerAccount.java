@@ -223,9 +223,9 @@ public class ServerAccount extends AccountBase {
 						.fromJson(response_sync, listType);
 				Log.i(TAG, list.size() + " datasets for sync.");
 				return list;
-			} catch (MalformedJsonException e) {
+			}  catch (IOException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
+			}catch (Exception e) {
 				e.printStackTrace();
 			}
 

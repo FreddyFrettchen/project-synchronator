@@ -85,7 +85,7 @@ public class SettingsActivity extends BaseActivity {
 					new MyRefresher() {
 						protected void onPostExecute(Boolean result) {
 							dialog.dismiss();
-							showToast("Refreshing all accounts...");
+							//showToast("Refreshing all accounts...");
 						}
 					}.execute();
 				} else {
@@ -120,7 +120,7 @@ public class SettingsActivity extends BaseActivity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			//onClickRefresh(getCurrentFocus());
-			accounts.refreshAllData();
+			accounts.synchronizeAll();
 			return true;
 		}
 	}
