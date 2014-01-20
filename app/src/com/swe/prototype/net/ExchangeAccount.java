@@ -146,6 +146,111 @@ public class ExchangeAccount extends AccountBase {
 			e.printStackTrace();
 		}
 	}
+	
+
+	private String formatTime(String date)
+	{
+		String time="";
+		boolean AM = true;
+		
+		if(date.length()>20)
+		{
+			if(date.charAt(6) == ',')
+			{
+				if(date.charAt(15)==':')
+				{
+					for(int i = 0;i<8;i++)
+						time = time + date.charAt(i+13);
+					if(date.charAt(22) == 'P')
+					{
+						AM = false;
+					}
+				}
+				else
+				{
+					for(int i = 0;i<7;i++)
+						time = time + date.charAt(i+13);					
+					if(date.charAt(21) == 'P')
+					{
+						AM = false;
+					}
+				}
+			}
+			else
+			{
+				if(date.charAt(14)==':')
+				{
+					for(int i = 0;i<8;i++)
+						time = time + date.charAt(i+12);
+					if(date.charAt(21) == 'P')
+					{
+						AM = false;
+					}
+				}
+				else
+				{
+					for(int i = 0;i<7;i++)
+						time = time + date.charAt(i+12);					
+					if(date.charAt(20) == 'P')
+					{
+						AM = false;
+					}
+				}
+			}	
+		}
+		if(AM == true)
+			return time;
+		
+		String[] stuecke = time.split(":");
+		try
+		{
+			int h = Integer.parseInt(stuecke[0]);
+			h = h +12;
+			time=h+":"+stuecke[1]+":"+stuecke[2];
+		}
+		catch(Exception e)
+		{
+			
+		}
+		return time;
+	}
+
+	private String formatDate(String date)
+	{
+		String datum=date;
+		
+		if(date.length()>12)
+		{
+			String monat="";
+			if(date.contains("Jan")){monat = "01";}
+			if(date.contains("Feb")){monat = "02";}
+			if(date.contains("Mar")){monat = "03";}
+			if(date.contains("Apr")){monat = "04";}
+			if(date.contains("May")){monat = "05";}
+			if(date.contains("Jun")){monat = "06";}
+			if(date.contains("Jul")){monat = "07";}
+			if(date.contains("Aug")){monat = "08";}
+			if(date.contains("Sep")){monat = "09";}
+			if(date.contains("Oct")){monat = "10";}
+			if(date.contains("Nov")){monat = "11";}
+			if(date.contains("Dec")){monat = "12";}
+			String tag="";
+			String jahr="";
+			if(date.charAt(6) == ',')
+			{
+				tag = datum.charAt(4)+""+datum.charAt(5);
+				jahr = datum.charAt(8)+""+datum.charAt(9)+""+datum.charAt(10)+""+datum.charAt(11);
+			}
+			else
+			{
+				tag = "0"+datum.charAt(4);
+				jahr = datum.charAt(7)+""+datum.charAt(8)+""+datum.charAt(9)+""+datum.charAt(10);	
+			}
+			
+			datum = jahr+"-"+monat+"-"+tag;
+		}
+		return datum;
+	}
 
 	@Override
 	public void synchronizeCalendarEntries() {
@@ -173,11 +278,21 @@ public class ExchangeAccount extends AccountBase {
 					values.put("_id", appointment.getItemId().toString());
 					values.put("title", appointment.getSubject());
 					values.put("body", appointment.getBodyPlainText());
-					values.put("startTime", appointment.getStartTime()
-							.toLocaleString());
-					values.put("endTime", appointment.getEndTime()
-							.toLocaleString());
-
+					Log.i(TAG,"VALUES.PUT_#1 "+ this.formatDate(appointment.getStartTime()
+							.toLocaleString()));
+					values.put("startTime", this.formatTime(appointment.getStartTime()
+							.toLocaleString()));
+					Log.i(TAG,"VALUES.PUT_#2");
+					values.put("endTime", this.formatTime(appointment.getEndTime()
+							.toLocaleString()));
+					Log.i(TAG,"VALUES.PUT_#3");
+					values.put("startDate", this.formatDate(appointment.getStartTime()
+							.toLocaleString()));
+					Log.i(TAG,"VALUES.PUT_#4");
+					values.put("endDate", this.formatDate(appointment.getEndTime()
+							.toLocaleString()));
+					Log.i(TAG,"VALUES.PUT_#5");
+					
 					this.context.getContentResolver()
 							.insert(contentUri, values);
 				}
@@ -290,8 +405,14 @@ public class ExchangeAccount extends AccountBase {
 				excal.setId(cursor.getString(0));
 				excal.setSubject(cursor.getString(1));
 				excal.setDescription(cursor.getString(2));
+				Log.i(TAG,"änderung");
+				
+				Log.i(TAG,"Datumcheck1:"+cursor.getString(3));
+				Log.i(TAG,"Datumcheck2:"+cursor.getString(4));
+				
 				excal.setStartDate(cursor.getString(3).toString());
 				excal.setEndDate(cursor.getString(4).toString());
+				
 				calendarlist.add(excal);
 			} while (cursor.moveToNext());
 		}
@@ -334,8 +455,8 @@ public class ExchangeAccount extends AccountBase {
 		final String[] projection = { ExchangeCalendarTable.COLUMN_ID,
 				ExchangeCalendarTable.COLUMN_SUBJECT,
 				ExchangeCalendarTable.COLUMN_BODY,
-				ExchangeCalendarTable.COLUMN_STARTTIME,
-				ExchangeCalendarTable.COLUMN_ENDTIME };
+				ExchangeCalendarTable.COLUMN_STARTDATE,
+				ExchangeCalendarTable.COLUMN_ENDDATE };
 		String[] selectionArgs = null;
 		Cursor cursor = resolver.query(dataUri, projection, null,
 				selectionArgs, null);
