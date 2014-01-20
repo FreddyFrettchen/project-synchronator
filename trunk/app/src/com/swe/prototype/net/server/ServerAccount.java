@@ -180,7 +180,7 @@ public class ServerAccount extends AccountBase {
 	public int getLastSynchronisationTimestamp() {
 		SynchronatorApplication app = ((SynchronatorApplication) this.context
 				.getApplicationContext());
-		return app.getPreferences().getInt("last_sync", 0);
+		return 0;//app.getPreferences().getInt("last_sync", 0);
 	}
 
 	public void setLastSynchronisationTimestamp() {
