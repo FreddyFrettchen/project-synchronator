@@ -95,4 +95,5 @@
 	<string name="no_repeat">No Repeat</string>
 	<string name="server">Server</string>
 	<string name="description_doublepoint">Description</string>
+	<string name="account">Account</string>
 </resources>
