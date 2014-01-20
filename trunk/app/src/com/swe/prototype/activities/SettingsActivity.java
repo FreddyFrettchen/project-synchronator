@@ -1,5 +1,6 @@
 package com.swe.prototype.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.audiofx.BassBoost.Settings;
 import com.swe.prototype.globalsettings.*;
@@ -92,4 +93,15 @@ public class SettingsActivity extends BaseActivity {
 		accounts.refreshAllData();
 	}
 
+	protected void createAccount() {
+		Intent intent = new Intent(SettingsActivity.this,
+				CreateAccountActivity.class);
+		startActivity(intent);
+		finish();
+	}
+
+	@Override
+	protected void addClicked() {
+		this.createAccount();
+	}
 }
