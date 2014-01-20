@@ -14,23 +14,16 @@
 
         <TextView
             android:id="@+id/contact_view_name"
-            android:layout_width="100dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="@string/lastname"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/contact_view_forname"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="@string/forename"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/name"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/contact_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
     <LinearLayout
@@ -43,12 +36,14 @@
             android:id="@+id/contact_view_number"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="@string/phonenumber" />
+            android:text="@string/phonenumber"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/contact_phone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 
@@ -62,12 +57,14 @@
             android:id="@+id/contact_view_email"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/email" />
 
         <TextView
             android:id="@+id/contact_email"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 
