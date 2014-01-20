@@ -396,6 +396,7 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public void deleteContact(Contact c) 
 	{
+		Log.i(TAG,"DeleteContact!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		String id = ((ExchangeContact)c).getID();
 		Log.i(TAG,"ID = "+id);
 		new ExchangeDeleteContact().execute(this.username, this.password,id);	
