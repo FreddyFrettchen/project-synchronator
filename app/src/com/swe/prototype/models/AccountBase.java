@@ -112,15 +112,15 @@ public abstract class AccountBase extends Thread {
 	 * Neue Notiz anlegen. Speichern und zum account schicken
 	 * 
 	 * @param startDate
-	 *            Sting: Format: dd/mm/yyyy
+	 *            String: Format: yyyy-mm-dd | dd:01 -> 31 mm:01 -> 12
 	 * @param endDate
-	 *            Sting: Format: dd/mm/yyyy
+	 *            String: Format: yyyy-mm-dd | dd:01 -> 31 mm:01 -> 12
 	 * @param startTime
-	 *            String hh:mm AM or hh:mm PM | hh:00 ->11 mm:00->59
+	 *            String hh:mm:ss | hh:00 -> 23 mm:00 -> 59 ss:00 -> 59
 	 * @param endTime
-	 *            String hh:mm AM or hh:mm PM | hh:00 ->11 mm:00->59
+	 *            String hh:mm:ss | hh:00 -> 23 mm:00 -> 59 ss:00 -> 59
 	 * @param description
-	 *            Sting from EditText
+	 *            String from EditText
 	 * @param repeat
 	 *            : int | 0 == no_repeat; 1 == every_day; 2 == every_month; 3 ==
 	 *            every_year
