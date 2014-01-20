@@ -26,7 +26,7 @@ public class ExchangeCreateCalendar extends AsyncTask<String, Void, Boolean> {
 			Date _endTime = dateFormat.parse(params[3] + " " + params[5]);//(endDate + " " + endTime);// "2014-02-25 18:00:00");
 
 			Appointment appointment = new Appointment();
-			appointment.setSubject("");
+			appointment.setSubject(params[6]);
 			appointment.setBody(new Body(params[6]));
 			appointment.setStartTime(_startTime);
 			appointment.setEndTime(_endTime);
