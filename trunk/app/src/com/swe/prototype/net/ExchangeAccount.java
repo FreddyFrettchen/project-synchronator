@@ -404,33 +404,16 @@ public class ExchangeAccount extends AccountBase {
 
 	@Override
 	public void deleteNote(com.swe.prototype.models.Note n) {
-		// TODO Auto-generated method stub
-		try {
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					this.username, this.password);
-
-			IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT,
-					n.getTitle());
-
-			FindItemResponse notesItems = service.findItem(
-					StandardFolder.NOTES, restriction);
-
-			for (int i = 0; i < notesItems.getItems().size(); i++) {
-				Response response = service.deleteItem(notesItems.getItems()
-						.get(i).getItemId(), DeleteType.HARD_DELETE);
-			}
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		}
-
+		Log.i(TAG, "Delete Note start");
+		ExchangeNote exnote = (ExchangeNote) n;
+		Log.i(TAG, "ID = " + exnote.getID());
+		new ExchangeDeleteNote().execute(this.username, this.password, exnote.getID().toString());	
 	}
 
 	@Override
 	public void deleteCalendarEntry(CalendarEntry ce) {
+		ExchangeCalendarEntry e = (ExchangeCalendarEntry)ce;
+		
 		// TODO Auto-generated method stub
 
 	}
@@ -444,38 +427,8 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public void createCalendarEntry(String startDate, String endDate,
 			String startTime, String endTime, String description, int repeat) {
-		try {
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					this.username, this.password);// "bd8299s@ad.fh-aachen.de",
-													// "password");
-
-			SimpleDateFormat dateFormat = new SimpleDateFormat(
-					"yyyy-MM-dd HH:mm:ss");
-			Date _startTime = dateFormat.parse(startDate + " " + startTime);// "2014-02-25 16:00:00");
-			Date _endTime = dateFormat.parse(endDate + " " + endTime);// "2014-02-25 18:00:00");
-
-			Appointment appointment = new Appointment();
-			appointment.setSubject("");
-			appointment.setBody(new Body(description));
-			appointment.setStartTime(_startTime);
-			appointment.setEndTime(_endTime);
-			appointment.setLocation(description);
-			appointment.setReminderIsSet(true);
-			appointment.setReminderMinutesBeforeStart(30);
-			// appointment.setReminderNextTime(repeat); Reminder noch finden und
-			// repeat??? was uebergibt es mir
-
-			ItemId itemId = service.createItem(appointment);
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
+		new ExchangeCreateCalendar().execute(this.username, this.password,
+				startDate, endDate,startTime, endTime,description, repeat + "");
 	}
 
 	@Override
@@ -494,35 +447,9 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public void editNote(com.swe.prototype.models.Note n, String title,
 			String text) {
-		// TODO Auto-generated method stub
-		try {
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					this.username, this.password);
-
-			IsEqualTo restriction = new IsEqualTo(NotePropertyPath.SUBJECT,
-					n.getTitle());
-
-			FindItemResponse response = service.findItem(StandardFolder.NOTES,
-					restriction);
-
-			for (int i = 0; i < response.getItems().size(); i++) {
-				if (response.getItems().get(i) instanceof com.independentsoft.exchange.Note) {
-					ItemId itemId = response.getItems().get(i).getItemId();
-
-					Property noteProperty = new Property(NotePropertyPath.BODY,
-							n.getNote());
-
-					itemId = service.updateItem(itemId, noteProperty);
-				}
-			}
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		}
-
+		ExchangeNote exnote = (ExchangeNote) n;
+		new ExchangeEditNote().execute(this.username, this.password, 
+				exnote.getID(), title, text);
 	}
 
 	@Override
