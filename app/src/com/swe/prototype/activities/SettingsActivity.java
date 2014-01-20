@@ -1,10 +1,13 @@
 package com.swe.prototype.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.audiofx.BassBoost.Settings;
 import com.swe.prototype.globalsettings.*;
+import com.swe.prototype.models.AccountBase;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.swe.prototype.R;
@@ -72,7 +76,15 @@ public class SettingsActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				if (hasInternetConnection()) {
-					onClickRefresh(getCurrentFocus());
+					final ProgressDialog dialog;
+					dialog = ProgressDialog.show(SettingsActivity.this, "",getString(R.string.wait), true);
+					dialog.show();
+					new MyRefresher() {
+						protected void onPostExecute(Boolean result) {
+							dialog.dismiss();
+							showToast("Refreshing all accounts...");
+						}
+					}.execute();
 				} else {
 					Log.v(TAG, "no internet");
 					Toast.makeText(getApplicationContext(),
@@ -88,11 +100,6 @@ public class SettingsActivity extends BaseActivity {
 		finish();
 	}
 
-	public void onClickRefresh(View v) {
-		showToast("Refreshing all accounts...");
-		accounts.refreshAllData();
-	}
-
 	protected void createAccount() {
 		Intent intent = new Intent(SettingsActivity.this,
 				CreateAccountActivity.class);
@@ -103,5 +110,15 @@ public class SettingsActivity extends BaseActivity {
 	@Override
 	protected void addClicked() {
 		this.createAccount();
+	}
+	
+	class MyRefresher extends AsyncTask<Void, Void, Boolean>{
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			//onClickRefresh(getCurrentFocus());
+			accounts.refreshAllData();
+			return true;
+		}
 	}
 }

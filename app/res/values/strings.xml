@@ -89,4 +89,9 @@
 	<string name="purge_db">DEV: Purge DB</string>
 	<string name="store_pass">swe1314</string>
 	<string name="name">Name</string>
+	<string name="date_example">dd-mm-yyyy</string>
+	<string name="time_example">hh:mm</string>
+	<string name="no_repeat">No Repeat</string>
+	<string name="server">Server</string>
+	<string name="description_doublepoint">Description</string>
 </resources>
