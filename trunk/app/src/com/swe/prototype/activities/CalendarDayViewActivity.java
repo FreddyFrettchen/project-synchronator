@@ -83,7 +83,10 @@ public class CalendarDayViewActivity extends BaseActivity {
 				.getCurrentCalendarEntryList();
 		if (calendarEntrys != null) {
 			initRectangles(calendarEntrys);
-			addEventDescriptionTextViews(layout);
+		}
+		else{
+			// falls es nichts anzuzeigen gibt,braucht man auch keinen onclick
+			onTouchBlocked = true;
 		}
 		drawView = new DrawView(this, BORDER, width, PADDING_TOP, PADDING_LEFT,
 				PADDING_LEFT_LEFT, oneHour, recList);
@@ -94,7 +97,6 @@ public class CalendarDayViewActivity extends BaseActivity {
 			addEventDescriptionTextViews(layout);
 		}
 
-		System.out.println("actionBarSize: " + actionBarSize);
 		setContentView(layout);
 	}
 
@@ -148,6 +150,49 @@ public class CalendarDayViewActivity extends BaseActivity {
 			recList.add(rec);
 
 		}
+		initRectanglesScaleY();
+	}
+	
+	private boolean collision(RectangleCalendarEntry r1,RectangleCalendarEntry r2){
+		boolean collision =true;
+		if(r1.y1<r2.y1){
+			if(r1.y2<r2.y1){
+				//keine kollision
+				collision = false;
+			}
+			else{
+				//kollision
+			}
+		}
+		else{
+			if(r2.y2<r1.y1){
+				//keine
+				collision = false;
+			}
+			else{
+				//kollision
+			}
+		}
+		
+		return collision;
+	}
+
+	private void initRectanglesScaleY() {
+		for (RectangleCalendarEntry r1 : recList) {
+			for (RectangleCalendarEntry r2 : recList) {
+				if(r1!=r2){
+					if(collision(r1,r2)){
+						System.out.println("r1: "+r1.x1+","+r1.x2+"  r2: "+r2.x1+","+r2.x2);
+						r1.x2 = r1.getWidth()/2;
+						r2.x1 = r1.x2 +BORDER;
+						r2.x2 = r2.getWidth();
+						System.out.println("r1: "+r1.x1+","+r1.x2+"  r2: "+r2.x1+","+r2.x2);
+					}
+				}
+			}
+			
+		}
+		
 	}
 
 	/**
@@ -159,8 +204,8 @@ public class CalendarDayViewActivity extends BaseActivity {
 			TextView t = new TextView(this);
 			t.setX(r.x1 + BORDER * 3);
 			t.setY(r.y1 + BORDER);
-			t.setWidth(r.w);
-			t.setHeight(r.h);
+			t.setWidth(r.getWidth());
+			t.setHeight(r.getHeight());
 			t.setTextColor(TEXT_COLOR);
 			t.setText(r.calEntry.getDescription());
 			layout.addView(t);
@@ -271,7 +316,7 @@ public class CalendarDayViewActivity extends BaseActivity {
 		});
 		
 		onclickAlert.setView(optionDialogView);
-		onclickAlert.setCancelable(true);
+		onclickAlert.setCancelable(false);
 		onclickAlert.setTitle("" + rec.calEntry.getDescription());
 		switch (rec.account) {
 		case 0:
