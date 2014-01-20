@@ -1,37 +1,22 @@
 package com.swe.prototype.net;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
-import com.google.gdata.data.spreadsheet.Column;
 import com.independentsoft.exchange.And;
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.AppointmentPropertyPath;
-import com.independentsoft.exchange.Body;
 import com.independentsoft.exchange.ContactPropertyPath;
-import com.independentsoft.exchange.DeleteType;
-import com.independentsoft.exchange.FileAsMapping;
 import com.independentsoft.exchange.FindItemResponse;
-import com.independentsoft.exchange.IsEqualTo;
-import com.independentsoft.exchange.ItemId;
-import com.independentsoft.exchange.Note;
-import com.independentsoft.exchange.NoteColor;
-import com.independentsoft.exchange.NotePropertyPath;
-import com.independentsoft.exchange.Property;
-import com.independentsoft.exchange.Response;
 import com.independentsoft.exchange.Service;
 import com.independentsoft.exchange.ServiceException;
 import com.independentsoft.exchange.StandardFolder;
@@ -40,14 +25,12 @@ import com.swe.prototype.database.SQLiteDataProvider;
 import com.swe.prototype.database.tables.ExchangeCalendarTable;
 import com.swe.prototype.database.tables.ExchangeContactTable;
 import com.swe.prototype.database.tables.ExchangeNoteTable;
-import com.swe.prototype.database.tables.ServerDataTable;
 import com.swe.prototype.models.AccountBase;
 import com.swe.prototype.models.CalendarEntry;
 import com.swe.prototype.models.Contact;
 import com.swe.prototype.models.exchange.ExchangeCalendarEntry;
 import com.swe.prototype.models.exchange.ExchangeContact;
 import com.swe.prototype.models.exchange.ExchangeNote;
-import com.swe.prototype.models.server.ServerCalendarEntry;
 
 public class ExchangeAccount extends AccountBase {
 

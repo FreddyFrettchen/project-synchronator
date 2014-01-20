@@ -1,5 +1,8 @@
 package com.swe.prototype.net;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.independentsoft.exchange.FindItemResponse;
 import com.independentsoft.exchange.ItemId;
 import com.independentsoft.exchange.NotePropertyPath;
@@ -14,12 +17,12 @@ import android.util.Log;
 public class ExchangeEditNote extends AsyncTask<String, Void, Boolean> {
 
 	private static String TAG = "ExchangeAccount";
-	
+
 	@Override
 	protected Boolean doInBackground(String... params) {
 		try {
-			Log.i(TAG, params[0]+ " " +params[1]+
-					" " + params[2]+" "+ params[3]+ " " +params[4]);
+			Log.i(TAG, params[0] + " " + params[1] + " " + params[2] + " "
+					+ params[3] + " " + params[4]);
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx", params[0],
 					params[1]);
@@ -37,8 +40,10 @@ public class ExchangeEditNote extends AsyncTask<String, Void, Boolean> {
 					Property notePropertyBody = new Property(
 							NotePropertyPath.BODY, params[4]);
 
-					itemId = service.updateItem(itemId, notePropertySubject);
-					itemId = service.updateItem(itemId, notePropertyBody);
+					List<Property> properties = new ArrayList<Property>();
+					properties.add(notePropertySubject);
+					properties.add(notePropertyBody);
+					itemId = service.updateItem(itemId, properties);
 					return true;
 				}
 			}
