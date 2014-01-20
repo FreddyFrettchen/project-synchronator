@@ -9,16 +9,21 @@ public class ExchangeCalendarTable {
 		public static final String COLUMN_ID = "_id";
 		public static final String COLUMN_SUBJECT = "title";
 		public static final String COLUMN_BODY = "body";
+		public static final String COLUMN_STARTDATE = "startDate";
+		public static final String COLUMN_ENDDATE = "endDate";
 		public static final String COLUMN_STARTTIME = "startTime";
 		public static final String COLUMN_ENDTIME = "endTime";
 
 		// Database creation SQL statement
 		private static final String DATABASE_CREATE = "create table "
-				+ TABLE_CALENDAR + "(" + COLUMN_ID
-				+ " text not null, " + COLUMN_SUBJECT
-				+ " text not null, " + COLUMN_BODY + " text not null,"
-				+ COLUMN_STARTTIME + " text not null," + COLUMN_ENDTIME
-				+ " text not null" + ")";
+				+ TABLE_CALENDAR + "(" + 
+				COLUMN_ID + " text not null, " + 
+				COLUMN_SUBJECT	+ " text not null, " + 
+				COLUMN_BODY + " text not null,"  	 + 
+				COLUMN_STARTDATE +	" text not null," +    
+				COLUMN_ENDDATE 	+ " text not null," +  
+				COLUMN_STARTTIME + " text not null," + 
+				COLUMN_ENDTIME + " text not null" + ")";
 
 		public static void onCreate(SQLiteDatabase database) {
 			database.execSQL(DATABASE_CREATE);

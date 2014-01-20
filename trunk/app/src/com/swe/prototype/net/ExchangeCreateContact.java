@@ -1,5 +1,6 @@
 package com.swe.prototype.net;
 
+import com.independentsoft.exchange.FileAsMapping;
 import com.independentsoft.exchange.FindItemResponse;
 import com.independentsoft.exchange.Service;
 import com.independentsoft.exchange.ServiceException;
@@ -29,9 +30,9 @@ public class ExchangeCreateContact extends AsyncTask<String, Void, Boolean> {
 			Log.i(TAG, params[2]);
 			contact.setGivenName(params[2]);
 			contact.setSurname(params[3]);
+			contact.setFileAsMapping(FileAsMapping.LAST_SPACE_FIRST);
 			contact.setBusinessPhone(params[5]);
 			contact.setEmail1Address(params[4]);
-			contact.setDisplayName(params[2] + " " + params[3]);
 
 			service.createItem(contact);
 			return true;
