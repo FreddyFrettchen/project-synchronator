@@ -173,9 +173,18 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 				e.printStackTrace();
 			}
 		}
+		
+		/*if(_url.contains("calendar")){
+			Log.i(TAG,"calendar stuff");
+		// test
+		while(s.hasNext()){
+			response = s.next();
+			Log.i(TAG,response);
+		}
+		}*/
 
 		if (s != null) {
-			s.useDelimiter("\\Z");
+			//s.useDelimiter("\\Z");
 			response = s.next();
 		}
 
@@ -298,7 +307,7 @@ public abstract class AsyncTaskBase<Params, Progress, Result> extends
 			} else {
 				s = new Scanner(request.getInputStream());
 			}
-			s.useDelimiter("\\Z");
+			//s.useDelimiter("\\Z");
 
 			response_body = s.next();
 		} catch (IOException e) {
