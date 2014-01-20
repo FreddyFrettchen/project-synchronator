@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -16,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
 import com.google.gdata.data.spreadsheet.Column;
+import com.independentsoft.exchange.And;
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.AppointmentPropertyPath;
 import com.independentsoft.exchange.Body;
@@ -455,9 +457,13 @@ public class ExchangeAccount extends AccountBase {
 	@Override
 	public void editCalendarEntry(CalendarEntry ce, String startDate,
 			String endDate, String startTime, String endTime,
-			String description, int repeat) {
+			String description, int repeat) 
+	{
 		// TODO Auto-generated method stub
-
+		String id = ((ExchangeCalendarEntry)ce).getId();
+		new ExchangeEditCalendarEntry().execute(this.username, this.password, 
+				id, startDate, startTime,endDate,endTime,description,repeat+"");
+		
 	}
 
 	@Override
