@@ -480,45 +480,15 @@ public class ExchangeAccount extends AccountBase {
 
 	@Override
 	public void editContact(Contact c, String lastname, String firstname,
-			String phonenumber, String email) {
-		// TODO Auto-generated method stub
-		try {
-			Service service = new Service(
-					"https://mail.fh-aachen.de/EWS/exchange.asmx",
-					this.username, this.password);
-
-			IsEqualTo restriction = new IsEqualTo(
-					ContactPropertyPath.EMAIL1_ADDRESS, c.getEmail());
-
-			FindItemResponse response = service.findItem(
-					StandardFolder.CONTACTS, restriction);
-
-			for (int i = 0; i < response.getItems().size(); i++) {
-				if (response.getItems().get(i) instanceof com.independentsoft.exchange.Contact) {
-					ItemId itemId = response.getItems().get(i).getItemId();
-
-					Property businessPhonePropertyFN = new Property(
-							ContactPropertyPath.GIVEN_NAME, c.getFirstName());
-					Property businessPhonePropertyLN = new Property(
-							ContactPropertyPath.SURNAME, c.getLastName());
-					Property businessPhonePropertyBP = new Property(
-							ContactPropertyPath.BUSINESS_PHONE,
-							c.getPhoneumber());
-
-					itemId = service
-							.updateItem(itemId, businessPhonePropertyFN);
-					itemId = service
-							.updateItem(itemId, businessPhonePropertyLN);
-					itemId = service
-							.updateItem(itemId, businessPhonePropertyBP);
-				}
-			}
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getXmlMessage());
-
-			e.printStackTrace();
-		}
+			String phonenumber, String email)
+	{
+		
+		Log.i(TAG,"EditContact start");
+		String id = ((ExchangeContact)c).getID();
+		Log.i(TAG,"EditContact id="+id);
+			
+		//EDITCONTACTS!!!!
+		new ExchangeEditContact().execute(this.username,this.password, id, firstname,lastname,phonenumber,email);		
 	}
 
 	@Override

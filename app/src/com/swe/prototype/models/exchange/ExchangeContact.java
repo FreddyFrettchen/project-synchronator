@@ -25,7 +25,7 @@ public class ExchangeContact extends Contact {
 	
 	public String getID()
 	{
-		return null;
+		return this.id;
 	}
 	
 	public ExchangeContact(AccountBase account, Contact c) {
