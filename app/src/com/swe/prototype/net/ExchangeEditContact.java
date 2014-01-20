@@ -1,6 +1,9 @@
 package com.swe.prototype.net;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.independentsoft.exchange.ContactPropertyPath;
 import com.independentsoft.exchange.FindItemResponse;
 import com.independentsoft.exchange.ItemId;
@@ -33,11 +36,12 @@ public class ExchangeEditContact extends AsyncTask<String, Void, Boolean> {
 					Property businessPhonePropertyBP = new Property(ContactPropertyPath.BUSINESS_PHONE, params[5]);
 					Property businessPhonePropertyEA = new Property(ContactPropertyPath.EMAIL1_ADDRESS, params[6]);
 	
-					
-					itemId = service.updateItem(itemId, businessPhonePropertyFN);
-					itemId = service.updateItem(itemId, businessPhonePropertyLN);
-					itemId = service.updateItem(itemId, businessPhonePropertyBP);
-					itemId = service.updateItem(itemId, businessPhonePropertyEA);
+					List<Property> properties = new ArrayList<Property>();
+					properties.add(businessPhonePropertyBP);
+					properties.add(businessPhonePropertyEA);
+					properties.add(businessPhonePropertyLN);
+					properties.add(businessPhonePropertyFN);
+					itemId = service.updateItem(itemId, properties);
 					return true;
 				}
 			}
