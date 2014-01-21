@@ -34,11 +34,6 @@ public class ExchangeCreateCalendar extends AsyncTask<String, Void, Boolean> {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
 					params[0], params[1]);
-
-		
-			Log.i(TAG, params[0] + " " + params[1] + " " + params[2] + " " +
-			params[3] + " " + params[4] + " " + params[5] + " " + params[6] + " " + params[7]);
-			
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat(
 					"yyyy-MM-dd HH:mm:ss");

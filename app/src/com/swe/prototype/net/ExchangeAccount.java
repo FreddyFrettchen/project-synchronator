@@ -1,6 +1,9 @@
 package com.swe.prototype.net;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentResolver;
@@ -15,8 +18,11 @@ import android.widget.BaseAdapter;
 import com.independentsoft.exchange.And;
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.AppointmentPropertyPath;
+import com.independentsoft.exchange.CalendarView;
 import com.independentsoft.exchange.ContactPropertyPath;
 import com.independentsoft.exchange.FindItemResponse;
+import com.independentsoft.exchange.InstanceType;
+import com.independentsoft.exchange.RecurringMasterItemId;
 import com.independentsoft.exchange.Service;
 import com.independentsoft.exchange.ServiceException;
 import com.independentsoft.exchange.StandardFolder;
@@ -220,7 +226,6 @@ public class ExchangeAccount extends AccountBase {
 	private String formatDate(String date)
 	{
 		String datum=date;
-		
 		if(date.length()>12)
 		{
 			String monat="";
@@ -266,10 +271,27 @@ public class ExchangeAccount extends AccountBase {
 			Service service = new Service(
 					"https://mail.fh-aachen.de/EWS/exchange.asmx",
 					this.username, this.password);
+		//muss noch besser gemacht werden!!!!
+		/*	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date startTime = null, endTime = null;
+			try {
+				startTime = dateFormat.parse("2014-01-01 00:00:00");
+				endTime = dateFormat.parse("2016-02-01 00:00:00");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+			CalendarView view = new CalendarView(startTime, endTime);
+			*/
 			Log.i(TAG, "SnchronizeCalendar for response.findItem");
 			FindItemResponse response = service.findItem(
 					StandardFolder.CALENDAR,
 					AppointmentPropertyPath.getAllPropertyPaths());
+			
+			Log.i(TAG, "Synchronice Calendar drop all");
+			new DBTools(context).purgeCalendarTable();
+			
 			Log.i(TAG, "Synchronize for FORSCHLEIFE");
 			for (int i = 0; i < response.getItems().size(); i++) {
 				if (response.getItems().get(i) instanceof com.independentsoft.exchange.Appointment) {
@@ -281,23 +303,23 @@ public class ExchangeAccount extends AccountBase {
 					values.put("title", appointment.getSubject());
 					values.put("body", appointment.getBodyPlainText());
 					
-					Log.i(TAG,"VALUES.PUT_#1 "+ this.formatTime(appointment.getStartTime()
-							.toLocaleString()));
 					values.put("startTime", this.formatTime(appointment.getStartTime()
 							.toLocaleString()));
-					Log.i(TAG,"VALUES.PUT_#2");
 					values.put("endTime", this.formatTime(appointment.getEndTime()
 							.toLocaleString()));
-					Log.i(TAG,"VALUES.PUT_#3");
 					values.put("startDate", this.formatDate(appointment.getStartTime()
 							.toLocaleString()));
-					Log.i(TAG,"VALUES.PUT_#4");
 					values.put("endDate", this.formatDate(appointment.getEndTime()
 							.toLocaleString()));
-					Log.i(TAG,"VALUES.PUT_#5");
 					
-					this.context.getContentResolver()
-							.insert(contentUri, values);
+			        if (appointment.getInstanceType() == InstanceType.OCCURRENCE)
+                    {
+                        RecurringMasterItemId masterId = new RecurringMasterItemId(appointment.getItemId().getId(), appointment.getItemId().getChangeKey());
+
+                        Appointment master = service.getAppointment(masterId);
+                    }
+
+					this.context.getContentResolver().insert(contentUri, values);
 				}
 			}
 		} catch (ServiceException e) {
