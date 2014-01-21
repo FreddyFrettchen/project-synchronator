@@ -57,15 +57,15 @@ public class RegisterActivity extends BaseActivity {
 
 	private void initializeDialog() {
 		dialog = ProgressDialog.show(RegisterActivity.this, "",
-				"Bitte einen moment geduld...", true);
+				"Please wait a moment ...", true);
 		dialog.show();
 	}
 
 	private void alertPasswordsNotMatching() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
-		dlgAlert.setTitle("Registrierung fehlgeschlagen");
-		dlgAlert.setMessage("Die Passw�rter stimmen leider nicht �berein.");
+		dlgAlert.setTitle("Registration Failed");
+		dlgAlert.setMessage("Unfortunately, the passwords do not match.");
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.setCancelable(true);
 		dialog.dismiss();
@@ -113,8 +113,8 @@ public class RegisterActivity extends BaseActivity {
 	private void registerFailed() {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
-		dlgAlert.setMessage("E-Mail Adresse nicht valide oder schon vergeben.");
-		dlgAlert.setTitle("Registrierung fehlgeschlagen");
+		dlgAlert.setMessage("E-mail address is not valid or already in use.");
+		dlgAlert.setTitle("Registration Failed.");
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.setCancelable(true);
 		dlgAlert.create().show();

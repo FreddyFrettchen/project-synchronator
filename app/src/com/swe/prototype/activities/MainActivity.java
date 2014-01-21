@@ -151,7 +151,7 @@ public class MainActivity extends BaseActivity {
 						} else {
 							Toast.makeText(
 									getApplicationContext(),
-									"Server Settings IP oder Port nicht valide!",
+									"Server Settings IP or port is not valid!",
 									Toast.LENGTH_LONG).show();
 							System.out
 									.println("Server Settings IP oder Port nicht valide!");

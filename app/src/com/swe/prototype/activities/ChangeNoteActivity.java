@@ -83,7 +83,7 @@ public class ChangeNoteActivity extends BaseActivity {
 			private boolean correctInputChoise() {
 				// TODO Auto-generated method stub
 				if (title.getText().toString().equals("")) {
-					this.showShortToast("Alle Felder müssen ausgefüllt sein!");
+					this.showShortToast("All fields must be filled!");
 					return false;
 				}
 
@@ -99,7 +99,7 @@ public class ChangeNoteActivity extends BaseActivity {
 							return true;
 						}
 					}
-					this.showShortToast("Mindestens ein Server muss gewählt sein!");
+					this.showShortToast("At least one server must be selected!");
 				}
 				return false;
 			}
