@@ -168,6 +168,7 @@ public class ExchangeAccount extends AccountBase {
 				}
 				else
 				{
+					time="0";
 					for(int i = 0;i<7;i++)
 						time = time + date.charAt(i+13);					
 					if(date.charAt(21) == 'P')
@@ -189,6 +190,7 @@ public class ExchangeAccount extends AccountBase {
 				}
 				else
 				{
+					time="0";
 					for(int i = 0;i<7;i++)
 						time = time + date.charAt(i+12);					
 					if(date.charAt(20) == 'P')
@@ -278,7 +280,8 @@ public class ExchangeAccount extends AccountBase {
 					values.put("_id", appointment.getItemId().toString());
 					values.put("title", appointment.getSubject());
 					values.put("body", appointment.getBodyPlainText());
-					Log.i(TAG,"VALUES.PUT_#1 "+ this.formatDate(appointment.getStartTime()
+					
+					Log.i(TAG,"VALUES.PUT_#1 "+ this.formatTime(appointment.getStartTime()
 							.toLocaleString()));
 					values.put("startTime", this.formatTime(appointment.getStartTime()
 							.toLocaleString()));
