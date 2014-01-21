@@ -65,7 +65,7 @@ public class DBTools extends SQLiteOpenHelper {
 	 */
 	public void purgeContactTable() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		ExchangeContactTable.onUpgrade(db, 1, 1);
+		GoogleContactTable.onUpgrade(db, 1, 1);
 	}
 
 	/**
