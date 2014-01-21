@@ -549,6 +549,8 @@ public class ExchangeAccount extends AccountBase {
 	public void deleteCalendarEntry(CalendarEntry ce) {
 		ExchangeCalendarEntry e = (ExchangeCalendarEntry)ce;
 		Log.i(TAG,"delete got called");
+		
+		new ExchangeDeleteCalendarEntry().execute(this.username,this.password,e.getId());
 		// TODO Auto-generated method stub
 
 	}
