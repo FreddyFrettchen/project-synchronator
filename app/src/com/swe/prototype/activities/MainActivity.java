@@ -222,7 +222,7 @@ public class MainActivity extends BaseActivity {
 		new MyRefresher(this) {
 			protected void onPostExecute(Boolean result) {
 				dialog.dismiss();
-				startActivity(new Intent(context, ListContactsActivity.class));
+				startActivity(new Intent(context, CalendarMonthViewActivity.class));
 				finish();
 			}
 		}.execute();
