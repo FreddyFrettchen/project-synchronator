@@ -203,14 +203,14 @@ public class CalendarDayViewActivity extends BaseActivity {
 					if (collision(r1, r2)) {
 						if (!handeldPairs.contains(new RectPairs(r1, r2))) {
 							handeldPairs.add(new RectPairs(r1, r2));
-							System.out.println("calWidth: "+calWidth);
-							System.out.println("r1: " + r1.x1 + "," + r1.x2
-									+ "  r2: " + r2.x1 + "," + r2.x2);
+							//System.out.println("calWidth: "+calWidth);
+							//System.out.println("r1: " + r1.x1 + "," + r1.x2
+							//		+ "  r2: " + r2.x1 + "," + r2.x2);
 							r1.x2 = r1.x1 +(calWidth / 2) -BORDER;
 							r2.x1 = r1.x2 + BORDER;
 							r2.x2 = r2.x1+(calWidth/2) -BORDER;
-							System.out.println("r1: " + r1.x1 + "," + r1.x2
-									+ "  r2: " + r2.x1 + "," + r2.x2);
+							//System.out.println("r1: " + r1.x1 + "," + r1.x2
+							//		+ "  r2: " + r2.x1 + "," + r2.x2);
 						}
 					}
 				}

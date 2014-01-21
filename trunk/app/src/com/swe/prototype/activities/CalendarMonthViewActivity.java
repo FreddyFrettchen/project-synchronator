@@ -302,7 +302,6 @@ public class CalendarMonthViewActivity extends BaseActivity {
 		for (int i = 0; i < REPEAT_EVERY_YEAR_HOW_MANY_YEARS; i++) {
 			year++;
 			res.add("" + year + tmp);
-			System.out.println("repeated: " + year + tmp);
 		}
 
 		return res;
@@ -353,7 +352,6 @@ public class CalendarMonthViewActivity extends BaseActivity {
 				res.add(Tools.concertSimpleDateFormatToNormal(cdate));
 				curTime += interval;
 			}
-			System.out.println("alles gut ! keine Exception");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			Log.i(TAG, "Fehler beim einordenen eines mehrtagesEvent");
