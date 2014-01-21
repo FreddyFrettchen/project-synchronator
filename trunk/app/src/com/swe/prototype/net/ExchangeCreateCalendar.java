@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gdata.data.calendar.CalendarEntry;
 import com.independentsoft.exchange.AbsoluteYearlyRecurrencePattern;
 import com.independentsoft.exchange.Appointment;
 import com.independentsoft.exchange.Body;
@@ -19,6 +20,7 @@ import com.independentsoft.exchange.Service;
 import com.independentsoft.exchange.ServiceException;
 import com.independentsoft.exchange.TimeZoneDefinition;
 import com.independentsoft.exchange.WeeklyRecurrencePattern;
+import com.swe.prototype.models.exchange.ExchangeContact;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -93,5 +95,10 @@ public class ExchangeCreateCalendar extends AsyncTask<String, Void, Boolean> {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	@Override
+	protected void onPostExecute(Boolean result) {
+		
 	}
 }
