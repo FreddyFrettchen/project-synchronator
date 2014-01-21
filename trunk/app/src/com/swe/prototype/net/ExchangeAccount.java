@@ -408,7 +408,7 @@ public class ExchangeAccount extends AccountBase {
 				excal.setId(cursor.getString(0));
 				excal.setSubject(cursor.getString(1));
 				excal.setDescription(cursor.getString(2));
-				Log.i(TAG,"änderung");
+				Log.i(TAG,"Aenderung");
 				
 				Log.i(TAG,"Datumcheck1:"+cursor.getString(3));
 				Log.i(TAG,"Datumcheck2:"+cursor.getString(4));
