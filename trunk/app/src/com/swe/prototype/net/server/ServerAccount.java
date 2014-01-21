@@ -56,13 +56,13 @@ public class ServerAccount extends AccountBase {
 	 *            -> possible values: calendar, contacts, notes
 	 */
 	private void synchronizeByType(final String data_type) {
-		/*new SyncDataTask(context, data_type) {
-			protected void onPostExecute(
-					java.util.ArrayList<EncryptedData> result) {
-				synchronizeDatabase(data_type, result);
-			};
-		}.execute();*/
-		synchronizeDatabase(data_type, new SyncDataTask(context, data_type).doSync());
+		/*
+		 * new SyncDataTask(context, data_type) { protected void onPostExecute(
+		 * java.util.ArrayList<EncryptedData> result) {
+		 * synchronizeDatabase(data_type, result); }; }.execute();
+		 */
+		synchronizeDatabase(data_type,
+				new SyncDataTask(context, data_type).doSync());
 	}
 
 	/**
@@ -666,7 +666,7 @@ public class ServerAccount extends AccountBase {
 		contact.setEmail(email);
 
 		values.put("data", sec.encrypt(contact.toJson()));
-		values.put("status", "UPDATE");
+		//values.put("status", "UPDATE");
 		if (entryExists(contentUri, where, args)) {
 			// update entry
 			this.context.getContentResolver().update(contentUri, values, where,
@@ -678,6 +678,18 @@ public class ServerAccount extends AccountBase {
 
 		// send update to server
 		new UpdateDataTask(context) {
+			protected void onPostExecute(Boolean result) {
+				if (result) {
+					synchronizeContacts();
+				} else {
+					// problem with saving on server. resending later
+					Toast.makeText(
+							context,
+							"An error occured while posting data to the server.",
+							Toast.LENGTH_LONG).show();
+					// setResendDataset(Integer.parseInt(id_result), true);
+				}
+			};
 		}.execute("contacts", contact.toJson(), contact.getId() + "");
 	}
 
@@ -697,7 +709,7 @@ public class ServerAccount extends AccountBase {
 		sn.setText(text);
 
 		values.put("data", sec.encrypt(sn.toJson()));
-		values.put("status", "UPDATE");
+		//values.put("status", "UPDATE");
 		if (entryExists(contentUri, where, args)) {
 			// update entry
 			this.context.getContentResolver().update(contentUri, values, where,
@@ -709,6 +721,18 @@ public class ServerAccount extends AccountBase {
 
 		// send update to server
 		new UpdateDataTask(context) {
+			protected void onPostExecute(Boolean result) {
+				if (result) {
+					synchronizeNotes();
+				} else {
+					// problem with saving on server. resending later
+					Toast.makeText(
+							context,
+							"An error occured while posting data to the server.",
+							Toast.LENGTH_LONG).show();
+					// setResendDataset(Integer.parseInt(id_result), true);
+				}
+			}
 		}.execute("notes", sn.toJson(), sn.getId() + "");
 	}
 
@@ -733,7 +757,7 @@ public class ServerAccount extends AccountBase {
 		entry.setRepeat(repeat);
 
 		values.put("data", sec.encrypt(entry.toJson()));
-		values.put("status", "UPDATE");
+		//values.put("status", "UPDATE");
 		if (entryExists(contentUri, where, args)) {
 			// update entry
 			this.context.getContentResolver().update(contentUri, values, where,
@@ -745,6 +769,18 @@ public class ServerAccount extends AccountBase {
 
 		// send update to server
 		new UpdateDataTask(context) {
+			protected void onPostExecute(Boolean result) {
+				if (result) {
+					synchronizeCalendarEntries();
+				} else {
+					// problem with saving on server. resending later
+					Toast.makeText(
+							context,
+							"An error occured while posting data to the server.",
+							Toast.LENGTH_LONG).show();
+					// setResendDataset(Integer.parseInt(id_result), true);
+				}
+			}
 		}.execute("calendar", entry.toJson(), entry.getId() + "");
 	}
 

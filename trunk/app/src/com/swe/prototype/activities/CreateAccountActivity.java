@@ -32,7 +32,7 @@ public class CreateAccountActivity extends BaseActivity {
 	private int id_account = 0;
 	private boolean edit_mode = false;
 	ProgressDialog dialog;
-	
+
 	boolean valid = false;
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +50,13 @@ public class CreateAccountActivity extends BaseActivity {
 
 		Button save_button = (Button) findViewById(R.id.button_edit_save);
 		save_button.setText(edit_mode ? "Edit Account" : "Save Account");
-		getActionBar().setTitle(edit_mode ? "Edit Account" : "Save Account");  
+		getActionBar().setTitle(edit_mode ? "Edit Account" : "Save Account");
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
 				final ProgressDialog dialog;
-				dialog = ProgressDialog.show(CreateAccountActivity.this, "",getString(R.string.wait), true);
+				dialog = ProgressDialog.show(CreateAccountActivity.this, "",
+						getString(R.string.wait), true);
 				dialog.show();
 				new MyAccountValidator() {
 					protected void onPostExecute(Boolean result) {
@@ -64,7 +65,7 @@ public class CreateAccountActivity extends BaseActivity {
 							showShortToast("Account data not valid. Please supply correct logindata.");
 							return;
 						}
-		
+
 						if (correctInputChoise()) {
 							if (edit_mode) {
 								updateAccount(v);
@@ -91,7 +92,7 @@ public class CreateAccountActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		return true;
 	}
-	
+
 	// load account from db
 	protected void prefill_fields() {
 		String[] projection = { AccountTable.COLUMN_PROVIDER,
@@ -142,7 +143,9 @@ public class CreateAccountActivity extends BaseActivity {
 				getEditText(R.id.edit_text_username));
 		values.put(AccountTable.COLUMN_PASSWORD,
 				getEditText(R.id.edit_text_password));
-		values.put("last_sync", "0"); // TODO synctime
+		values.put(AccountTable.COLUMN_LAST_SYNC, "0"); // TODO synctime
+		values.put(AccountTable.COLUMN_SYNCHRONATOR_USERNAME, accounts
+				.getServerAccount().getUsername()); 
 		getContentResolver().insert(CONTENT_URI, values);
 	}
 
@@ -173,7 +176,7 @@ public class CreateAccountActivity extends BaseActivity {
 		return ((EditText) findViewById(id)).getText().toString();
 	}
 
-	class MyAccountValidator extends AsyncTask<Void, Void, Boolean>{
+	class MyAccountValidator extends AsyncTask<Void, Void, Boolean> {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -181,7 +184,8 @@ public class CreateAccountActivity extends BaseActivity {
 					.getSelectedItem().toString();
 			String username = getEditText(R.id.edit_text_username);
 			String password = getEditText(R.id.edit_text_password);
-			AccountBase created_acc = accounts.getAccountByTag(tag,username,password);
+			AccountBase created_acc = accounts.getAccountByTag(tag, username,
+					password);
 			return created_acc.validateAccountData();
 		}
 	}
