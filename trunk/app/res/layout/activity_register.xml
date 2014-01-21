@@ -27,6 +27,7 @@
         android:layout_alignLeft="@+id/register_input_email"
         android:layout_below="@+id/TextView01"
         android:ems="10"
+        android:hint="@string/stern_PW"
         android:inputType="textPassword" />
 
     <EditText
@@ -36,6 +37,7 @@
         android:layout_alignLeft="@+id/register_input_password"
         android:layout_below="@+id/TextView02"
         android:ems="10"
+        android:hint="@string/stern_PW"
         android:inputType="textPassword" />
 
     <EditText
@@ -45,6 +47,7 @@
         android:layout_below="@+id/text_app"
         android:layout_centerHorizontal="true"
         android:ems="10"
+        android:hint="@string/mustermannAweb_de"
         android:inputType="textEmailAddress" />
 
     <TextView
