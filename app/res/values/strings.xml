@@ -49,15 +49,15 @@
         <item>Notiz 7</item>
     </string-array>
 
-    <string name="passwort">Passwort</string>
-    <string name="registrieren">Registrieren</string>
+    <string name="passwort">Password</string>
+    <string name="registrieren">Register</string>
     <string name="synchronator">Synchronator</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="edit">Edit</string>
     <string name="move">Move</string>
     <string name="delete">Delete</string>
-	<string name="action_add_object">Hinzufügen</string>
+	<string name="action_add_object">Add</string>
 	<string name="action_logout">Logout</string>
 	<string name="lastname">Lastname</string>
 	<string name="forename">Forename</string>
@@ -79,10 +79,10 @@
 	<string name="text">Text</string>
 	<string name="email_example">aaa@a.de</string>
 	<string name="passwort_example">qqq</string>
-	<string name="registrierung">Registrierung:</string>
-	<string name="mustermannAweb_de">Mustermann@web.de</string>
-	<string name="password_textview">Passwort:</string>
-	<string name="password_wiederholen_textview">Passwort wiederholen:</string>
+	<string name="registrierung">Registration:</string>
+	<string name="mustermannAweb_de">Mustermann@domain.de</string>
+	<string name="password_textview">Password:</string>
+	<string name="password_wiederholen_textview">Password repeat:</string>
 	<string name="change">Change</string>
 	<string name="account_type">Account Type</string>
 	<string name="username">Username</string>
@@ -96,4 +96,5 @@
 	<string name="server">Server</string>
 	<string name="description_doublepoint">Description</string>
 	<string name="account">Account</string>
+	<string name="stern_PW">********</string>
 </resources>
