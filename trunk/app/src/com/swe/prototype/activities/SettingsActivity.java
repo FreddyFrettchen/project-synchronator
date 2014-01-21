@@ -60,7 +60,7 @@ public class SettingsActivity extends BaseActivity {
 						returnToLastActivity();
 					}
 				} catch (Exception e) {
-					System.out.println("Refreshing time falsches format");
+					System.out.println("Refreshing time wrong format");
 				}
 
 			}
