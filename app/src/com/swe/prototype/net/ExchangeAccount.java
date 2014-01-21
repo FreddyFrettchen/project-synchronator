@@ -148,7 +148,6 @@ public class ExchangeAccount extends AccountBase {
 		} catch (ServiceException e) {
 			System.out.println(e.getMessage());
 			System.out.println(e.getXmlMessage());
-
 			e.printStackTrace();
 		}
 	}

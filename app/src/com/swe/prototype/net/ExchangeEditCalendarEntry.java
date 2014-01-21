@@ -24,22 +24,23 @@ public class ExchangeEditCalendarEntry extends AsyncTask<String, Void, Boolean> 
 	private static final String TAG = "ExchangeAccount";
 	@Override
 	protected Boolean doInBackground(String... params) 
-	{
-		
+	{		
 		try
 		{
+			Log.i(TAG, "ExchangeEditCalendar start!!!!");
 			Service service = new Service("https://mail.fh-aachen.de/EWS/exchange.asmx",params[0], params[1]);
 
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		    Date newStartTime = dateFormat.parse(params[3]+" "+params[4]);
 		    Date newEndTime = dateFormat.parse(params[5]+" "+params[6]);
-
+		    Log.i(TAG, "ExchangeEditCalendar FOR Response!!!!");
 		    FindItemResponse response = service.findItem(StandardFolder.CALENDAR, AppointmentPropertyPath.getAllPropertyPaths());
-
+		    Log.i(TAG, "ExchangeEditCalendar FOR FORSCHLEIFE!!!!");
 		    for (int i = 0; i < response.getItems().size(); i++)
 		    {
-		    	if (response.getItems().get(i).toString().equals(params[2]))
+		    	Log.i(TAG, "ExchangeEditCalendar IN DER FORSCHLEIFE!!!!");
+		    	if (response.getItems().get(i).toString().contains(params[2]))
 		        {
 		    		ItemId itemId = response.getItems().get(i).getItemId();
 
