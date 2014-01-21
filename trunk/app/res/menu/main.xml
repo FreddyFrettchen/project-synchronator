@@ -44,6 +44,6 @@
         android:showAsAction="always"
         android:title="@string/action_notes"
         android:visible="true"/>
-    <item android:id="@+id/purge_db_btn" android:title="@string/purge_db"></item>
+    <item android:id="@+id/purge_db_btn" android:title="@string/purge_db" android:visible="false"></item>
 
 </menu>
