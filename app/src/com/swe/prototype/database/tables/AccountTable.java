@@ -7,6 +7,7 @@ public class AccountTable {
 	// Database table
 	public static final String TABLE_ACCOUNT = "accounts";
 	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_SYNCHRONATOR_USERNAME = "synchronator_username";
 	public static final String COLUMN_USERNAME = "username";
 	public static final String COLUMN_PASSWORD = "password";
 	public static final String COLUMN_PROVIDER = "provider";
@@ -17,6 +18,7 @@ public class AccountTable {
 			+ TABLE_ACCOUNT + "(" + COLUMN_ID
 			+ " integer primary key autoincrement, " + COLUMN_USERNAME
 			+ " text not null, " + COLUMN_PASSWORD + " text not null,"
+			+ COLUMN_SYNCHRONATOR_USERNAME + " text not null,"
 			+ COLUMN_PROVIDER + " text not null," + COLUMN_LAST_SYNC
 			+ " text not null" + ")";
 

@@ -21,6 +21,10 @@ public abstract class AccountBase extends Thread {
 		this.password = password;
 		this.context = context;
 	}
+	
+	public String getUsername(){
+		return this.username;
+	}
 
 	public void run() {
 		synchronizeAll();
