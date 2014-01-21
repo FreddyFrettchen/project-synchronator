@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -51,6 +53,21 @@ public class CreateAccountActivity extends BaseActivity {
 		Button save_button = (Button) findViewById(R.id.button_edit_save);
 		save_button.setText(edit_mode ? "Edit Account" : "Save Account");
 		getActionBar().setTitle(edit_mode ? "Edit Account" : "Save Account");
+		final Spinner spin = (Spinner) findViewById(R.id.spinner_account);
+		spin.setOnItemSelectedListener(new OnItemSelectedListener() {
+				public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) { 
+					EditText username = (EditText)findViewById(R.id.edit_text_username);
+					if(spin.getSelectedItem().toString().equals("Exchange")) {
+						username.setHint("xx0000x@ad.fh-aachen.de");
+					} else if(spin.getSelectedItem().toString().equals("Google")){
+						username.setHint("xxxx@gmail.com");
+					}
+				} 
+
+				public void onNothingSelected(AdapterView<?> adapterView) {
+					return;
+				}
+		});
 		save_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
