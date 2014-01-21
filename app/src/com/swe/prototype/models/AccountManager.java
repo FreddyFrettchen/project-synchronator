@@ -78,7 +78,7 @@ public class AccountManager {
 		String email = settings.getString("email", null);
 		String password = settings.getString("password", null);
 		this.server_account = new ServerAccount(context, 0,
-				Settings.getRefreshTimeAsInt(), email, Security.sha1(password));
+				Settings.getRefreshTimeAsInt(), email, password);
 	}
 
 	public void refreshAllData() {

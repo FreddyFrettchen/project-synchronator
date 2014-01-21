@@ -68,8 +68,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="53dp"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:text="@string/email_example" >
+        android:inputType="textEmailAddress" >
 
         <requestFocus />
     </EditText>
@@ -82,8 +81,7 @@
         android:layout_below="@+id/input_email"
         android:layout_marginTop="40dp"
         android:ems="10"
-        android:inputType="textPassword"
-        android:text="@string/passwort_example" />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/button_login"

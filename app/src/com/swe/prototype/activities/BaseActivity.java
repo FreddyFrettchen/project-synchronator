@@ -118,7 +118,7 @@ public abstract class BaseActivity extends Activity {
 										editor.putInt("last_sync", 0);
 										editor.commit();
 										new DBTools(getApplicationContext()).purgeData();
-										show(MainActivity.class);
+										showAndFinish(MainActivity.class);
 									}
 								})
 						.setNegativeButton("No",

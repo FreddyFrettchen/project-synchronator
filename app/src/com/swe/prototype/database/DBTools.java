@@ -58,6 +58,7 @@ public class DBTools extends SQLiteOpenHelper {
 		ExchangeNoteTable.onUpgrade(db, 1, 1);
 		ExchangeCalendarTable.onUpgrade(db, 1, 1);
 		GoogleContactTable.onUpgrade(db, 1, 1);
+		AccountTable.onUpgrade(db, 1, 1);
 	}
 
 	/**

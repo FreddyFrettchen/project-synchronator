@@ -94,6 +94,11 @@ public class MainActivity extends BaseActivity {
 					pref.getString("Server_Port", ""));
 		}
 	}
+	
+	@Override
+	public void onBackPressed() {
+		// do NOTHINGY
+	}
 
 	/*
 	 * Die muessen wir ueberschreiben, damit das optionsmenue nicht sichtbar ist
@@ -209,7 +214,8 @@ public class MainActivity extends BaseActivity {
 		SharedPreferences pref = getPreferences();
 		SharedPreferences.Editor editor = getPreferences().edit();
 		editor.putString("email", email);
-		editor.putString("password", password);
+		editor.putString("password", Security.sha1(password));
+
 		if (pref.getFloat("refreshTime-" + email, 0) > 0) {
 			Settings.setRefreshTimeAsFloat(pref.getFloat(
 					"refreshTime-" + email, 0));
