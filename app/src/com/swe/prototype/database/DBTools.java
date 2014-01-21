@@ -65,7 +65,7 @@ public class DBTools extends SQLiteOpenHelper {
 	 */
 	public void purgeContactTable() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		GoogleContactTable.onUpgrade(db, 1, 1);
+		ExchangeContactTable.onUpgrade(db, 1, 1);
 	}
 
 	/**
@@ -82,5 +82,13 @@ public class DBTools extends SQLiteOpenHelper {
 	public void purgeCalendarTable() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ExchangeCalendarTable.onUpgrade(db, 1, 1);
+	}
+	
+	/**
+	 * delete all contacts from GoogleContactTable
+	 */
+	public void purgeGoogleContactTable() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		GoogleContactTable.onUpgrade(db, 1, 1);
 	}
 }
