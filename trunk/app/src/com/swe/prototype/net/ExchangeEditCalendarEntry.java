@@ -24,7 +24,8 @@ public class ExchangeEditCalendarEntry extends AsyncTask<String, Void, Boolean> 
 	private static final String TAG = "ExchangeAccount";
 	@Override
 	protected Boolean doInBackground(String... params) 
-	{		
+	{
+		
 		try
 		{
 			Log.i(TAG, "ExchangeEditCalendar start!!!!");
@@ -36,12 +37,11 @@ public class ExchangeEditCalendarEntry extends AsyncTask<String, Void, Boolean> 
 		    Date newEndTime = dateFormat.parse(params[5]+" "+params[6]);
 		    Log.i(TAG, "ExchangeEditCalendar FOR Response!!!!");
 		    FindItemResponse response = service.findItem(StandardFolder.CALENDAR, AppointmentPropertyPath.getAllPropertyPaths());
-		    Log.i(TAG, "ExchangeEditCalendar FOR FORSCHLEIFE!!!!");
 		    for (int i = 0; i < response.getItems().size(); i++)
 		    {
-		    	Log.i(TAG, "ExchangeEditCalendar IN DER FORSCHLEIFE!!!!");
-		    	if (response.getItems().get(i).toString().contains(params[2]))
+		    	if (response.getItems().get(i).getItemId().toString().equals(params[2]))
 		        {
+		    		Log.i(TAG,"EDITCALENDER ---------------------found");
 		    		ItemId itemId = response.getItems().get(i).getItemId();
 
 		            Property startTimeProperty = new Property(AppointmentPropertyPath.START_TIME, newStartTime);
